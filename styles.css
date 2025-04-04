@@ -1,0 +1,380 @@
+/* Basic Reset & Body */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+    background-color: #f0f2f5; /* Light gray background for the page */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #333;
+}
+body.dark {
+    background-color: #070734;
+    --background-color: #020233;
+    --text-color: #ffffff;
+    --border-color: #333333;
+}
+body.dark .login-container {
+    background-color: #020233; /* Dark background for the container */
+    color: #fff; /* White text for dark mode */
+}
+body.dark .left-panel {
+    background: linear-gradient(to bottom, rgba(22, 35, 221, 0.1), rgba(1, 6, 75, 0.8)),
+    url('../path/to/your/background-image.jpg'); /* Dark mode image */
+    background-color: #ffffff; /* Fallback dark background */
+}
+body.dark .left-panel h2,
+body.dark .left-panel p {
+    color: #fff; /* White text for dark mode */
+}
+body.dark .right-panel {
+    background-color: #222d50; /* Dark background for the right panel */
+}
+body.dark .right-panel h2,
+body.dark .right-panel .subtitle {
+    color: #fff; /* White text for dark mode */
+}
+body.dark .btnlogin-primary {
+    background-color: #0056b3; /* Darker blue for primary button in dark mode */
+}
+body.dark .btnlogin-google {
+    background-color: #222d50; /* Darker background for Google button in dark mode */
+    color: #fff; /* White text for dark mode */
+}
+body.dark .btnlogin-google:hover {
+    background-color: #222d50; /* Slightly lighter on hover */
+}
+body.dark .btnlogin-google svg {
+    fill: #fff; /* White icon for dark mode */
+}
+body.dark .forgot-password,
+body.dark .signup-link a {
+    color: #007bff; /* Blue color for links in dark mode */
+}
+body.dark .forgot-password:hover,
+body.dark .signup-link a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+body.dark .separator {
+    color: #ffffff; /* Light gray for separator text in dark mode */
+}
+body.dark .separator::before,
+body.dark .separator::after {
+    background-color: #ffffff; /* Darker line color for separator in dark mode */
+}
+body.dark .back-link {
+    color: #aaa; /* Light gray for back link in dark mode */
+}
+body.dark .back-link:hover {
+    color: #fff; /* White on hover for back link in dark mode */
+}
+body.dark .input-wrapper input[type="email"],
+body.dark .input-wrapper input[type="password"],
+body.dark .input-wrapper input[type="text"] {
+    background-color: #444; /* Darker background for inputs in dark mode */
+    color: #fff; /* White text for inputs in dark mode */
+    border: 1px solid #555; /* Darker border for inputs in dark mode */
+}
+body.dark .input-wrapper input:focus {
+    border-color: #007bff; /* Blue border on focus in dark mode */
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2); /* Blue shadow on focus in dark mode */
+}
+
+
+
+/* Main Container */
+.login-container {
+    display: flex;
+    width: 900px; /* Adjust width as needed */
+    max-width: 95%;
+    min-height: 600px; /* Adjust height as needed */
+    background-color: #fff; /* White background for the container */
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Important for rounded corners on children */
+}
+
+/* Left Panel Styling */
+.left-panel {
+    flex-basis: 45%; /* Adjust percentage as needed */
+    background: linear-gradient(to bottom, rgba(22, 35, 221, 0.1), rgba(1, 6, 75, 0.8)),
+                url('../path/to/your/background-image.jpg'); /* Add your image path */
+    background-size: cover;
+    background-position: center;
+    background-color: #cccccc; /* Fallback background */
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Align content to the bottom */
+    padding: 40px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.left-content {
+    /* Add styles if needed */
+}
+
+.brand-tag {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8em;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.left-panel h2 {
+    font-size: 2.2em;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.left-panel p {
+    font-size: 1em;
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+
+/* Right Panel Styling */
+.right-panel {
+    flex-basis: 55%; /* Adjust percentage as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 50px; /* Adjust padding */
+}
+
+.form-container {
+    width: 100%;
+    max-width: 380px; /* Max width for the form itself */
+}
+
+.back-link {
+    display: inline-flex; /* Use flex to align icon and text */
+    align-items: center;
+    color: #555;
+    text-decoration: none;
+    font-size: 0.9em;
+    margin-bottom: 30px; /* Space below back link */
+}
+
+.back-link svg {
+    margin-right: 8px;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.right-panel h2 {
+    font-size: 1.8em;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.subtitle {
+    color: #555;
+    font-size: 0.95em;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.label-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+label {
+    display: block; /* Makes label take full width if not in flex */
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #333;
+}
+
+.forgot-password {
+    font-size: 0.85em;
+    color: #007bff; /* Blue color for link */
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-wrapper input[type="email"],
+.input-wrapper input[type="password"] {
+    width: 100%;
+    padding: 12px 15px 12px 40px; /* Padding: top/bottom, right, left (for icon) */
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+    transition: border-color 0.2s ease;
+}
+
+.input-wrapper input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+.input-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    display: flex; /* Helps center the SVG if needed */
+    align-items: center;
+    justify-content: center;
+    color: #888;
+}
+
+.password-toggle svg {
+    display: block; /* Ensure SVGs behave predictably */
+}
+
+
+/* Buttons */
+.btnlogin {
+    display: inline-flex; /* Align text and icon */
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+    text-decoration: none; /* For potential <a> tags styled as buttons */
+}
+
+.btnlogin-primary {
+    background-color: #007bff;
+    color: #fff;
+    margin-top: 10px; /* Space above primary button */
+}
+
+.btnlogin-primary:hover {
+    background-color: #0056b3;
+}
+
+.btnlogin-google {
+    background-color: #fff;
+    color: #555;
+    border: 1px solid #ccc;
+    margin-top: 15px;
+}
+
+.btnlogin-google:hover {
+    background-color: #f8f8f8;
+}
+
+.btnlogin-google svg {
+    margin-right: 10px;
+}
+
+/* Signup Link & Separator */
+.signup-link {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.signup-link a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
+
+.separator {
+    text-align: center;
+    margin: 25px 0;
+    color: #aaa;
+    font-size: 0.85em;
+    position: relative; /* For lines */
+}
+
+/* Lines for separator */
+.separator::before,
+.separator::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 35%; /* Adjust width of lines */
+    height: 1px;
+    background-color: #ccc;
+}
+
+.separator::before {
+    left: 0;
+}
+
+.separator::after {
+    right: 0;
+}
+
+/* Responsive Adjustments (Example) */
+@media (max-width: 900px) {
+    .login-container {
+        flex-direction: column;
+        width: 95%;
+        max-width: 500px; /* Max width on smaller screens */
+        min-height: auto; /* Allow height to adjust */
+    }
+
+    .left-panel {
+        flex-basis: auto; /* Reset flex-basis */
+        min-height: 200px; /* Give some height */
+        border-radius: 10px 10px 0 0; /* Adjust corners */
+        padding: 30px;
+    }
+
+    .right-panel {
+        flex-basis: auto; /* Reset flex-basis */
+        padding: 30px;
+        border-radius: 0 0 10px 10px; /* Adjust corners */
+    }
+
+    .right-panel h2 {
+        font-size: 1.6em;
+    }
+}

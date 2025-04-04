@@ -99,14 +99,6 @@ body.dark .nav-link {
     display: none;
 }
 
-/* Icons (using emojis for simplicity) */
-.icon-home::before { content: '🏠'; }
-.icon-users::before { content: '👥'; }
-.icon-calendar::before { content: '📅'; }
-.icon-info::before { content: 'ℹ️'; }
-.icon-menu::before { content: '☰'; }
-.icon-close::before { content: '✖️'; }
-
 .sidebar-bottom {
     margin-top: auto;
 }
@@ -259,6 +251,7 @@ body.dark #theme-toggle{
     .close-btn {
         background: none;
         border: none;
+      
         cursor: pointer;
     }
 
@@ -269,7 +262,7 @@ body.dark #theme-toggle{
     }
 
     .mobile-menu-auth {
-        margin-top: auto;
+        margin: 0px;
         display: flex;
         flex-direction: column;
         gap: 1rem;
