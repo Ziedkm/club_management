@@ -1,0 +1,148 @@
+/* Default (Light Mode) Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+.side-menu {
+    width: 230px;
+    background-color: #ffffff;
+    padding: 20px;
+    font-family: 'Roboto', sans-serif;
+    min-height: 100vh;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1E90FF;
+    margin-bottom: 20px;
+}
+
+nav a {
+    display: block;
+    font-size: 16px;
+    color: #333333;
+    text-decoration: none;
+    padding: 15px 10px;
+    border-radius: 20px;
+    margin-left: -12px;
+    transition-duration: 200ms;
+}
+
+nav a.active {
+    background-color: #E6F0FA;
+    padding: 15px 10px;
+    margin-left: -12px;
+    border-radius: 20px;
+    color: #1E90FF;
+}
+
+nav a:hover {
+    color: #1E90FF;
+    background-color: #f3f7fb;
+}
+
+nav a.active:hover {
+    color: #6477c4;
+    background-color: #E6F0FA;
+}
+
+.language-selector {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.language-selector select {
+    font-size: 16px;
+    color: #333333;
+    border: 1px solid #1E90FF;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #ffffff;
+}
+
+.theme-toggle {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.buttons button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.login {
+    background-color: #ffffff;
+    border: 1px solid #1E90FF;
+    color: #1E90FF;
+}
+
+.signup {
+    background-color: #1E90FF;
+    border: none;
+    color: #ffffff;
+}
+
+.buttons button:hover {
+    opacity: 0.8;
+}
+
+.main-content {
+    
+    padding: 20px;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #333;
+    color: #fff;
+}
+
+body.dark-mode .side-menu {
+    background-color: #444;
+}
+
+body.dark-mode .side-menu .title {
+    color: #1E90FF;
+}
+
+body.dark-mode .side-menu nav a {
+    color: #ddd;
+}
+
+body.dark-mode .side-menu nav a.active {
+    background-color: #555;
+    color: #fff;
+}
+
+body.dark-mode .side-menu .language-selector select {
+    background-color: #555;
+    color: #fff;
+    border-color: #1E90FF;
+}
+
+body.dark-mode .side-menu .buttons .login {
+    background-color: #555;
+    color: #1E90FF;
+    border-color: #1E90FF;
+}
+
+body.dark-mode .side-menu .buttons .signup {
+    background-color: #1E90FF;
+    color: #fff;
+}
+
+body.dark-mode .main-content {
+    background-color: #333;
+    color: #fff;
+}
