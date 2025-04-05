@@ -30,6 +30,10 @@ body.dark {
 body.dark .sidebar.scrolled {
     background-color: rgba(26, 26, 26, 0.8);
 }
+body.dark .main-content {
+    background-color: #1a1a4a;
+    color: #ffffff;
+}
 
 .sidebar-content {
     display: flex;
@@ -257,4 +261,224 @@ body.dark #theme-toggle{
         flex-direction: column;
         gap: 1rem;
     }
+}
+/* Add these rules to your styles.css or adapt them */
+
+/* Utilities */
+.mb-16 { margin-bottom: 4rem; }
+.mb-12 { margin-bottom: 3rem; }
+.mt-8 { margin-top: 2rem; }
+.text-center { text-align: center; }
+.btn-block { display: block; width: 100%; text-align: center; }
+/* Consider adding a .text-muted class if needed */
+.text-muted { color: #6c757d; } /* Example muted color */
+body.dark .text-muted { color: #adb5bd; } /* Example dark mode muted color */
+
+
+/* Hero Section */
+.hero-section .hero-content-wrapper {
+    display: flex;
+    flex-wrap: wrap; /* Wrap on smaller screens */
+    align-items: center;
+    gap: 2rem; /* Adjust gap */
+}
+.hero-section .hero-text {
+    flex: 1; /* Take up available space */
+    min-width: 300px; /* Prevent text becoming too narrow */
+}
+.hero-title {
+    font-size: 2.5rem; /* Adjust size */
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    color: var(--text-color); /* Use text color variable */
+}
+body.dark .hero-title { color: var(--text-color); }
+
+.hero-subtitle {
+    font-size: 1.1rem; /* Adjust size */
+    color: var(--text-color); /* Or use a muted color variable if defined */
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+}
+body.dark .hero-subtitle { opacity: 0.9; }
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.hero-image {
+    flex: 1;
+    min-width: 300px;
+    text-align: center; /* Center image if it's smaller than container */
+}
+.hero-illustration {
+    max-width: 100%;
+    height: auto;
+}
+/* Responsive adjustments for hero */
+@media (max-width: 767px) {
+    .hero-title { font-size: 2rem; }
+    .hero-section .hero-content-wrapper { flex-direction: column-reverse; } /* Stack image above text on mobile */
+    .hero-text { text-align: center; }
+    .hero-actions { justify-content: center; }
+}
+
+
+/* Section Headers */
+.section-header {
+    max-width: 600px; /* Limit width of subtitle */
+    margin-left: auto;
+    margin-right: auto;
+}
+.section-title {
+    font-size: 2rem; /* Adjust size */
+    font-weight: bold;
+    margin-bottom: 0.75rem;
+    color: var(--text-color);
+}
+body.dark .section-title { color: var(--text-color); }
+
+.section-subtitle {
+    font-size: 1rem; /* Adjust size */
+    color: var(--text-color); /* Or use muted */
+    opacity: 0.8;
+}
+body.dark .section-subtitle { opacity: 0.9; }
+
+
+/* Cards (Used for Features and Clubs) */
+.card {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem; /* Match nav-link radius */
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.card:hover {
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-3px);
+}
+body.dark .card {
+     background-color: #1a1a4a; /* Darker card background */
+     border-color: #333366; /* Darker border */
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 600; /* Semibold */
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+body.dark .card-title { color: var(--text-color); }
+
+.card p, .card-description {
+    color: var(--text-color); /* Or muted */
+    opacity: 0.8;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+body.dark .card p, body.dark .card-description { opacity: 0.9; }
+
+
+/* Features Section */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+    gap: 1.5rem;
+}
+.feature-card {
+    text-align: center; /* Center feature content */
+}
+.feature-icon-background {
+    display: inline-flex; /* Allows centering */
+    align-items: center;
+    justify-content: center;
+    width: 3rem; /* 48px */
+    height: 3rem; /* 48px */
+    border-radius: 50%;
+    background-color: hsla(210, 100%, 50%, 0.1); /* Light primary background */
+    margin-bottom: 1rem;
+}
+.feature-icon-background i {
+    font-size: 1.5rem; /* Adjust icon size */
+    color: var(--primary-color);
+}
+body.dark .feature-icon-background {
+    background-color: hsla(210, 100%, 70%, 0.15);
+}
+body.dark .feature-icon-background i {
+     color: hsl(210, 100%, 70%); /* Lighter primary for dark mode */
+}
+
+/* Featured Clubs Section */
+.clubs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
+    gap: 1.5rem;
+}
+.club-card .card-content {
+    padding-top: 1rem; /* Space below placeholder */
+}
+.club-image-placeholder {
+    height: 160px; /* Same as h-40 */
+    background-color: #e0e7ff; /* Example placeholder color */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25rem; /* Slight rounding */
+    margin-bottom: 1rem; /* Space below placeholder */
+}
+.club-image-placeholder i {
+    font-size: 3rem; /* Adjust icon size */
+    color: #a5b4fc; /* Lighter icon color */
+}
+body.dark .club-image-placeholder {
+    background-color: #2a2a5a; /* Darker placeholder */
+}
+body.dark .club-image-placeholder i {
+     color: #5a5a8a;
+}
+
+.club-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    margin-top: 0.5rem; /* Space above tags */
+}
+.tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px; /* Pill shape */
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+.tag i {
+    margin-right: 0.3rem;
+}
+.tag-members {
+    background-color: hsla(210, 100%, 50%, 0.1);
+    color: var(--primary-color);
+}
+.tag-category {
+     background-color: #e5e7eb; /* Gray background */
+     color: #4b5563; /* Dark gray text */
+}
+body.dark .tag-members {
+    background-color: hsla(210, 100%, 70%, 0.15);
+    color: hsl(210, 100%, 70%);
+}
+body.dark .tag-category {
+     background-color: #374151; /* Darker gray */
+     color: #d1d5db; /* Light gray text */
+}
+
+
+/* Footer adjustments (if you have one) */
+.section-footer {
+    /* Styles for the container of the 'View All' button */
 }
