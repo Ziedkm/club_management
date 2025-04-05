@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Navbar Example</title>
     <link rel="stylesheet" href="styles2.css">
+    <style>
+        .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 256px;
+    backdrop-filter: blur(10px);
+    transition: background-color 0.3s ease;
+    z-index: 50;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+}
+    </style>
 </head>
 <body>
     <!-- Desktop Sidebar -->

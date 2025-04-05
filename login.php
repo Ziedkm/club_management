@@ -97,7 +97,18 @@ if (isset($_POST['register'])) {
     <title><?php echo $showLoginForm ? 'Se connecter' : 'S\'inscrire'; ?> - ClubMantra</title>
     <link rel="stylesheet" href="styles.css"> <!-- Make sure this path is correct -->
     <style>
+
         /* Basic styles for error/success messages - adapt or move to styles.css */
+        .input-wrapper input[type="email"],
+.input-wrapper input[type="password"],
+        .input-wrapper input[type="text"] {
+    width: 100%;
+    padding: 12px 15px 12px 40px; /* Padding: top/bottom, right, left (for icon) */
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+    transition: border-color 0.2s ease;
+}
         .error-message {
             background-color: #f8d7da;
             color: #721c24;
@@ -125,6 +136,10 @@ if (isset($_POST['register'])) {
         }
         .password-toggle.active .eye-off-icon {
             display: inline; /* Or block, depending on SVG */
+        }
+        .login-container{
+            margin-top: 50px;
+            margin-bottom: 100px;
         }
     </style>
 </head>
@@ -286,7 +301,8 @@ if (isset($_POST['register'])) {
             });
         });
     </script>
-     <!-- <script src="scripts.js"></script> -->
+     <script src="scripts.js"></script>
+     <script src="script.js"></script>
 
 </body>
 </html>

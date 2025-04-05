@@ -194,6 +194,7 @@ body.dark .input-wrapper input:focus {
     margin-bottom: 20px;
 }
 
+
 .label-wrapper {
     display: flex;
     justify-content: space-between;
@@ -222,15 +223,7 @@ label {
     position: relative;
 }
 
-.input-wrapper input[type="email"],
-.input-wrapper input[type="password"] {
-    width: 100%;
-    padding: 12px 15px 12px 40px; /* Padding: top/bottom, right, left (for icon) */
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1em;
-    transition: border-color 0.2s ease;
-}
+
 
 .input-wrapper input:focus {
     outline: none;
@@ -359,6 +352,8 @@ label {
         width: 95%;
         max-width: 500px; /* Max width on smaller screens */
         min-height: auto; /* Allow height to adjust */
+        margin-top: 200px;
+        margin-bottom: 200px;
     }
 
     .left-panel {
