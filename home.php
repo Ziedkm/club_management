@@ -1,4 +1,5 @@
 <?php
+session_start();
 // Make sure session is started if needed by other parts of the site,
 // though not strictly required by the content below unless checking login status
 // session_start();
@@ -38,7 +39,7 @@ foreach ($all_clubs as $club) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClubNest - University Club Management System</title>
+    <title>University Club Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>

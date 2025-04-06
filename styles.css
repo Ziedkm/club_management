@@ -5,6 +5,7 @@
     box-sizing: border-box;
 }
 
+
 body {
     font-family: sans-serif;
     background-color: #f0f2f5; /* Light gray background for the page */
@@ -26,8 +27,10 @@ body.dark .login-container {
 }
 body.dark .left-panel {
     background: linear-gradient(to bottom, rgba(22, 35, 221, 0.1), rgba(1, 6, 75, 0.8)),
-    url('../path/to/your/background-image.jpg'); /* Dark mode image */
+    url('../cm/assets/images/login_img.jpg'); /* Dark mode image */
     background-color: #ffffff; /* Fallback dark background */
+    background-size: cover;
+    background-position: center;
 }
 body.dark .left-panel h2,
 body.dark .left-panel p {
@@ -103,8 +106,8 @@ body.dark .input-wrapper input:focus {
 /* Left Panel Styling */
 .left-panel {
     flex-basis: 45%; /* Adjust percentage as needed */
-    background: linear-gradient(to bottom, rgba(22, 35, 221, 0.1), rgba(1, 6, 75, 0.8)),
-                url('../path/to/your/background-image.jpg'); /* Add your image path */
+    background: linear-gradient(to bottom, rgba(22, 35, 221, 0.1), rgba(90, 96, 175, 0.8)),
+                url('../cm/assets/images/login_img.jpg'); /* Add your image path */
     background-size: cover;
     background-position: center;
     background-color: #cccccc; /* Fallback background */

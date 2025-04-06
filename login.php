@@ -4,7 +4,7 @@ session_start();
 // Include database connection and potentially user functions
 require_once 'config/database.php';
 // Assuming loginUser() and registerUser() might be defined here or in database.php
-include 'test2.php'; // Keep this if it defines loginUser/registerUser, otherwise remove/adjust
+ // Keep this if it defines loginUser/registerUser, otherwise remove/adjust
 
 // Initialize error and success messages
 $error = '';
@@ -34,7 +34,7 @@ if (isset($_POST['login'])) {
         if (function_exists('loginUser') && loginUser($email, $password)) {
             // Redirect to dashboard on successful login
             // Make sure no HTML is output before this header call
-            header('Location: index.php?page=dashboard');
+            header('Location: home.php?page=auth');
             exit;
         } else {
             $error = 'Email ou mot de passe invalide.';
@@ -43,7 +43,7 @@ if (isset($_POST['login'])) {
     // Ensure we show the login form if login fails
     $showLoginForm = true;
 }
-
+include 'test2.php';
 // Process registration form submission
 if (isset($_POST['register'])) {
     $username = trim($_POST['username'] ?? '');
@@ -95,6 +95,8 @@ if (isset($_POST['register'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $showLoginForm ? 'Se connecter' : 'S\'inscrire'; ?> - ClubMantra</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> 
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="styles.css"> <!-- Make sure this path is correct -->
     <style>
 

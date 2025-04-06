@@ -81,7 +81,6 @@ body.dark .nav-link {
     
 }
 
-
 .nav-link.active {
     background-color: rgba(100, 108, 255, 0.1);
     color: var(--primary-color);
@@ -481,4 +480,37 @@ body.dark .tag-category {
 /* Footer adjustments (if you have one) */
 .section-footer {
     /* Styles for the container of the 'View All' button */
+}
+.profilebox{
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    border-radius: 4rem;
+    background-color: white;
+    border: solid 2px var(--primary-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.profilebox:hover {
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(5px);
+}
+body.dark .profilebox {
+    background-color: #1a1a4a; /* Darker card background */
+     /* Darker border */
+}
+
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 256px;
+    background-color: var(--background-color);
+    transition: background-color 0.3s ease;
+    z-index: 50;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
 }

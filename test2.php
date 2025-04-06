@@ -4,21 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Navbar Example</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="styles2.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <style>
-        .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 256px;
-    backdrop-filter: blur(10px);
-    transition: background-color 0.3s ease;
-    z-index: 50;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-}
-    </style>
 </head>
 <body>
     <!-- Desktop Sidebar -->
@@ -64,7 +51,7 @@
                       </svg></button>
                 </div>
                 <?php if (isset($_SESSION['user'])): ?>
-                        <div class="flex items-center space-x-4">
+                        <div class="profilebox">
                             <a href="index.php?page=profile" class="flex items-center space-x-2">
                                 <div class="h-8 w-8 rounded-full bg-indigo-200 flex items-center justify-center">
                                     <?php echo substr($_SESSION['user']['username'], 0, 1); ?>
@@ -72,15 +59,16 @@
                                 <span><?php echo $_SESSION['user']['username']; ?></span>
                             </a>
                             <a href="actions/logout.php" class="bg-red-100 hover:bg-red-200 text-red-800 px-3 py-1 rounded-md">
-                                Logout
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+                                        <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                                </svg>
                             </a>
                         </div>
                     <?php else: ?>
-                        <a href="index.php?page=auth" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md">
-                            Sign In
-                        </a>
+                        
                         <a href="/cm/login.php" class="btn btn-outline">Login</a>
-                <a href="/auth?signup=true" class="btn btn-primary">Sign Up</a>
+                <a href="//cm/login.php?action=register" class="btn btn-primary">Sign Up</a>
                     <?php endif; ?>
             </div>
         </div>
@@ -114,7 +102,9 @@
             <span>About</span>
         </a>
         <button id="menu-toggle" class="nav-item">
-            <i class="icon-menu"></i>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+</svg>
             <span>Menu</span>
         </button>
     </div>
@@ -141,8 +131,26 @@
                       </svg></button>
             </div>
             <div class="mobile-menu-auth">
-                <a href="/cm/login.php" class="btn btn-outline">Login</a>
-                <a href="/auth?signup=true" class="btn btn-primary">Sign Up</a>
+            <?php if (isset($_SESSION['user'])): ?>
+                        <div class="profilebox">
+                            <a href="index.php?page=profile" class="flex items-center space-x-2">
+                                <div class="h-8 w-8 rounded-full bg-indigo-200 flex items-center justify-center ">
+                                    <?php echo substr($_SESSION['user']['username'], 0, 1); ?>
+                                </div>
+                                <span><?php echo $_SESSION['user']['username']; ?></span>
+                            </a>
+                            <a href="actions/logout.php" class="bg-red-100 hover:bg-red-200 text-red-800 px-3 py-1 rounded-md ">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+                                        <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    <?php else: ?>
+                        
+                        <a href="/cm/login.php" class="btn btn-outline">Login</a>
+                <a href="//cm/login.php?action=register" class="btn btn-primary">Sign Up</a>
+                    <?php endif; ?>
             </div>
         </div>
     </div>
