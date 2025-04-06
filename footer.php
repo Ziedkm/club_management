@@ -3,7 +3,7 @@
 
     <!-- ... Your main page content above ... -->
 
-    <footer class="site-footer">
+    <footer class="site-footer mt-20 ">
         <div class="footer-content container">
             <div class="footer-section about">
                 <h2 class="logo-text"><span class="logo-campus">club</span>nest</h2>

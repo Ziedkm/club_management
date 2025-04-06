@@ -44,6 +44,29 @@
                         <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5m9.954 3H2.545c-.3 0-.545.224-.545.5v1c0 .276.244.5.545.5h10.91c.3 0 .545-.224.545-.5v-1c0-.276-.244-.5-.546-.5M8.5 7a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM3 10.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5m3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/>
                       </svg> Events
                 </a>
+                <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] == 'admin'): ?>
+                    <a href="/cm/admin.php" class="nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-badge-fill" viewBox="0 0 16 16">
+                            <path d="M10.5 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM8 2a2.5 2.5 0 1 0 .001-4.001A2.5 2.5 0 0 0 8 2zm4.5-.5a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5h9zM8 .75A7.25 7.25 0 1 1 .75 8 .75.75 0 0 1 .75.75h7z"/>
+                        </svg> Admin Panel
+                    </a>
+                <?php endif; ?>
+                <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] == 'club_leader'): ?>
+                <a href="/cm/dashboard.php" class="nav-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-grid-1x2-fill" viewBox="0 0 16 16">
+  <path d="M0 1a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm9 0a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1zm0 9a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1z"/>
+</svg>
+                     Dashboard
+                </a>
+                <?php endif; ?>
+                <!--messages-->
+                <?php if (isset($_SESSION['user'])): ?>
+                <a href="/cm/messages.php" class="nav-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+  <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
+</svg> Messages
+                </a>
+                <?php endif; ?>
                 <a href="/about" class="nav-link">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-lightbulb-fill" viewBox="0 0 16 16">
   <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a2 2 0 0 0-.453-.618A5.98 5.98 0 0 1 2 6m3 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1-.5-.5"/>
@@ -105,14 +128,16 @@
                       </svg>
             <span>Events</span>
         </a>
-        <a href="/about" class="nav-item">
-        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-lightbulb-fill" viewBox="0 0 16 16">
-  <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a2 2 0 0 0-.453-.618A5.98 5.98 0 0 1 2 6m3 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1-.5-.5"/>
-</svg>
-            <span>About</span>
-        </a>
+        <?php if (isset($_SESSION['user'])): ?>
+                <a href="/cm/messages.php" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+  <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
+</svg> <span>Messages</span>
+                </a>
+                <?php endif; ?>
+        
         <button id="menu-toggle" class="nav-item">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
 </svg>
             <span>Menu</span>
@@ -126,10 +151,29 @@
                 <a href="/" class="logo">
                     ISGS Clubs
                 </a>
-                <button id="close-menu" class="close-btn">
-                    <i class="icon-close"></i>
-                </button>
+                
             </div>
+            <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] == 'admin'): ?>
+                    <a href="/cm/admin.php" class="nav-list-phone" style="background-color: var(--background-color); color: var(--text-color); border-radius: 5px; padding: 10px; align-items: center; display: flex; gap: 10px; border: 1px solid var(--primary-color); margin: 10px 0;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-badge-fill" viewBox="0 0 16 16">
+                            <path d="M10.5 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM8 2a2.5 2.5 0 1 0 .001-4.001A2.5 2.5 0 0 0 8 2zm4.5-.5a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5h9zM8 .75A7.25 7.25 0 1 1 .75 8 .75.75 0 0 1 .75.75h7z"/>
+                        </svg> Admin Panel
+                    </a>
+                <?php endif; ?>
+                <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] == 'club_leader'): ?>
+                <a href="/cm/dashboard.php" class="nav-list-phone" style="background-color: var(--background-color); color: var(--text-color); border-radius: 5px; padding: 10px; align-items: center; display: flex; gap: 10px; border: 1px solid var(--primary-color); margin: 10px 0;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-grid-1x2-fill" viewBox="0 0 16 16">
+  <path d="M0 1a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm9 0a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1zm0 9a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1z"/>
+</svg>
+                     Dashboard
+                </a>
+                <?php endif; ?>
+            <a href="/about" class="nav-list-phone" style="background-color: var(--background-color); color: var(--text-color); border-radius: 5px; padding: 10px; align-items: center; display: flex; gap: 10px; border: 1px solid var(--primary-color); margin: 10px 0;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-lightbulb-fill" viewBox="0 0 16 16">
+  <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a2 2 0 0 0-.453-.618A5.98 5.98 0 0 1 2 6m3 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1-.5-.5"/>
+</svg>
+            About
+        </a>
             <div class="mobile-menu-settings">
                 <select id="mobile-language-select" style="background-color: transparent; color: var(--primary-color); border-radius: 5px; padding: 5px; border: 1px solid var(--primary-color);">
                     <option value="en">English</option>
