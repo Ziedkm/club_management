@@ -6,6 +6,7 @@
     <title>Navbar Example</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="styles2.css">
+    <script src="scripts.js"></script>
 </head>
 <body>
     <!-- Desktop Sidebar -->
@@ -121,7 +122,7 @@
                 </button>
             </div>
             <div class="mobile-menu-settings">
-                <select id="mobile-language-select">
+                <select id="language-select">
                     <option value="en">English</option>
                     <option value="fr">Français</option>
                     <option value="ar">العربية</option>

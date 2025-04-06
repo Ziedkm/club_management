@@ -303,7 +303,7 @@ if (isset($_POST['register'])) {
             });
         });
     </script>
-     <script src="scripts.js"></script>
+     
      <script src="script.js"></script>
 
 </body>

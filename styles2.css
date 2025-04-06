@@ -21,15 +21,9 @@ body.dark {
 /* Desktop Sidebar */
 
 
-.sidebar.scrolled {
-    background-color: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
 
-body.dark .sidebar.scrolled {
-    background-color: rgba(26, 26, 26, 0.8);
-}
+
+
 body.dark .main-content {
     background-color: #1a1a4a;
     color: #ffffff;

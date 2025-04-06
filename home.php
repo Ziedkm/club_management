@@ -68,8 +68,8 @@ foreach ($all_clubs as $club) {
                     </a>
                 </div>
             </div>
-            <div class="fade-up" style="animation-delay: 200ms;">
-                <img src="assets/images/hero-illustration.svg" alt="Club illustration" class="w-full">
+            <div class="fade-up" style="animation-delay: 200ms;width:90%;">
+                <img src="assets/images/7826321.webp" alt="Club illustration" class="w-full" > 
             </div>
         </div>
         
@@ -180,8 +180,8 @@ foreach ($all_clubs as $club) {
 </div>
 
 </main>
-<script src="scripts.js"></script>
-<script src="script.js"></script>
+</body>
+</html>
 
 
 <!-- You might have a footer outside the main content -->
