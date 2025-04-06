@@ -66,28 +66,7 @@ if (!empty($selectedCategory)) {
 }
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>University Clubs - Club Management System</title>
-    <!-- Tailwind CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Font Awesome - Ensure your kit includes fas icons or use the CSS version -->
-    <!-- Example using Font Awesome CSS (replace kit if you prefer) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Optional: Add your custom CSS file if needed -->
-    <!-- <link rel="stylesheet" href="styles.css"> -->
-    <style>
-        /* Add any minor custom styles here if needed, e.g., for specific overrides */
-        .form-input { /* Basic styling for consistency if needed */
-            @apply border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50;
-        }
-        /* You might want styles for .club-tag-primary, .club-tag-secondary if not using pure Tailwind */
-    </style>
-</head>
-<body class="bg-gray-100">
+
 
     <!-- Optional: Include Header if you have one -->
     <?php // include 'header.php'; ?>
@@ -228,10 +207,13 @@ if (!empty($selectedCategory)) {
             </div>
 
         </div> <!-- End container -->
+        <?php
+// Include footer if needed
+include 'footer.php';
+?>
     </main>
 
-    <!-- Optional: Include Footer if you have one -->
-    <?php // include 'footer.php'; ?>
+
 
     <!-- Add any necessary JS files here -->
     <!-- <script src="scripts.js"></script> -->

@@ -105,6 +105,7 @@ body.dark .nav-link {
     text-align: center;
     text-decoration: none;
     margin-top: 10px;
+    border-radius: 5px;
     transition: background-color 0.2s ease;
 }
 
@@ -152,7 +153,6 @@ body.dark #theme-toggle{
 /* Main Content */
 .main-content {
     margin-left: 256px;
-    padding: 2rem;
 }
 
 /* Mobile Styles */
@@ -165,7 +165,7 @@ body.dark #theme-toggle{
     
     .main-content {
         margin-left: 0;
-        padding-bottom: 5rem;
+        padding-bottom: 3rem;
         
     }
 

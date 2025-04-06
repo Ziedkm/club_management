@@ -92,10 +92,6 @@ nav a.active:hover {
     opacity: 0.8;
 }
 
-.main-content {
-    
-    padding: 20px;
-}
 
 /* Dark Mode Styles */
 body.dark-mode {

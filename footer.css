@@ -1,0 +1,168 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif; /* Choose a suitable font */
+    /* Add other body styles if needed */
+}
+
+/* Container to center content */
+.container {
+    max-width: 1140px; /* Adjust as needed */
+    margin: 0 auto;
+    padding: 0 15px; /* Add horizontal padding */
+}
+
+
+/* Footer General Styling */
+.site-footer {
+    background-color: #003370; /* Dark Blue - Adjust color as needed */
+    color: #ccc; /* Light grey text color */
+    padding-top: 40px;
+    font-size: 0.9em;
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+    justify-content: space-between;
+    gap: 20px; /* Space between columns */
+    padding-bottom: 40px;
+}
+
+.footer-section {
+    flex: 1; /* Try to make columns equal width */
+    min-width: 220px; /* Minimum width before wrapping */
+    margin-bottom: 20px; /* Space below sections when they stack */
+}
+
+/* Section Titles */
+.footer-section h2 {
+    color: #fff; /* White title */
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+/* About Section */
+.footer-section.about .logo-text {
+    font-size: 1.8em;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #fff; /* ESTG part */
+}
+
+.footer-section.about .logo-campus {
+    color: #e83e8c; /* Pink color for CAMPUS - Adjust as needed */
+}
+
+.footer-section.about p {
+    line-height: 1.6;
+}
+
+/* Links Section */
+.footer-section.links ul {
+    list-style: none;
+}
+
+.footer-section.links ul li {
+    margin-bottom: 10px;
+}
+
+.footer-section.links ul li a {
+    color: #ccc;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section.links ul li a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* Contact Section */
+.footer-section.contact p {
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+.footer-section.contact p strong {
+    color: #fff; /* Make labels slightly more prominent */
+}
+
+
+/* Social Icons */
+.social-icons a {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px; /* Vertically center icon */
+    text-align: center;
+    border-radius: 50%;
+    background-color: #007bff; /* Blue background for icons - Adjust */
+    color: #fff; /* White icon color */
+    margin-right: 8px;
+    transition: background-color 0.3s ease;
+    font-size: 1.1em; /* Icon size */
+}
+
+.social-icons a:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    color: #fff;
+}
+
+/* Stay Connected Section */
+.footer-section.stay-connected p {
+    line-height: 1.6;
+}
+
+.footer-section.stay-connected .highlight,
+.footer-bottom .highlight /* Share style for pink */
+{
+    color: #e83e8c; /* Pink color */
+    font-weight: bold;
+}
+.footer-section.stay-connected .highlight-white,
+.footer-bottom .highlight-white /* Share style for white */
+{
+    color: #fff; /* White color */
+    font-weight: bold;
+}
+
+
+/* Footer Bottom Bar */
+.footer-bottom {
+    background-color: #002b5c; /* Slightly darker or same blue */
+    text-align: center;
+    padding: 15px 0;
+    margin-top: 20px; /* Space above the bottom bar */
+    border-top: 1px solid #00408e; /* Subtle top border */
+    font-size: 0.85em;
+    line-height: 1.5;
+}
+
+/* --- Responsiveness --- */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column; /* Stack columns vertically */
+        align-items: center; /* Center sections */
+        text-align: center; /* Center text within sections */
+    }
+
+    .footer-section {
+        min-width: 100%; /* Make sections full width */
+        margin-bottom: 30px; /* Increase space between stacked sections */
+    }
+
+    .social-icons {
+        text-align: center; /* Ensure icons are centered if section is */
+    }
+    .footer-section.about .logo-text {
+       text-align: center;
+    }
+    .footer-section.links ul {
+       padding-left: 0; /* Remove default padding if text is centered */
+    }
+}
