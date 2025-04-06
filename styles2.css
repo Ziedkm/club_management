@@ -32,7 +32,7 @@ body.dark .main-content {
 .sidebar-content {
     display: flex;
     flex-direction: column;
-    height: 96%;
+    height: 100%;
     padding: 1rem;
 }
 
@@ -98,7 +98,7 @@ body.dark .nav-link {
 
 .btn {
     display: block;
-    width: 80%;
+    width: 100%;
     padding: 0.5rem 1rem;
     border-radius: 9999px;
     text-align: center;
