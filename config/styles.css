@@ -44,13 +44,13 @@ nav a.active:hover {
     background-color: #E6F0FA;
 }
 
-.language-selector {
+#language-selector {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
 }
 
-.language-selector select {
+#language-selector select {
     font-size: 16px;
     color: #333333;
     border: 1px solid #1E90FF;
@@ -116,7 +116,7 @@ body.dark-mode .side-menu nav a.active {
     color: #fff;
 }
 
-body.dark-mode .side-menu .language-selector select {
+body.dark-mode .side-menu #language-selector select {
     background-color: #555;
     color: #fff;
     border-color: #1E90FF;

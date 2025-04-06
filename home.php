@@ -38,10 +38,11 @@ foreach ($all_clubs as $club) {
 ?>
 
 
-<!-- Main Content Area -->
-<main class="main-content">
 
-<div class="pt-10 pb-16">
+<!-- Main Content Area -->
+<main class="main-content pb-0  px-0 py-0">
+
+<div class="pt-10 pb-16 px-4 py-4">
     <div class="max-w-7xl mx-auto px-4">
         <!-- Hero section -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
@@ -151,7 +152,7 @@ foreach ($all_clubs as $club) {
                                 <?php echo $club['category']; ?>
                             </span>
                         </div>
-                        <a href="index.php?page=club-detail&id=<?php echo $club['id']; ?>" class="btn-primary w-full text-center">
+                        <a href="index.php?page=club-detail&id=<?php echo $club['id']; ?>" class="btn btn-primary w-full text-center">
                             View Club
                         </a>
                     </div>

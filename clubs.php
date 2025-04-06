@@ -72,8 +72,8 @@ if (!empty($selectedCategory)) {
     <?php // include 'header.php'; ?>
 
     <!-- Main Content Area -->
-    <main class="main-content py-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main class="main-content pb-0 pt-10 px-0 py-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 pb-10 lg:px-8">
 
             <!-- Page Header -->
             <div class="mb-10 text-center md:text-left">

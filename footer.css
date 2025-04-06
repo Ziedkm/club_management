@@ -1,13 +1,4 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
-body {
-    font-family: sans-serif; /* Choose a suitable font */
-    /* Add other body styles if needed */
-}
 
 /* Container to center content */
 .container {
@@ -52,11 +43,11 @@ body {
     font-size: 1.8em;
     margin-bottom: 15px;
     font-weight: bold;
-    color: #fff; /* ESTG part */
+    color: #fff; 
 }
 
 .footer-section.about .logo-campus {
-    color: #e83e8c; /* Pink color for CAMPUS - Adjust as needed */
+    color: #7eb0ff; 
 }
 
 .footer-section.about p {
@@ -121,7 +112,7 @@ body {
 .footer-section.stay-connected .highlight,
 .footer-bottom .highlight /* Share style for pink */
 {
-    color: #e83e8c; /* Pink color */
+    color: #3e88e8; /* Pink color */
     font-weight: bold;
 }
 .footer-section.stay-connected .highlight-white,

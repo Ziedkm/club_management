@@ -89,63 +89,7 @@ if (isset($_POST['register'])) {
 
 // --- HTML Output Starts Here ---
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $showLoginForm ? 'Se connecter' : 'S\'inscrire'; ?> - ClubMantra</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> 
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="styles.css"> <!-- Make sure this path is correct -->
-    <style>
 
-        /* Basic styles for error/success messages - adapt or move to styles.css */
-        .input-wrapper input[type="email"],
-.input-wrapper input[type="password"],
-        .input-wrapper input[type="text"] {
-    width: 100%;
-    padding: 12px 15px 12px 40px; /* Padding: top/bottom, right, left (for icon) */
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1em;
-    transition: border-color 0.2s ease;
-}
-        .error-message {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-            padding: 10px 15px;
-            border-radius: 4px;
-            margin-bottom: 15px;
-            font-size: 0.9em;
-        }
-        .success-message {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-            padding: 10px 15px;
-            border-radius: 4px;
-            margin-bottom: 15px;
-            font-size: 0.9em;
-        }
-         /* Style to hide the eye-off icon initially */
-        .password-toggle .eye-off-icon {
-            display: none;
-        }
-        .password-toggle.active .eye-icon {
-            display: none;
-        }
-        .password-toggle.active .eye-off-icon {
-            display: inline; /* Or block, depending on SVG */
-        }
-        .login-container{
-            margin-top: 50px;
-            margin-bottom: 100px;
-        }
-    </style>
-</head>
-<body>
 <main class="main-content">
     <div class="login-container">
         <!-- Left Decorative Panel -->

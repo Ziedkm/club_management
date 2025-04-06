@@ -17,6 +17,7 @@
     <!-- Optional: Add your custom CSS file if needed -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script src="scripts.js"></script>
+    <script src="script.js"></script>
 </head>
 <body>
     <!-- Desktop Sidebar -->
@@ -51,7 +52,7 @@
             </nav>
             <div class="sidebar-bottom">
                 <div class="settings">
-                    <select id="language-select">
+                    <select id="language-select" style="background-color: transparent; color: var(--primary-color); border-radius: 5px; padding: 5px; border: 1px solid var(--primary-color);">
                         <option value="en">English</option>
                         <option value="fr">Français</option>
                         <option value="ar">العربية</option>
@@ -78,7 +79,7 @@
                     <?php else: ?>
                         
                         <a href="/cm/login.php" class="btn btn-outline">Login</a>
-                <a href="//cm/login.php?action=register" class="btn btn-primary">Sign Up</a>
+                <a href="/cm/login.php?action=register" class="btn btn-primary">Sign Up</a>
                     <?php endif; ?>
             </div>
         </div>
@@ -130,7 +131,7 @@
                 </button>
             </div>
             <div class="mobile-menu-settings">
-                <select id="mobile-language-select">
+                <select id="mobile-language-select" style="background-color: transparent; color: var(--primary-color); border-radius: 5px; padding: 5px; border: 1px solid var(--primary-color);">
                     <option value="en">English</option>
                     <option value="fr">Français</option>
                     <option value="ar">العربية</option>
@@ -158,7 +159,7 @@
                     <?php else: ?>
                         
                         <a href="/cm/login.php" class="btn btn-outline">Login</a>
-                <a href="//cm/login.php?action=register" class="btn btn-primary">Sign Up</a>
+                <a href="/cm/login.php?action=register" class="btn btn-primary">Sign Up</a>
                     <?php endif; ?>
             </div>
         </div>
