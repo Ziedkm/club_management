@@ -181,6 +181,8 @@ foreach ($all_clubs as $club) {
 </div>
 
 </main>
+
+ 
 </body>
 </html>
 
