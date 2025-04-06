@@ -67,6 +67,36 @@
 </svg> Messages
                 </a>
                 <?php endif; ?>
+                <!-- ==== START Create Buttons ==== -->
+            <?php if (isset($_SESSION['user'])): ?>
+                <?php
+                    // Check permissions for each button
+                    $canCreateClub = ($_SESSION['user']['role'] === 'student' || $_SESSION['user']['role'] === 'admin');
+                    // Add logic here later in create_club.php to check if student already leads a club
+                    $canCreateEvent = ($_SESSION['user']['role'] === 'club_leader' || $_SESSION['user']['role'] === 'admin');
+                ?>
+
+                <?php if ($canCreateClub): ?>
+                    <a href="/cm/create_club.php" class="nav-link"> <!-- Simple link -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+                        </svg>
+                        Create Club
+                    </a>
+                <?php endif; ?>
+
+                <?php if ($canCreateEvent): ?>
+                    <a href="/cm/create_event.php" class="nav-link"> <!-- Simple link -->
+                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-calendar-plus-fill" viewBox="0 0 16 16">
+                            <path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2M8.5 8.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zM8 12a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
+                         </svg>
+                         Create Event
+                    </a>
+                <?php endif; ?>
+
+            <?php endif; // End check for logged in user ?>
+            <!-- ==== END Create Buttons ==== -->
+            
                 <a href="/about" class="nav-link">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-lightbulb-fill" viewBox="0 0 16 16">
   <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a2 2 0 0 0-.453-.618A5.98 5.98 0 0 1 2 6m3 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1-.5-.5"/>
@@ -86,7 +116,7 @@
                 </div>
                 <?php if (isset($_SESSION['user'])): ?>
                         <div class="profilebox">
-                            <a href="index.php?page=profile" class="flex items-center space-x-2">
+                            <a href="profile.php" class="flex items-center space-x-2">
                                 <div class="h-8 w-8 rounded-full bg-indigo-200 flex items-center justify-center">
                                     <?php echo substr($_SESSION['user']['username'], 0, 1); ?>
                                 </div>
@@ -187,7 +217,7 @@
             <div class="mobile-menu-auth">
             <?php if (isset($_SESSION['user'])): ?>
                         <div class="profilebox">
-                            <a href="index.php?page=profile" class="flex items-center space-x-2">
+                            <a href="profile.php" class="flex items-center space-x-2">
                                 <div class="h-8 w-8 rounded-full bg-indigo-200 flex items-center justify-center ">
                                     <?php echo substr($_SESSION['user']['username'], 0, 1); ?>
                                 </div>

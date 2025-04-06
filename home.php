@@ -54,10 +54,10 @@ foreach ($all_clubs as $club) {
                     ClubNest connects you with clubs that match your interests, helps you stay updated with events, and simplifies club management for leaders.
                 </p>
                 <div class="flex flex-wrap gap-4">
-                    <a href="index.php?page=clubs" class="btn-primary py-3 px-6">
+                    <a href="/cm/clubs.php" class="btn-primary py-3 px-6">
                         Explore Clubs
                     </a>
-                    <a href="index.php?page=auth" class="btn-secondary py-3 px-6">
+                    <a href="/cm/login.php" class="btn-secondary py-3 px-6">
                         Sign Up Now
                     </a>
                 </div>
@@ -126,10 +126,13 @@ foreach ($all_clubs as $club) {
                 // Get all clubs from database
                 $clubs = getAllClubs();
                 
-                // Display up to 3 clubs
+                // Display up to 3 active clubs
                 $count = 0;
                 foreach ($clubs as $club) {
                     if ($count >= 3) break;
+                    
+                    // Check if the club is active
+                    if ($club['status'] !== 'active') continue;
                     
                     // Get member count
                     $members = getClubMembers($club['id']);

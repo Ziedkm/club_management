@@ -10,51 +10,59 @@ include_once 'test2.php'; // Adjust path if necessary
 
 // --- Data Fetching and Filtering ---
 
-// 1. Get ALL clubs first for category list and initial display
-$all_clubs = [];
+// 1. Get ALL clubs from the function
+$all_clubs_from_db = [];
 if (function_exists('getAllClubs')) {
-    $all_clubs = getAllClubs(); // Assuming this function exists and works
+    $all_clubs_from_db = getAllClubs(); // Get all, including pending/rejected
 } else {
-    // Log error or handle the case where the function is missing
     error_log("getAllClubs function not found.");
-    // You might want to set an error message to display to the user
 }
 
-// 2. Generate list of unique categories from ALL clubs
+// **** NEW: Filter for ACTIVE clubs ONLY ****
+$all_clubs = []; // This will hold only active clubs for display
+foreach ($all_clubs_from_db as $club) {
+    // Check if the status column exists and is 'active'
+    // Use null coalescing in case 'status' column doesn't exist yet or is null
+    if (($club['status'] ?? 'pending') === 'active') {
+        $all_clubs[] = $club;
+    }
+}
+// Now $all_clubs contains only active ones
+
+
+// 2. Generate list of unique categories from ACTIVE clubs
 $all_categories = [];
-foreach ($all_clubs as $club) {
-    // Use null coalescing operator for safety if 'category' might be missing
+foreach ($all_clubs as $club) { // Loop through the already filtered $all_clubs
     $category = $club['category'] ?? null;
     if ($category && !in_array($category, $all_categories)) {
         $all_categories[] = $category;
     }
 }
-sort($all_categories); // Optional: Sort categories alphabetically
+sort($all_categories);
+
 
 // 3. Get filter parameters from URL
-$searchQuery = trim($_GET['search'] ?? ''); // Use trim and null coalescing
+$searchQuery = trim($_GET['search'] ?? '');
 $selectedCategory = trim($_GET['category'] ?? '');
 
-// 4. Start with all clubs and apply filters sequentially
-$display_clubs = $all_clubs;
+// 4. Start with ACTIVE clubs and apply filters sequentially
+$display_clubs = $all_clubs; // Start with the active clubs list
 
-// Apply search filter
+// Apply search filter (logic remains the same)
 if (!empty($searchQuery)) {
     $filteredBySearch = [];
     foreach ($display_clubs as $club) {
-        // Case-insensitive search using stripos
         $nameMatch = stripos($club['name'] ?? '', $searchQuery) !== false;
         $descMatch = stripos($club['description'] ?? '', $searchQuery) !== false;
         $catMatch = stripos($club['category'] ?? '', $searchQuery) !== false;
-
         if ($nameMatch || $descMatch || $catMatch) {
             $filteredBySearch[] = $club;
         }
     }
-    $display_clubs = $filteredBySearch; // Update the list to display
+    $display_clubs = $filteredBySearch;
 }
 
-// Apply category filter (on the already search-filtered list, or all if no search)
+// Apply category filter (logic remains the same)
 if (!empty($selectedCategory)) {
     $filteredByCategory = [];
     foreach ($display_clubs as $club) {
@@ -62,7 +70,7 @@ if (!empty($selectedCategory)) {
             $filteredByCategory[] = $club;
         }
     }
-    $display_clubs = $filteredByCategory; // Update the list again
+    $display_clubs = $filteredByCategory;
 }
 
 ?>
@@ -129,7 +137,7 @@ if (!empty($selectedCategory)) {
 
                         <!-- Submit Button -->
                         <div class="flex justify-end pt-2">
-                            <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 <i class="fas fa-filter mr-2"></i> Apply Filters
                             </button>
                         </div>
@@ -180,7 +188,7 @@ if (!empty($selectedCategory)) {
                                     <?php endif; ?>
                                 </div>
                                 <!-- View Button -->
-                                <a href="club-detail.php?page=club-detail&id=<?php echo $club['id'] ?? ''; ?>" class="mt-auto block w-full text-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <a href="club-detail.php?page=club-detail&id=<?php echo $club['id'] ?? ''; ?>" class="mt-auto block w-full text-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     View Club
                                 </a>
                             </div>

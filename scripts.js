@@ -124,4 +124,9 @@ document.addEventListener('DOMContentLoaded', () => {
              link.classList.remove('active'); // Ensure no active state if no href
         }
     });
+
+   
+
+
 }); // End of DOMContentLoaded
+
