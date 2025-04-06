@@ -104,20 +104,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 link.classList.remove('active');
             }
 
-            /* // *** Option 2: Normalization (Keep if direct comparison fails edge cases) ***
-            const normalizedCurrentPath = currentPath.endsWith('/') ? currentPath : currentPath + '/';
-            // Ensure linkPath exists before calling endsWith
-            const normalizedLinkPath = linkPath.endsWith('/') ? linkPath : linkPath + '/';
-
-            console.log("Normalized Compare:", normalizedCurrentPath, "with", normalizedLinkPath); // Debug
-
-            if (normalizedLinkPath === normalizedCurrentPath) {
-                link.classList.add('active');
-                console.log("Activated (Normalized Match):", linkPath); // Debug
+            if (linkPath) {
+                console.log("Comparing:", currentPath, "with", linkPath); // Debug
+            
+                // *** Option 1: Direct Comparison (Often simpler and sufficient) ***
+                if (linkPath === currentPath) {
+                    link.classList.add('active');
+                     console.log("Activated (Direct Match):", linkPath); // Debug
+                } else {
+                    link.classList.remove('active');
+                }
             } else {
-                link.classList.remove('active');
+                 console.warn("Link skipped (no href):", link); // Debug
+                 link.classList.remove('active'); // Ensure no active state if no href
             }
-            */
 
         } else {
             console.warn("Link skipped (no href):", link); // Debug

@@ -146,6 +146,7 @@ if (isset($_POST['register'])) {
     </style>
 </head>
 <body>
+<main class="main-content">
     <div class="login-container">
         <!-- Left Decorative Panel -->
         <div class="left-panel">
@@ -305,6 +306,6 @@ if (isset($_POST['register'])) {
     </script>
      
      <script src="script.js"></script>
-
+</main>
 </body>
 </html>
