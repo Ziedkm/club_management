@@ -45,10 +45,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.toggle('dark');
         // Add logic to persist theme if desired (e.g., localStorage)
     };
-/*
+
     themeToggle.addEventListener('click', toggleTheme);
     mobileThemeToggle.addEventListener('click', toggleTheme);
-
+/*
 
     // Language change
     const handleLanguageChange = (event) => {
