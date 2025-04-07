@@ -1,20 +1,27 @@
+<?php date_default_timezone_set('Africa/Tunis'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navbar Example</title>
+    <title>ISGS Clubs</title>
+
+    <!-- Core Stylesheets -->
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="styles2.css">
     <link rel="stylesheet" href="footer.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Third Party CSS -->
+    <!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Tailwind CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Font Awesome - Ensure your kit includes fas icons or use the CSS version -->
-    <!-- Example using Font Awesome CSS (replace kit if you prefer) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Optional: Add your custom CSS file if needed -->
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" 
+          integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" 
+          crossorigin="anonymous" 
+          referrerpolicy="no-referrer" />
+    
+    <!-- JavaScript Files -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script src="scripts.js"></script>
     <script src="script.js"></script>
@@ -39,7 +46,7 @@
                         <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
                       </svg> Clubs
                 </a>
-                <a href="/events" class="nav-link">
+                <a href="/cm/events.php" class="nav-link">
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"fill="currentColor" class="bi bi-calendar2-week-fill" viewBox="0 0 16 16">
                         <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5m9.954 3H2.545c-.3 0-.545.224-.545.5v1c0 .276.244.5.545.5h10.91c.3 0 .545-.224.545-.5v-1c0-.276-.244-.5-.546-.5M8.5 7a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM3 10.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5m3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/>
                       </svg> Events
@@ -97,7 +104,7 @@
             <?php endif; // End check for logged in user ?>
             <!-- ==== END Create Buttons ==== -->
             
-                <a href="/about" class="nav-link">
+                <a href="/cm/about/about.php" class="nav-link">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-lightbulb-fill" viewBox="0 0 16 16">
   <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a2 2 0 0 0-.453-.618A5.98 5.98 0 0 1 2 6m3 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1-.5-.5"/>
 </svg> About
@@ -152,7 +159,7 @@
                       </svg>
             <span>Clubs</span>
         </a>
-        <a href="/events" class="nav-item">
+        <a href="/cm/events.php" class="nav-item">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-calendar2-week-fill" viewBox="0 0 16 16">
                         <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5m9.954 3H2.545c-.3 0-.545.224-.545.5v1c0 .276.244.5.545.5h10.91c.3 0 .545-.224.545-.5v-1c0-.276-.244-.5-.546-.5M8.5 7a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM3 10.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5m3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/>
                       </svg>
@@ -183,6 +190,35 @@
                 </a>
                 
             </div>
+            
+            <?php if (isset($_SESSION['user'])): ?>
+                <?php
+                    // Check permissions for each button
+                    $canCreateClub = ($_SESSION['user']['role'] === 'student' || $_SESSION['user']['role'] === 'admin');
+                    // Add logic here later in create_club.php to check if student already leads a club
+                    $canCreateEvent = ($_SESSION['user']['role'] === 'club_leader' || $_SESSION['user']['role'] === 'admin');
+                ?>
+
+                <?php if ($canCreateClub): ?>
+                    <a href="/cm/create_club.php" class="nav-list-phone" style="background-color: var(--background-color); color: var(--text-color); border-radius: 5px; padding: 10px; align-items: center; display: flex; gap: 10px; border: 1px solid var(--primary-color); margin: 10px 0;"> <!-- Simple link -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+                        </svg>
+                        Create Club
+                    </a>
+                <?php endif; ?>
+
+                <?php if ($canCreateEvent): ?>
+                    <a href="/cm/create_event.php" class="nav-list-phone" style="background-color: var(--background-color); color: var(--text-color); border-radius: 5px; padding: 10px; align-items: center; display: flex; gap: 10px; border: 1px solid var(--primary-color); margin: 10px 0;"> <!-- Simple link -->
+                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-calendar-plus-fill" viewBox="0 0 16 16">
+                            <path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2M8.5 8.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zM8 12a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
+                         </svg>
+                         Create Event
+                    </a>
+                <?php endif; ?>
+
+            <?php endif; // End check for logged in user ?>
+            
             <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] == 'admin'): ?>
                     <a href="/cm/admin.php" class="nav-list-phone" style="background-color: var(--background-color); color: var(--text-color); border-radius: 5px; padding: 10px; align-items: center; display: flex; gap: 10px; border: 1px solid var(--primary-color); margin: 10px 0;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-badge-fill" viewBox="0 0 16 16">
@@ -198,7 +234,7 @@
                      Dashboard
                 </a>
                 <?php endif; ?>
-            <a href="/about" class="nav-list-phone" style="background-color: var(--background-color); color: var(--text-color); border-radius: 5px; padding: 10px; align-items: center; display: flex; gap: 10px; border: 1px solid var(--primary-color); margin: 10px 0;">
+            <a href="/cm/about/about.php" class="nav-list-phone" style="background-color: var(--background-color); color: var(--text-color); border-radius: 5px; padding: 10px; align-items: center; display: flex; gap: 10px; border: 1px solid var(--primary-color); margin: 10px 0;">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-lightbulb-fill" viewBox="0 0 16 16">
   <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a2 2 0 0 0-.453-.618A5.98 5.98 0 0 1 2 6m3 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1-.5-.5"/>
 </svg>

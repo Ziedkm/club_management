@@ -1,0 +1,194 @@
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    line-height: 1.6;
+    color: #333;
+    background-color: #fff;
+    font-size: 16px;
+}
+
+.container {
+    max-width: 1140px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+
+p {
+    margin-bottom: 1rem;
+}
+
+a {
+    color: #00408e;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* --- Common Section Styles --- */
+.section-padding {
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+@media (min-width: 768px) {
+    .section-padding {
+        padding-top: 80px;
+        padding-bottom: 80px;
+    }
+}
+
+.section-bg-light {
+    background-color: #f8f9fa;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    font-size: 2.25rem;
+}
+@media (min-width: 768px) {
+    .section-title {
+        font-size: 2.5rem;
+        margin-bottom: 3rem;
+    }
+}
+
+.section-description {
+    text-align: center;
+    font-size: 1.1em;
+    color: #555;
+    margin-bottom: 3rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.7;
+}
+@media (min-width: 768px) {
+     .section-description {
+         margin-bottom: 4rem;
+     }
+}
+
+/* --- Styles Section À Propos --- */
+.about-section-wrapper {} /* Utilise .section-padding et .section-bg-light */
+.about-main-title { font-size: 2.5em; font-weight: 700; text-align: center; margin-bottom: 15px; }
+.about-subtitle { font-size: 1.2em; color: #6c757d; text-align: center; max-width: 700px; margin: 0 auto 40px auto; line-height: 1.6; }
+.about-card { background-color: #ffffff; border-radius: 12px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); overflow: hidden; max-width: 900px; margin: 0 auto; }
+.about-banner { position: relative; line-height: 0; }
+.about-banner img { width: 100%; max-height: 350px; object-fit: cover; }
+.mission-overlay-text { position: absolute; bottom: 25px; left: 25px; color: #ffffff; font-size: 2.2em; font-weight: 700; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6); margin: 0; }
+.about-content { padding: 30px 35px; }
+.about-content p { font-size: 1.05em; color: #333; line-height: 1.7; }
+
+/* --- Styles Section Valeurs --- */
+.values-grid { display: grid; gap: 2rem; grid-template-columns: 1fr; }
+@media (min-width: 768px) { .values-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 992px) { .values-grid { grid-template-columns: repeat(4, 1fr); } }
+.value-card { background-color: #ffffff; border: 1px solid #e9ecef; border-radius: 8px; padding: 2rem 1.5rem; text-align: center; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.value-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
+.value-icon { font-size: 2.5rem; color: #3498db; margin-bottom: 1rem; }
+.value-card h3 { margin-bottom: 0.5rem; font-size: 1.25rem; }
+.value-card p { font-size: 0.95rem; color: #555; margin-bottom: 0; }
+
+/* --- Styles Section Équipe --- */
+/* #team-section utilise .section-padding et .section-bg-light */
+#team-section .section-title { color: #2c3e50; }
+#team-section .section-description { color: #555; }
+#team-section .section-description .highlight-dark { color: #343a40; }
+.team-members-grid {
+    display: flex;
+    /* MODIFICATION 1: Permettre le passage à la ligne */
+    flex-wrap: wrap;
+    /* MODIFICATION 2: Centrer les éléments horizontalement sur chaque ligne */
+    justify-content: center;
+    /* SUPPRIMÉ : overflow-x: auto; (plus besoin de défilement) */
+    /* SUPPRIMÉ : padding-bottom: 20px; (l'espace pour la barre n'est plus utile) */
+    /* Garder l'espacement entre les membres */
+    gap: 30px; /* Ou 20px, 25px selon votre préférence */
+    /* Garder la marge au-dessus */
+    margin-top: 30px;
+}.team-member { position: relative; width: 180px; height: 180px; border-radius: 50%; overflow: hidden; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; flex-shrink: 0; }
+@media (min-width: 768px) { .team-member { width: 200px; height: 200px; } }
+@media (min-width: 992px) { .team-member { width: 220px; height: 220px; } }
+@media (min-width: 1200px) { .team-member { width: 250px; height: 250px; } }
+.team-member:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); }
+.team-member img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+.team-member:hover img { transform: scale(1.1); }
+.member-info-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 43, 92, 0.85); color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 15px; box-sizing: border-box; opacity: 0; transition: opacity 0.4s ease-in-out; pointer-events: none; border-radius: 50%; }
+.team-member:hover .member-info-overlay { opacity: 1; pointer-events: auto; }
+.member-info-overlay h3 { margin: 0 0 5px 0; font-size: 1.1em; font-weight: 600; color: #fff; }
+.member-info-overlay .member-title { margin: 0 0 10px 0; font-size: 0.85em; font-style: italic; color: #ddd; }
+.member-info-overlay .social-links a { color: #fff; font-size: 1.1em; margin: 0 6px; transition: color 0.3s ease, transform 0.3s ease; display: inline-block; }
+.member-info-overlay .social-links a:hover { color: #aee6ff; transform: scale(1.2); }
+
+
+.localisation-video-wrapper {
+    max-width: 900px; /* Limite la largeur max de la carte */
+    margin: 0 auto;   /* Centre la carte horizontalement */
+    border: 1px solid #ddd; /* Bordure légère autour */
+    border-radius: 8px;    /* Coins arrondis */
+    overflow: hidden;      /* Coupe l'iframe aux coins arrondis */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    width: 595px;        /* Prend toute la largeur du wrapper */
+}
+
+.localisation-video-wrapper iframe {
+    display: block;     /* Enlève l'espace sous l'iframe */
+    max-width: 100%;    /* Empêche de déborder */
+    border: 0;          /* Enlève la bordure par défaut de l'iframe */
+}
+
+
+/* Tous les styles .contact-grid, .contact-info, .contact-form, etc. ont été enlevés */
+
+
+/* --- Responsive Spécifiques (Ajustements fins si nécessaire) --- */
+@media (max-width: 767px) {
+    .about-main-title { font-size: 2em; }
+    .about-subtitle { font-size: 1.1em; }
+    .mission-overlay-text { font-size: 1.8em; bottom: 15px; left: 15px; }
+    .about-content { padding: 25px 20px; }
+    .section-title { font-size: 1.8rem; margin-bottom: 2rem; }
+    .section-description { font-size: 1em; margin-bottom: 2.5rem; }
+    .values-grid { gap: 1.5rem; }
+}
+
+@media (max-width: 575px) {
+     .about-main-title { font-size: 1.8em; }
+     .about-subtitle { font-size: 1em; margin-bottom: 30px; }
+     .mission-overlay-text { font-size: 1.5em; }
+     .about-card { border-radius: 8px; }
+     .team-member { width: 160px; height: 160px; }
+     .team-members-grid { gap: 20px; padding-bottom: 15px;}
+     .member-info-overlay h3 { font-size: 1em; }
+     .member-info-overlay .member-title { font-size: 0.8em; margin-bottom: 8px; }
+     .member-info-overlay .social-links a { font-size: 1em; margin: 0 5px; }
+     .value-card { padding: 1.5rem 1rem;}
+}
