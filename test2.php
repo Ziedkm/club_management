@@ -253,7 +253,7 @@
             <div class="mobile-menu-auth">
             <?php if (isset($_SESSION['user'])): ?>
                         <div class="profilebox">
-                            <a href="profile.php" class="flex items-center space-x-2">
+                            <a href="/cm/profile.php" class="flex items-center space-x-2">
                                 <div class="h-8 w-8 rounded-full bg-indigo-200 flex items-center justify-center ">
                                     <?php echo substr($_SESSION['user']['username'], 0, 1); ?>
                                 </div>

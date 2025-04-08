@@ -234,7 +234,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     /* Admin Tabs */
     .admin-tabs-section { margin-bottom: 2rem; }
-    .admin-tabs { border-bottom: 2px solid var(--border-color); display: flex; gap: 0.5rem; margin-bottom: -1px; /* Overlap border */ } body.dark .admin-tabs { border-bottom-color: #333366; }
+    .admin-tabs { 
+        border-bottom: 2px solid var(--border-color); display: flex; gap: 0.5rem; margin-bottom: -1px; /* Overlap border */ } body.dark .admin-tabs { border-bottom-color: #333366; }
     .admin-tab-button {
         padding: 0.75rem 1.25rem; border: none; border-bottom: 2px solid transparent;
         background: none; cursor: pointer; font-weight: 500; color: #555;
@@ -273,7 +274,6 @@ document.addEventListener('DOMContentLoaded', function() {
     .status-badge.banned { background-color: #f8d7da; color: #721c24; } body.dark .status-badge.banned { background-color: #721c24; color: #f8d7da;}
     tr.banned-row td { opacity: 0.6; font-style: italic; }
 
-    .empty-list-message { /* ... Reuse style ... */ }
 
      /* Responsive Table */
      @media (max-width: 767px) {

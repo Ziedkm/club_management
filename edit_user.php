@@ -262,8 +262,7 @@ include_once 'test2.php'; // Includes <!DOCTYPE>, <head>, opening <body>, <heade
      .form-actions .btn { display: inline-flex; align-items: center; } .form-actions .btn i { margin-right: 0.5rem; }
      .btn-secondary { /* Define if not defined */ background-color: #e5e7eb; color: #374151; border: 1px solid transparent; } .btn-secondary:hover { background-color: #d1d5db; } body.dark .btn-secondary { background-color: #4b5563; color: #e5e7eb; } body.dark .btn-secondary:hover { background-color: #6b7280; }
 
-     /* Message styles */
-     .message { /* ... reuse message styles ... */ }
+     
 </style>
 
 <!-- Password toggle JS is not needed here as there are no password fields -->

@@ -15,7 +15,7 @@
             <div class="footer-section links">
                 <h2>SUIVEZ-NOUS</h2>
                 <ul>
-                    <li><a href="#">Home</a></li>
+                    <li><a href="/cm/home.php">Home</a></li>
                     <li><a href="#">Services</a></li>
                     <li><a href="#">clubs</a></li>
                     <li><a href="#">why clubnest </a></li>
