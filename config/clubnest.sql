@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 08, 2025 at 09:25 PM
+-- Generation Time: Apr 13, 2025 at 10:33 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ISG Clubs`
+-- Database: `clubnest`
 --
 
 -- --------------------------------------------------------
@@ -58,7 +58,7 @@ CREATE TABLE `club_members` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `club_id` int(11) NOT NULL,
-  `role` enum('member','leader') NOT NULL DEFAULT 'member',
+  `role` enum('member','leader','pending') NOT NULL DEFAULT 'pending',
   `joined_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -69,7 +69,8 @@ CREATE TABLE `club_members` (
 INSERT INTO `club_members` (`id`, `user_id`, `club_id`, `role`, `joined_at`) VALUES
 (1, 2, 1, 'leader', '2025-03-25 10:17:43'),
 (2, 2, 2, 'leader', '2025-03-25 10:17:43'),
-(3, 3, 3, 'member', '2025-03-25 10:17:43');
+(3, 3, 3, 'member', '2025-03-25 10:17:43'),
+(29, 4, 2, 'pending', '2025-04-13 20:06:34');
 
 -- --------------------------------------------------------
 
@@ -97,7 +98,7 @@ CREATE TABLE `events` (
 
 INSERT INTO `events` (`id`, `club_id`, `name`, `description`, `event_date`, `event_end_date`, `location`, `status`, `poster_image_path`, `created_at`, `created_by`) VALUES
 (2, 2, 'qsfsqf', 'qdsqsdqsdqsdqsd', '2025-04-07 04:28:00', '2025-04-07 15:26:00', 'saleqsfqsfqs', 'active', '/cm/uploads/event_posters/event_67f31be802fd27.42977506.png', '2025-04-07 00:27:20', 1),
-(3, 1, 'fqfsqfqsfqsf', 'qsfqsfqsfqsfojsifjqslkfjq\r\nqsfqlskfjqlqsfqsfqsfqsfojsifjqslkfjq\r\nqsfqlskfjqlqsfqsfqsfqsfojsifjqslkfjq\r\nqsfqlskfjqlqsfqsfqsfqsfojsifjqslkfjq\r\nqsfqlskfjqlqsfqsfqsfqsfojsifjqslkfjq\r\nqsfqlskfjql', '2025-04-08 01:41:00', '2025-04-08 17:44:00', 'sale 17', 'active', '/cm/uploads/event_posters/event_67f31f58aa2fb5.24921088.png', '2025-04-07 00:42:00', 1),
+(3, 1, 'test', 'qsfqsfqsfqsfojsifjqslkfjq\r\nqsfqlskfjqlqsfqsfqsfqsfojsifjqslkfjq\r\nqsfqlskfjqlqsfqsfqsfqsfojsifjqslkfjq\r\nqsfqlskfjqlqsfqsfqsfqsfojsifjqslkfjq\r\nqsfqlskfjqlqsfqsfqsfqsfojsifjqslkfjq\r\nqsfqlskfjql', '2025-04-13 13:41:00', '2025-04-14 17:44:00', 'sale 17', 'active', '/cm/uploads/event_posters/event_67f31f58aa2fb5.24921088.png', '2025-04-07 00:42:00', 1),
 (4, 2, 'CMC', 'QSDQSFSQFQSFQSFQSFQSFQSFQSF', '2025-04-08 03:18:00', '2025-04-09 03:18:00', 'EPI', 'active', '/cm/uploads/event_posters/event_67f33630b74af2.02937043.jpg', '2025-04-07 02:19:28', 2),
 (5, 2, 'CMC', 'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffqsfqfqsfqsf', '2025-04-10 03:28:00', '2025-04-11 03:28:00', 'sale 17', 'rejected', '/cm/uploads/event_posters/event_67f338433138f0.13613334.jpg', '2025-04-07 02:28:19', 2),
 (6, 2, 'hachathon', 'BLABLABLABLABLABLABALBALABALB   AKABKABKABKABBAKBAKAB', '2025-04-16 12:57:00', '2025-04-17 12:57:00', 'ihecc', 'rejected', '/cm/uploads/event_posters/event_67f3bdd8a86dd7.41879141.jpg', '2025-04-07 11:58:16', 2);
@@ -141,7 +142,8 @@ CREATE TABLE `event_comments` (
 --
 
 INSERT INTO `event_comments` (`id`, `event_id`, `user_id`, `comment_text`, `created_at`) VALUES
-(1, 3, 1, 'very good event 😊', '2025-04-07 01:25:40');
+(1, 3, 1, 'very good event 😊', '2025-04-07 01:25:40'),
+(2, 4, 8, 'Yooo', '2025-04-11 21:38:40');
 
 -- --------------------------------------------------------
 
@@ -160,7 +162,8 @@ CREATE TABLE `event_interest` (
 --
 
 INSERT INTO `event_interest` (`user_id`, `event_id`, `marked_at`) VALUES
-(1, 3, '2025-04-07 01:17:29');
+(1, 3, '2025-04-07 01:17:29'),
+(8, 4, '2025-04-11 21:38:17');
 
 -- --------------------------------------------------------
 
@@ -183,7 +186,8 @@ INSERT INTO `event_likes` (`user_id`, `event_id`, `liked_at`) VALUES
 (1, 4, '2025-04-08 13:29:07'),
 (2, 3, '2025-04-07 12:05:04'),
 (4, 4, '2025-04-07 18:15:50'),
-(5, 4, '2025-04-07 13:03:46');
+(5, 4, '2025-04-07 13:03:46'),
+(8, 4, '2025-04-11 21:38:20');
 
 -- --------------------------------------------------------
 
@@ -221,7 +225,9 @@ INSERT INTO `messages` (`id`, `sender_id`, `receiver_id`, `message_content`, `se
 (14, 5, 4, 'geleg', '2025-04-07 13:03:14', 1),
 (15, 5, 4, 'wenek', '2025-04-07 13:03:21', 1),
 (16, 4, 5, 'hani wlh', '2025-04-07 18:16:13', 0),
-(17, 6, 4, 'hello', '2025-04-08 07:54:07', 1);
+(17, 6, 4, 'hello', '2025-04-08 07:54:07', 1),
+(18, 7, 4, 'dfgdf', '2025-04-09 14:27:32', 1),
+(19, 4, 7, 'salem', '2025-04-10 09:38:10', 0);
 
 -- --------------------------------------------------------
 
@@ -268,7 +274,28 @@ INSERT INTO `notifications` (`id`, `user_id`, `title`, `message`, `is_read`, `cr
 (25, 2, '[Computer Science Club] sfqsf', 'qsfqfs', 0, '2025-04-06 16:11:35'),
 (26, 2, '[Chess Club] qfqfsqsqsf', 'qsfqsf', 0, '2025-04-06 17:00:23'),
 (27, 1, 'Club Joined', 'You have successfully joined Computer Science Club', 0, '2025-04-06 18:53:03'),
-(28, 1, 'Club Left', 'You have left Computer Science Club', 0, '2025-04-06 18:53:04');
+(28, 1, 'Club Left', 'You have left Computer Science Club', 0, '2025-04-06 18:53:04'),
+(29, 2, '[Chess Club] test', 'we have a meet !!', 0, '2025-04-13 16:20:20'),
+(30, 2, '[Chess Club] test', 'we have a meet !!', 0, '2025-04-13 16:20:23'),
+(32, 4, 'Club Joined', 'You have successfully joined Chess Club', 0, '2025-04-13 17:04:15'),
+(33, 4, 'Club Joined', 'You have successfully joined Chess Club', 0, '2025-04-13 17:08:19'),
+(34, 4, 'Club Joined', 'You have successfully joined Computer Science Club', 0, '2025-04-13 18:09:58'),
+(35, 4, 'Club Left', 'You have left Computer Science Club', 0, '2025-04-13 18:09:59'),
+(36, 4, 'Club Joined', 'You have successfully joined Computer Science Club', 0, '2025-04-13 18:45:16'),
+(37, 4, 'Club Left', 'You have left Computer Science Club', 0, '2025-04-13 18:45:19'),
+(38, 4, 'Club Joined', 'You have successfully joined Computer Science Club', 0, '2025-04-13 18:52:40'),
+(39, 4, 'Club Left', 'You have left Computer Science Club', 0, '2025-04-13 18:52:43'),
+(40, 4, 'Club Joined', 'You have successfully joined Computer Science Club', 0, '2025-04-13 18:59:59'),
+(41, 4, 'Club Left', 'You have left Computer Science Club', 0, '2025-04-13 19:01:35'),
+(42, 4, 'Club Left', 'You have left Chess Club', 0, '2025-04-13 19:52:22'),
+(43, 4, 'Club Joined', 'You have successfully joined Chess Club', 0, '2025-04-13 19:52:23'),
+(44, 4, 'Club Joined', 'You have successfully joined Chess Club', 0, '2025-04-13 19:58:44'),
+(45, 4, 'Club Left', 'You have left Chess Club', 0, '2025-04-13 20:04:19'),
+(46, 4, 'Club Joined', 'You have successfully joined Chess Club', 0, '2025-04-13 20:04:27'),
+(47, 4, 'Club Left', 'You have left Chess Club', 0, '2025-04-13 20:04:30'),
+(48, 4, 'Club Joined', 'You have successfully joined Chess Club', 0, '2025-04-13 20:06:25'),
+(49, 4, 'Club Left', 'You have left Chess Club', 0, '2025-04-13 20:06:26'),
+(50, 4, 'Club Joined', 'You have successfully joined Chess Club', 0, '2025-04-13 20:06:34');
 
 -- --------------------------------------------------------
 
@@ -298,7 +325,9 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `is_banned`,
 (3, 'student', 'student@university.edu', 'student123', 'student', 0, NULL, NULL, '2025-03-25 10:17:43'),
 (4, 'zied kmantar', 'ziedkmantar@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-04-05 19:53:01'),
 (5, 'azer', 'azerfarhat@gmail.com', 'azer123', 'student', 0, NULL, NULL, '2025-04-07 13:00:54'),
-(6, 'Ella', 'ellahamdi@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-04-08 07:53:22');
+(6, 'Ella', 'ellahamdi@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-04-08 07:53:22'),
+(7, 'yassine', 'yassinekmantar@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-04-09 14:25:23'),
+(8, 'anoirTN', 'anoirajej02@gmail.com', 'anoir0987', 'student', 0, NULL, NULL, '2025-04-11 21:37:11');
 
 --
 -- Indexes for dumped tables
@@ -318,7 +347,7 @@ ALTER TABLE `clubs`
 ALTER TABLE `club_members`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `unique_membership` (`user_id`,`club_id`),
-  ADD KEY `club_id` (`club_id`);
+  ADD KEY `idx_club_pending` (`club_id`,`role`);
 
 --
 -- Indexes for table `events`
@@ -398,7 +427,7 @@ ALTER TABLE `clubs`
 -- AUTO_INCREMENT for table `club_members`
 --
 ALTER TABLE `club_members`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `events`
@@ -416,25 +445,25 @@ ALTER TABLE `event_attendees`
 -- AUTO_INCREMENT for table `event_comments`
 --
 ALTER TABLE `event_comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables
