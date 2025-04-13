@@ -255,19 +255,19 @@ include_once 'header.php';
                 </div>
 
                  <!-- Start Date/Time -->
-                <div class="form-group"><label for="event_start_date_time">Start Date and Time <span class="required">*</span></label><input type="datetime-local" id="event_start_date_time" name="event_start_date_time" class="form-input" value="<?php echo htmlspecialchars(date('Y-m-d\TH:i', strtotime($eventToEdit['event_date'] ?? 'now'))); ?>" required min="<?php echo date('Y-m-d\TH:i'); ?>"></div>
+                <div class="form-group"><label for="event_start_date_time">Start Date and Time <span class="required">*</span></label><input type="datetime-local" id="event_start_date_time" name="event_start_date_time" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;" class="form-input" value="<?php echo htmlspecialchars(date('Y-m-d\TH:i', strtotime($eventToEdit['event_date'] ?? 'now'))); ?>" required min="<?php echo date('Y-m-d\TH:i'); ?>"></div>
 
                 <!-- End Date/Time -->
-                <div class="form-group"><label for="event_end_date_time">End Date and Time (Optional)</label><input type="datetime-local" id="event_end_date_time" name="event_end_date_time" class="form-input" value="<?php echo !empty($eventToEdit['event_end_date']) ? htmlspecialchars(date('Y-m-d\TH:i', strtotime($eventToEdit['event_end_date']))) : ''; ?>" min="<?php echo htmlspecialchars(date('Y-m-d\TH:i', strtotime($eventToEdit['event_date'] ?? 'now'))); ?>"> <small class="input-hint">Leave blank if single point in time.</small></div>
+                <div class="form-group"><label for="event_end_date_time">End Date and Time (Optional)</label><input type="datetime-local" id="event_end_date_time" name="event_end_date_time" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;" class="form-input" value="<?php echo !empty($eventToEdit['event_end_date']) ? htmlspecialchars(date('Y-m-d\TH:i', strtotime($eventToEdit['event_end_date']))) : ''; ?>" min="<?php echo htmlspecialchars(date('Y-m-d\TH:i', strtotime($eventToEdit['event_date'] ?? 'now'))); ?>"> <small class="input-hint">Leave blank if single point in time.</small></div>
 
                 <!-- Location -->
-                <div class="form-group"><label for="event_location">Location (Optional)</label><input type="text" id="event_location" name="event_location" class="form-input" value="<?php echo htmlspecialchars($eventToEdit['location'] ?? ''); ?>" maxlength="255" placeholder="e.g., Room 101, Online"></div>
+                <div class="form-group"><label for="event_location">Location (Optional)</label><input type="text" id="event_location" name="event_location" class="form-input" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;" value="<?php echo htmlspecialchars($eventToEdit['location'] ?? ''); ?>" maxlength="255" placeholder="e.g., Room 101, Online"></div>
                 <!-- Description -->
-                <div class="form-group"><label for="event_description">Description <span class="required">*</span></label><textarea id="event_description" name="event_description" class="form-textarea" rows="6" placeholder="Details..." required><?php echo htmlspecialchars($eventToEdit['description'] ?? ''); ?></textarea></div>
+                <div class="form-group"><label for="event_description">Description <span class="required">*</span></label><textarea id="event_description" name="event_description" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;" class="form-textarea" rows="6" placeholder="Details..." required><?php echo htmlspecialchars($eventToEdit['description'] ?? ''); ?></textarea></div>
                 <!-- Status -->
                 <div class="form-group">
                     <label for="event_status">Event Status <span class="required">*</span></label>
-                    <select id="event_status" name="event_status" class="form-input" required>
+                    <select id="event_status" name="event_status" class="form-input" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;" required>
                         <?php foreach ($availableStatuses as $status): ?>
                             <option value="<?php echo htmlspecialchars($status); ?>" <?php echo ($eventToEdit['status'] === $status) ? 'selected' : ''; ?>><?php echo ucfirst(htmlspecialchars($status)); ?></option>
                         <?php endforeach; ?>
