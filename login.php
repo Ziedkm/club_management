@@ -1,11 +1,8 @@
 <?php
 session_start();
 
-// Include database connection and potentially user functions
+// Include database connection and potentially user functions loginUser() and registerUser() might be defined here 
 require_once 'config/database.php';
-// Assuming loginUser() and registerUser() might be defined here or in database.php
- // Keep this if it defines loginUser/registerUser, otherwise remove/adjust
-
 // Initialize error and success messages
 $error = '';
 $success = ''; // Although not used for success messages in the original first file's processing, kept for potential future use.
@@ -101,17 +98,26 @@ if (isset($_POST['register'])) {
                     ? 'Connectez-vous pour continuer votre expérience avec les clubs universitaires.'
                     : 'Créez un compte pour découvrir et rejoindre les clubs, et rester connecté.'; ?>
                 </p>
-                 <!-- Optional: Add feature cards like in the first file if desired -->
-                 <!--
-                 <div class="auth-features"> ... </div>
-                 -->
+                 <div class="auth-features">
+                    <div class="feature-card">
+                        <p>Rejoindre des clubs</p>
+                    </div>
+                    <div class="feature-card">
+                        <p>Événements à venir</p>
+                    </div>
+                    <div class="feature-card">
+                        
+                        <p>Réseautage</p>
+                    </div>
+                </div>
+                 
             </div>
         </div>
 
         <!-- Right Form Panel -->
         <div class="right-panel">
             <div class="form-container">
-                <a href="/index.php" class="back-link"> <!-- Adjust link as needed -->
+                <a href="/cm/home.php" class="back-link"> <!-- Adjust link as needed -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                     Retour à l'accueil
                 </a>
@@ -207,10 +213,7 @@ if (isset($_POST['register'])) {
                     <a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?><?php echo $showLoginForm ? '?action=register' : ''; ?>">
                          <?php echo $showLoginForm ? 'S\'inscrire' : 'Se connecter'; ?>
                     </a>
-                </div>
-
-                <!-- Optional: Keep or remove Google Login / Separator -->
-                
+                </div>      
                 <div class="separator">
                     <span>ou continuer avec</span>
                 </div>

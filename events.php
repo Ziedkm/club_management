@@ -28,6 +28,7 @@ try {
     // Base query for active events, joining necessary tables
     $sql = "SELECT
                 e.id, e.name, e.description, e.event_date, e.event_end_date, e.location, e.poster_image_path, e.created_at,
+                e.created_by,
                 c.id as club_id, c.name as club_name,
                 u.username as creator_username, -- If you want to show who created it
                 (SELECT COUNT(*) FROM event_attendees WHERE event_id = e.id) as participant_count,
@@ -193,7 +194,21 @@ include_once 'test2.php'; // Provides navbar/layout
                                     </span>
                                 </div>
                             </div>
-                            <!-- Optional: Add dropdown menu for edit/delete if user is leader/admin -->
+                            <!-- Optional: Add dropdown menu for edit/delete if user is leader or admin -->
+                            <?php if (($currentUserId && $event['created_by'] == $currentUserId)|| $_SESSION['user']['role'] == 'admin'): ?>
+                                <div class="event-actions-dropdown">
+                                    <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
+                                    <div class="dropdown-menu" role="menu">
+                                        <a href="edit_event.php?id=<?php echo $event['id'];?>" class="dropdown-item">Edit Event</a>
+                                        <form method="POST" action="events.php" class="dropdown-item-form">
+                                            <input type="hidden" name="event_id" value="<?php echo $event['id']; ?>">
+                                            <input type="hidden" name="action" value="delete">
+                                            <button type="submit" class="dropdown-item delete-button">Delete Event</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+
                              
                         </div>
 

@@ -12,14 +12,20 @@ define('MAX_FILE_SIZE', 5 * 1024 * 1024);
 define('ALLOWED_MIME_TYPES', ['image/jpeg', 'image/png', 'image/gif', 'image/webp']);
 
 // --- Authentication & Authorization ---
-if (!isset($_SESSION['user']) || !isset($_SESSION['user']['id'])) { /* ... login redirect ... */ exit; }
+if (!isset($_SESSION['user']) || !isset($_SESSION['user']['id'])) { 
+    /* ... login redirect ... */
+    $_SESSION['error_message'] = "You must be logged in to create an event.";
+    header('Location: login.php'); exit;
+     exit; }
 $userId = $_SESSION['user']['id'];
 $userRole = $_SESSION['user']['role'];
 
-if ($userRole === 'student') { /* ... student redirect ... */ exit; }
+if ($userRole === 'student') {
+     /* ... student redirect ... */
+        $_SESSION['error_message'] = "Students cannot create events.";
+        header('Location: events.php'); exit;
+    exit; }
 
-// --- Set Default Timezone ---
-date_default_timezone_set('UTC'); // Example: Use your actual timezone
 
 // --- Fetch Clubs User Can Use ---
 $creatableClubs = []; $pageError = null; $leaderHasOnlyOneClub = false;

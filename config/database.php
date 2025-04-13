@@ -67,7 +67,7 @@ function loginUser($email, $password)
 
     $user = $stmt->fetch();
 
-    if ($user && $password === $user['password']) { // In production, use password_verify()
+    if ($user && $password === $user['password'] && /*check if the user is banned or not*/ $user['is_banned']==0) { // In production, use password_verify()
         // Store user in session
         $_SESSION['user'] = [
             'id' => $user['id'],
