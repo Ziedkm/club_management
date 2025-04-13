@@ -145,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $current
 }
 
 // --- NOW START HTML OUTPUT ---
-include_once 'test2.php'; // Provides navbar/layout
+include_once 'header.php'; // Provides navbar/layout
 ?>
 
 <!-- Main Content Area -->
@@ -194,16 +194,16 @@ include_once 'test2.php'; // Provides navbar/layout
                                     </span>
                                 </div>
                             </div>
-                            <!-- Optional: Add dropdown menu for edit/delete if user is leader or admin -->
+                            <!-- dropdown menu for edit if user is leader or admin -->
                             <?php if (($currentUserId && $event['created_by'] == $currentUserId)|| $_SESSION['user']['role'] == 'admin'): ?>
                                 <div class="event-actions-dropdown">
-                                    <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
+                                    
                                     <div class="dropdown-menu" role="menu">
                                         <a href="edit_event.php?id=<?php echo $event['id'];?>" class="dropdown-item">Edit Event</a>
                                         <form method="POST" action="events.php" class="dropdown-item-form">
                                             <input type="hidden" name="event_id" value="<?php echo $event['id']; ?>">
                                             <input type="hidden" name="action" value="delete">
-                                            <button type="submit" class="dropdown-item delete-button">Delete Event</button>
+                                            
                                         </form>
                                     </div>
                                 </div>

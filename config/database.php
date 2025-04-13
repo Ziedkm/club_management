@@ -24,7 +24,7 @@ try {
 function getAllClubs()
 {
     global $pdo;
-    $query = "SELECT * FROM clubs";
+    $query = "SELECT * FROM clubs ";
     $stmt = $pdo->prepare($query);
     $stmt->execute();
     return $stmt->fetchAll();
@@ -48,7 +48,7 @@ function getClubMembers($clubId)
     $query = "SELECT u.id, u.username, cm.role 
               FROM club_members cm 
               JOIN users u ON cm.user_id = u.id 
-              WHERE cm.club_id = :club_id";
+              WHERE cm.club_id = :club_id And cm.role != 'pending'";
     $stmt = $pdo->prepare($query);
     $stmt->bindParam(':club_id', $clubId);
     $stmt->execute();
@@ -110,7 +110,7 @@ function registerUser($username, $email, $password)
 function joinClub($userId, $clubId)
 {
     global $pdo;
-    $query = "INSERT INTO club_members (user_id, club_id, role) VALUES (:user_id, :club_id, 'member')";
+    $query = "INSERT INTO club_members (user_id, club_id, role) VALUES (:user_id, :club_id, 'pending')";
     $stmt = $pdo->prepare($query);
     $stmt->bindParam(':user_id', $userId);
     $stmt->bindParam(':club_id', $clubId);
@@ -132,7 +132,7 @@ function leaveClub($userId, $clubId)
 function isClubMember($userId, $clubId)
 {
     global $pdo;
-    $query = "SELECT * FROM club_members WHERE user_id = :user_id AND club_id = :club_id";
+    $query = "SELECT * FROM club_members WHERE user_id = :user_id AND club_id = :club_id AND role != 'pending'";
     $stmt = $pdo->prepare($query);
     $stmt->bindParam(':user_id', $userId);
     $stmt->bindParam(':club_id', $clubId);
@@ -145,6 +145,17 @@ function isClubLeader($userId, $clubId)
 {
     global $pdo;
     $query = "SELECT * FROM club_members WHERE user_id = :user_id AND club_id = :club_id AND role = 'leader'";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':user_id', $userId);
+    $stmt->bindParam(':club_id', $clubId);
+    $stmt->execute();
+    return $stmt->rowCount() > 0;
+}
+// Function to check if user is pending
+function isPending($userId, $clubId)
+{
+    global $pdo;
+    $query = "SELECT * FROM club_members WHERE user_id = :user_id AND club_id = :club_id AND role = 'pending'";
     $stmt = $pdo->prepare($query);
     $stmt->bindParam(':user_id', $userId);
     $stmt->bindParam(':club_id', $clubId);

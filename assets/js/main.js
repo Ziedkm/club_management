@@ -1,5 +1,5 @@
 
-// Main JavaScript file for ClubNest
+// Main JavaScript file for ISG Clubs
 
 document.addEventListener('DOMContentLoaded', function() {
     // Toggle password visibility

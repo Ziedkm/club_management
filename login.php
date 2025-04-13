@@ -40,7 +40,7 @@ if (isset($_POST['login'])) {
     // Ensure we show the login form if login fails
     $showLoginForm = true;
 }
-include 'test2.php';
+include_once 'header.php'; 
 // Process registration form submission
 if (isset($_POST['register'])) {
     $username = trim($_POST['username'] ?? '');

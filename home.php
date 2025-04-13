@@ -7,7 +7,7 @@ session_start();
 // Include database connection and functions
 require_once 'config/database.php';
 // Assuming getAllClubs() and getClubMembers() are defined here or in database.php
-include 'test2.php';
+include_once 'header.php'; 
 
 // --- Data Fetching for the Page ---
 // Get all clubs - assuming this function exists
@@ -51,7 +51,7 @@ foreach ($all_clubs as $club) {
                     Discover and join university clubs in one place
                 </h1>
                 <p class="text-lg text-gray-600">
-                    ClubNest connects you with clubs that match your interests, helps you stay updated with events, and simplifies club management for leaders.
+                    ISG Clubs connects you with clubs that match your interests, helps you stay updated with events, and simplifies club management for leaders.
                 </p>
                 <div class="flex flex-wrap gap-4">
                     <a href="/cm/clubs.php" class="btn-primary py-3 px-6">
@@ -70,7 +70,7 @@ foreach ($all_clubs as $club) {
         <!-- Features section -->
         <div class="mb-16">
             <div class="text-center mb-12 fade-up">
-                <h2 class="text-3xl font-bold mb-4">Why use ClubNest?</h2>
+                <h2 class="text-3xl font-bold mb-4">Why use ISG Clubs?</h2>
                 <p class="text-lg text-gray-600 max-w-2xl mx-auto">
                     Our platform makes club management and participation easier than ever
                 </p>
@@ -79,8 +79,8 @@ foreach ($all_clubs as $club) {
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Feature 1 -->
                 <div class="bg-white p-6 rounded-lg shadow-md border fade-up" style="animation-delay: 100ms;">
-                    <div class="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-search text-indigo-600 text-xl"></i>
+                    <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-search text-blue-600 text-xl"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-2">Discover Clubs</h3>
                     <p class="text-gray-600">
@@ -90,8 +90,8 @@ foreach ($all_clubs as $club) {
                 
                 <!-- Feature 2 -->
                 <div class="bg-white p-6 rounded-lg shadow-md border fade-up" style="animation-delay: 200ms;">
-                    <div class="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-bell text-indigo-600 text-xl"></i>
+                    <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-bell text-blue-600 text-xl"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-2">Stay Updated</h3>
                     <p class="text-gray-600">
@@ -101,8 +101,8 @@ foreach ($all_clubs as $club) {
                 
                 <!-- Feature 3 -->
                 <div class="bg-white p-6 rounded-lg shadow-md border fade-up" style="animation-delay: 300ms;">
-                    <div class="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-users-cog text-indigo-600 text-xl"></i>
+                    <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-users-cog text-blue-600 text-xl"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-2">Easy Management</h3>
                     <p class="text-gray-600">
@@ -141,8 +141,8 @@ foreach ($all_clubs as $club) {
                     $delay = 100 * $count;
                 ?>
                 <div class="bg-white rounded-lg shadow-md border overflow-hidden fade-up" style="animation-delay: <?php echo $delay; ?>ms;">
-                    <div class="h-40 bg-indigo-100 flex items-center justify-center">
-                        <i class="fas fa-users text-indigo-300 text-5xl"></i>
+                    <div class="h-40 bg-blue-100 flex items-center justify-center">
+                        <i class="fas fa-users text-blue-300 text-5xl"></i>
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-semibold mb-2"><?php echo $club['name']; ?></h3>

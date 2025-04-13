@@ -823,3 +823,9 @@ body.dark .profilebox {
          .action-button i { font-size: 0.9rem; }
          .event-card-header, .event-card-body, .event-metadata, .event-stats { padding-left: 1rem; padding-right: 1rem; }
          .event-stats { padding-top: 0.75rem; padding-bottom: 0.75rem;} }
+
+         .btn-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+            border: 1px solid transparent;
+        }

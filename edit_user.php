@@ -151,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userToEdit) { // Only process if u
 
 
 // --- NOW START HTML OUTPUT ---
-include_once 'test2.php'; // Includes <!DOCTYPE>, <head>, opening <body>, <header>
+include_once 'header.php'; // Includes <!DOCTYPE>, <head>, opening <body>, <header>
 ?>
 
 <!-- Main Content Area -->

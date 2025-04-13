@@ -92,7 +92,7 @@ try { /* ... Same data fetching try-catch block as previous answer ... */
 
 
 // --- NOW START HTML OUTPUT ---
-include_once 'test2.php'; // Includes <!DOCTYPE>, <head>, opening <body>, <header>
+include_once 'header.php'; // Includes <!DOCTYPE>, <head>, opening <body>, <header>
 ?>
 
 <!-- Main Content Area -->
@@ -159,7 +159,7 @@ include_once 'test2.php'; // Includes <!DOCTYPE>, <head>, opening <body>, <heade
                  <?php if ($userRole !== 'admin'): ?>
                 <!-- My Clubs Panel -->
                 <div id="profile-clubs" class="profile-tab-panel active" role="tabpanel">
-                    <div class="card"><h2>My Clubs</h2> <?php /* ... Club list loop from previous answer ... */ if (count($userClubs) > 0): ?><div class="list-container"><?php foreach ($userClubs as $club): ?><div class="list-item club-list-item"> <div class="item-main"> <strong class="item-title"><?php echo htmlspecialchars($club['name']); ?></strong> <?php if (($club['member_role'] ?? '') === 'leader'): ?><span class="role-badge leader-badge">Leader</span><?php else: ?><span class="role-badge member-badge">Member</span><?php endif; ?> <p class="item-description"><?php $desc=$club['description']??''; echo htmlspecialchars(substr($desc,0,120)).(strlen($desc)>120?'...':''); ?></p> </div> <a href="index.php?page=club-detail&id=<?php echo $club['id']; ?>" class="btn btn-secondary btn-sm">View Club</a> </div><?php endforeach; ?></div><?php else: ?> <p class="empty-list-message">No clubs joined. <a href="index.php?page=clubs" class="text-link">Explore!</a></p> <?php endif; ?></div>
+                    <div class="card"><h2>My Clubs</h2> <?php /* ... Club list loop from previous answer ... */ if (count($userClubs) > 0): ?><div class="list-container"><?php foreach ($userClubs as $club): ?><div class="list-item club-list-item"> <div class="item-main"> <strong class="item-title"><?php echo htmlspecialchars($club['name']); ?></strong> <?php if (($club['member_role'] ?? '') === 'leader'): ?><span class="role-badge leader-badge">Leader</span><?php else: ?><span class="role-badge member-badge">Member</span><?php endif; ?> <p class="item-description"><?php $desc=$club['description']??''; echo htmlspecialchars(substr($desc,0,120)).(strlen($desc)>120?'...':''); ?></p> </div> <a href="club-detail.php?page=club-detail&id=<?php echo $club['id'] ?? ''; ?>" class="btn btn-secondary btn-sm">View Club</a> </div><?php endforeach; ?></div><?php else: ?> <p class="empty-list-message">No clubs joined. <a href="index.php?page=clubs" class="text-link">Explore!</a></p> <?php endif; ?></div>
                 </div>
 
                 <!-- My Events Panel -->
@@ -233,9 +233,5 @@ include_once 'test2.php'; // Includes <!DOCTYPE>, <head>, opening <body>, <heade
 
 </style>
 
-<?php
-// Potentially include a shared footer file if test2.php doesn't close <body>/<html>
-// include_once 'footer.php';
-?>
 </body>
 </html>

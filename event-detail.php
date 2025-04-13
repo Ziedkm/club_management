@@ -137,7 +137,7 @@ try {
 } catch (Exception $e) { /* ... error handling ... */ }
 
 // --- NOW START HTML OUTPUT ---
-include_once 'test2.php'; // Already included at the top
+include_once 'header.php'; // Already included at the top
 
 ?>
 

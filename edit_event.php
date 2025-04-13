@@ -209,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $eventToEdit && $isAllowedToEdit) {
 
 
 // --- NOW START HTML OUTPUT ---
-include_once 'test2.php';
+include_once 'header.php'; 
 ?>
 
 <!-- Main Content Area -->
@@ -232,13 +232,13 @@ include_once 'test2.php';
                 <input type="hidden" name="target_id" value="<?php echo $targetEventId; ?>">
 
                 <!-- Event Name -->
-                <div class="form-group"><label for="event_name">Event Name <span class="required">*</span></label><input type="text" id="event_name" name="event_name" class="form-input" value="<?php echo htmlspecialchars($eventToEdit['name'] ?? ''); ?>" maxlength="150" required></div>
+                <div class="form-group"><label for="event_name">Event Name <span class="required">*</span></label><input type="text" id="event_name" name="event_name" class="form-input" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;" value="<?php echo htmlspecialchars($eventToEdit['name'] ?? ''); ?>" maxlength="150" required></div>
 
                 <!-- Associated Club -->
                 <div class="form-group">
                     <label for="club_id">Associated Club <span class="required">*</span></label>
                     <?php if ($userRole === 'admin'): ?>
-                        <select id="club_id" name="club_id" class="form-input" required <?php echo empty($activeClubs) ? 'disabled' : ''; ?>>
+                        <select id="club_id" name="club_id" class="form-input" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;" required <?php echo empty($activeClubs) ? 'disabled' : ''; ?>>
                             <option value="" disabled>-- Select Club --</option>
                             <?php foreach ($activeClubs as $club): ?>
                                 <option value="<?php echo htmlspecialchars($club['id']); ?>" <?php echo ($eventToEdit['club_id'] == $club['id']) ? 'selected' : ''; ?>>

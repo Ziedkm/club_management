@@ -151,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_notification']))
 $ledClubs = array_filter($userClubs, function($club) {
     return $club['member_role'] === 'leader';
 });
-include_once 'test2.php'; 
+include_once 'header.php'; 
 
 ?>
 

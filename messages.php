@@ -203,7 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_message'])) {
 }
 
 // --- Include Layout File ---
-include_once 'test2.php'; // Contains the HTML structure (e.g., <head>, <body>, <header>)
+include_once 'header.php'; // Contains the HTML structure (e.g., <head>, <body>, <header>)
 ?>
 
 <!-- Main Content Area -->

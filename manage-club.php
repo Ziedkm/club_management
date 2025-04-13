@@ -131,7 +131,7 @@ if ($clubToManage) {
 }
 
 // --- NOW START HTML OUTPUT ---
-include_once 'test2.php';
+include_once 'header.php'; 
 ?>
 
 <!-- Main Content Area -->

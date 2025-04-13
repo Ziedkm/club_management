@@ -159,7 +159,7 @@ if (isset($_SESSION['error_message'])) { $pageError = $_SESSION['error_message']
 if (isset($_SESSION['success_message'])) { $formSuccess = $_SESSION['success_message']; unset($_SESSION['success_message']); }
 
 // --- NOW START HTML OUTPUT ---
-include_once 'test2.php';
+include_once 'header.php'; 
 ?>
 
 <!-- Main Content Area -->

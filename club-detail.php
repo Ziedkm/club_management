@@ -18,7 +18,7 @@ $userId = $_SESSION['user']['id'] ?? null; // Get user ID if logged in
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     // Optional: Set a flash message for the user
     // $_SESSION['error_message'] = 'Invalid Club ID.';
-    header('Location: index.php?page=clubs'); // Redirect to club list
+    header('Location: clubs.php'); // Redirect to club list
     exit;
 }
 $clubId = (int)$_GET['id']; // Cast to integer
@@ -35,7 +35,7 @@ if (function_exists('getClubById')) {
 if (!$club) {
     // Optional: Set a flash message
     // $_SESSION['error_message'] = 'Club not found.';
-    header('Location: index.php?page=clubs');
+    header('Location: clubs.php');
     exit;
 }
 
@@ -58,6 +58,11 @@ if ($userId) {
         $isLeader = isClubLeader($userId, $clubId);
     } else {
         error_log("Function isClubLeader does not exist.");
+    }
+    if (function_exists('isPending')) {
+        $isPending = isPending($userId, $clubId);
+    } else {
+        error_log("Function isPending does not exist.");
     }
 }
 
@@ -82,8 +87,9 @@ if (!$actionSuccess && isset($_POST['join_club']) && $userId && !$isMember && !$
     }
 }
 
+
 // Process Leave Club Request
-if (!$actionSuccess && isset($_POST['leave_club']) && $userId && $isMember && !$isLeader) {
+if (!$actionSuccess && isset($_POST['leave_club']) && $userId && ($isMember || $isPending) && !$isLeader) {
      if (function_exists('leaveClub') && leaveClub($userId, $clubId)) {
          if (function_exists('sendNotification')) {
             $clubName = $club['name'] ?? 'the club';
@@ -97,7 +103,7 @@ if (!$actionSuccess && isset($_POST['leave_club']) && $userId && $isMember && !$
          error_log("Failed to leave club: User $userId, Club $clubId");
      }
 }
-include_once 'test2.php';
+include_once 'header.php'; 
 
 ?>
 
@@ -110,7 +116,7 @@ include_once 'test2.php';
             <?php if (isset($_GET['joined'])): ?>
                 <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded shadow" role="alert">
                     <p class="font-medium">Success!</p>
-                    <p>You have successfully joined the club.</p>
+                    <p>You have successfully send a request to the club.</p>
                 </div>
             <?php endif; ?>
 
@@ -148,7 +154,7 @@ include_once 'test2.php';
                     <!-- Action Buttons -->
                     <div class="flex flex-col sm:flex-row gap-3 flex-shrink-0 mt-4 md:mt-0">
                         <?php if (!$userId): // User not logged in ?>
-                            <a href="login.php" class="inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <a href="login.php" class="inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                 Sign In to Join
                             </a>
                         <?php elseif ($isLeader): // User is the Leader ?>
@@ -161,16 +167,22 @@ include_once 'test2.php';
                                      <i class="fas fa-user-minus mr-2"></i> Leave Club
                                 </button>
                             </form>
+                            <?php elseif ($isPending): // User is a Pending (not Member) ?>
+                            <form method="POST" action="club-detail.php?page=club-detail&id=<?php echo $clubId; ?>">
+                                <button type="submit" name="leave_club" class="w-full sm:w-auto inline-flex justify-center items-center px-4 py-2 border border-red-300 rounded-md shadow-sm text-sm font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                    <i class="fas fa-user-times mr-2"></i> Cancel Request
+                                </button>
+                            </form>
                         <?php else: // User is logged in, but not member or leader ?>
                             <form method="POST" action="club-detail.php?page=club-detail&id=<?php echo $clubId; ?>">
-                                <button type="submit" name="join_club" class="w-full sm:w-auto inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <button type="submit" name="join_club" class="w-full sm:w-auto inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                     <i class="fas fa-user-plus mr-2"></i> Join Club
                                 </button>
                             </form>
                         <?php endif; ?>
 
                         <?php if ($userId && ($isMember || $isLeader)): // Contact button if logged in and member/leader ?>
-                            <a href="club-detail.php?page=contact&club_id=<?php echo $clubId; ?>" class="inline-flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <a href="/cm/messages.php" class="inline-flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                 <i class="fas fa-envelope mr-2"></i> Contact
                             </a>
                         <?php endif; ?>
@@ -185,14 +197,14 @@ include_once 'test2.php';
                     <!-- About Section -->
                     <div class="bg-white p-6 rounded-lg shadow border border-gray-200">
                         <h2 class="text-2xl font-semibold text-gray-900 mb-4">About the Club</h2>
-                        <div class="prose prose-indigo max-w-none text-gray-600">
+                        <div class="prose prose-blue max-w-none text-gray-600">
                             <?php echo !empty($club['description']) ? nl2br(htmlspecialchars($club['description'])) : '<p>No detailed description available.</p>'; ?>
                         </div>
                         <?php if (!empty($club['meeting_schedule'])): ?>
                         <div class="border-t border-gray-200 pt-4 mt-6">
                             <h3 class="text-lg font-medium text-gray-900 mb-2">Meeting Schedule</h3>
                             <p class="flex items-center text-gray-600">
-                                <i class="fas fa-calendar-alt mr-2 text-indigo-500"></i>
+                                <i class="fas fa-calendar-alt mr-2 text-blue-500"></i>
                                 <?php echo htmlspecialchars($club['meeting_schedule']); ?>
                             </p>
                         </div>
@@ -204,18 +216,20 @@ include_once 'test2.php';
                         <h2 class="text-2xl font-semibold text-gray-900 mb-4">Club Activities & Events</h2>
                         <div class="space-y-4">
                             <!-- Placeholder - Replace with actual event fetching/display logic later -->
-                            <div class="border-l-4 border-indigo-500 pl-4 py-2 bg-indigo-50 rounded">
+                            <div class="border-l-4 border-blue-500 pl-4 py-2 bg-blue-50 rounded">
                                 <p class="text-gray-600 italic">
-                                    Club activities and upcoming events information will be displayed here soon. Check back later!
+                                    Club activities and upcoming events information will be displayed here
                                 </p>
                             </div>
-                             <!-- Example structure for future events:
+                             <!-- Example structure for future events: -->
+                                
+
                             <div class="border rounded p-4">
                                 <h4 class="font-semibold">Event Title</h4>
                                 <p class="text-sm text-gray-500">Date & Time | Location</p>
                                 <p class="mt-2 text-gray-600">Event description...</p>
                             </div>
-                             -->
+                             
                         </div>
                     </div>
                 </div>
@@ -231,7 +245,7 @@ include_once 'test2.php';
                                 <?php foreach ($members as $member): ?>
                                     <div class="flex items-center justify-between pb-2 border-b border-gray-100 last:border-b-0 last:pb-0">
                                         <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-semibold text-lg">
+                                            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold text-lg">
                                                 <?php echo strtoupper(substr($member['username'] ?? '?', 0, 1)); ?>
                                             </div>
                                             <div class="ml-3">
@@ -242,7 +256,7 @@ include_once 'test2.php';
                                             </div>
                                         </div>
                                         <?php if (($member['role'] ?? 'member') === 'leader'): ?>
-                                            <i class="fas fa-shield-alt text-indigo-500 text-lg" title="Club Leader"></i>
+                                            <i class="fas fa-shield-alt text-blue-500 text-lg" title="Club Leader"></i>
                                         <?php endif; ?>
                                     </div>
                                 <?php endforeach; ?>
@@ -254,13 +268,13 @@ include_once 'test2.php';
 
                     <!-- Join Information Box (Conditional) -->
                     <?php if ($userId && !$isMember && !$isLeader): ?>
-                        <div class="bg-indigo-50 p-6 rounded-lg border border-indigo-100 shadow-sm">
-                            <h3 class="text-lg font-semibold text-indigo-800 mb-2">Interested in joining?</h3>
-                            <p class="text-sm text-indigo-700 mb-4">
+                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 shadow-sm">
+                            <h3 class="text-lg font-semibold text-blue-800 mb-2">Interested in joining?</h3>
+                            <p class="text-sm text-blue-700 mb-4">
                                 Joining this club gives you access to all activities, events, and communications. Click below to become a member!
                             </p>
                             <form method="POST" action="club-detail.php?page=club-detail&id=<?php echo $clubId; ?>">
-                                <button type="submit" name="join_club" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <button type="submit" name="join_club" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                     <i class="fas fa-user-plus mr-2"></i> Join Now
                                 </button>
                             </form>
@@ -271,7 +285,7 @@ include_once 'test2.php';
                             <p class="text-sm text-gray-700 mb-4">
                                 Sign in or create an account to join this club and participate in its activities.
                             </p>
-                             <a href="login.php" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                             <a href="login.php" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                 Sign In / Sign Up
                             </a>
                         </div>

@@ -124,7 +124,7 @@
                 <?php if (isset($_SESSION['user'])): ?>
                         <div class="profilebox">
                             <a href="profile.php" class="flex items-center space-x-2">
-                                <div class="h-8 w-8 rounded-full bg-indigo-200 flex items-center justify-center">
+                                <div class="h-8 w-8 rounded-full bg-blue-200 flex items-center justify-center">
                                     <?php echo substr($_SESSION['user']['username'], 0, 1); ?>
                                 </div>
                                 <span><?php echo $_SESSION['user']['username']; ?></span>
@@ -254,7 +254,7 @@
             <?php if (isset($_SESSION['user'])): ?>
                         <div class="profilebox">
                             <a href="/cm/profile.php" class="flex items-center space-x-2">
-                                <div class="h-8 w-8 rounded-full bg-indigo-200 flex items-center justify-center ">
+                                <div class="h-8 w-8 rounded-full bg-blue-200 flex items-center justify-center ">
                                     <?php echo substr($_SESSION['user']['username'], 0, 1); ?>
                                 </div>
                                 <span><?php echo $_SESSION['user']['username']; ?></span>

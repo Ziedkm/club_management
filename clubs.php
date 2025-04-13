@@ -6,7 +6,7 @@ session_start();
 require_once 'config/database.php'; // Adjust path if necessary
 // Assuming getAllClubs() and getClubMembers() are defined here or in database.php
 // Use include_once to prevent multiple inclusions if called elsewhere
-include_once 'test2.php'; // Adjust path if necessary
+include_once 'header.php'; // Adjust path if necessary
 
 // --- Data Fetching and Filtering ---
 
@@ -137,7 +137,7 @@ if (!empty($selectedCategory)) {
 
                         <!-- Submit Button -->
                         <div class="flex justify-end pt-2">
-                            <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                 <i class="fas fa-filter mr-2"></i> Apply Filters
                             </button>
                         </div>
@@ -159,10 +159,10 @@ if (!empty($selectedCategory)) {
                         ?>
                         <div class="bg-white rounded-lg shadow border border-gray-200 overflow-hidden flex flex-col">
                             <!-- Placeholder for Club Image/Logo -->
-                            <div class="h-40 bg-indigo-100 flex items-center justify-center">
+                            <div class="h-40 bg-blue-100 flex items-center justify-center">
                                 <!-- You can replace this with an actual image if available -->
-                                <i class="fas fa-users text-indigo-300 text-5xl"></i>
-                                <?php /* Example if logo path exists in $club:
+                                <i class="fas fa-users text-blue-300 text-5xl"></i>
+                                <?php /* in future update we add logo path to the database and use it here:
                                     $logoPath = $club['logo_path'] ?? 'path/to/default/logo.png';
                                     echo '<img src="'.htmlspecialchars($logoPath).'" alt="'.htmlspecialchars($club['name']).' Logo" class="h-full w-full object-cover">';
                                  */ ?>
@@ -188,7 +188,7 @@ if (!empty($selectedCategory)) {
                                     <?php endif; ?>
                                 </div>
                                 <!-- View Button -->
-                                <a href="club-detail.php?page=club-detail&id=<?php echo $club['id'] ?? ''; ?>" class="mt-auto block w-full text-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <a href="club-detail.php?page=club-detail&id=<?php echo $club['id'] ?? ''; ?>" class="mt-auto block w-full text-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                     View Club
                                 </a>
                             </div>
@@ -204,7 +204,7 @@ if (!empty($selectedCategory)) {
                         <p class="text-gray-500 mb-4">
                             We couldn't find any clubs matching your current filters.
                         </p>
-                        <a href="clubs.php" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <a href="clubs.php" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             Clear Filters & View All
                         </a>
                     </div>

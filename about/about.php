@@ -7,12 +7,12 @@ session_start();
 // Include database connection and functions
 require_once '../config/database.php';
 // --- PHP Part: Define Team Member Data ---
-include '../test2.php'; // Inclure l'en-tête de la page
+include '../header.php'; // Inclure l'en-tête de la page
 $team_members = [
     [
         'name' => 'Rayen Harrathi',
         'title' => '',
-        'image' => '../rayen.png', // Assurez-vous que le chemin commence par img/
+        'image' => '../rayen.png',
         'social' => [
             'facebook' => 'https://www.facebook.com/SIKIPON48',
             'linkedin' => 'https://www.linkedin.com/in/harrathi-rayen-21b8532a1/',
@@ -21,7 +21,7 @@ $team_members = [
     [
         'name' => 'Zied Kmanter',
         'title' => '',
-        'image' => '../zied.jpg', // Assurez-vous que le chemin commence par img/
+        'image' => '../zied.jpg',
         'social' => [
             'facebook' => 'https://www.facebook.com/zied.kmantar.16',
             'linkedin' => 'https://www.linkedin.com/in/zkmanter/',
@@ -30,7 +30,7 @@ $team_members = [
     [
         'name' => 'Yassmine Farhat',
         'title' => '',
-        'image' => '../yassmine.jpg', // Assurez-vous que le chemin commence par img/
+        'image' => '../yassmine.jpg', 
          'social' => [
             'facebook' => 'https://www.facebook.com/profile.php?id=100006258317901',
             'linkedin' => '#',
@@ -66,7 +66,7 @@ $team_members = [
     <!-- ===== SECTION À PROPOS (Fond clair pleine largeur) ===== -->
     <section id="about-section" class="section-padding section-bg-light about-section-wrapper">
         <div class="container"> <!-- Contenu centré -->
-            <h2 class="about-main-title">À propos de ClubNest</h2>
+            <h2 class="about-main-title">À propos de ISG Clubs</h2>
             <p class="about-subtitle">
                 Découvrez notre mission et comment nous facilitons la vie associative.
             </p>
@@ -77,7 +77,7 @@ $team_members = [
                 </div>
                 <div class="about-content">
                     <?php
-                        $about_paragraph1 = "Clubnest a été créé en 2025 avec une vision claire : dynamiser la vie associative universitaire en connectant les étudiants avec les clubs et associations qui correspondent à leurs passions et aspirations.";
+                        $about_paragraph1 = "ISG Clubs a été créé en 2025 avec une vision claire : dynamiser la vie associative universitaire en connectant les étudiants avec les clubs et associations qui correspondent à leurs passions et aspirations.";
                         $about_paragraph2 = "Nous croyons fermement que l'engagement étudiant dans les activités extra-académiques est essentiel au développement personnel et professionnel. Notre plateforme facilite la découverte, l'inscription et la participation aux nombreux clubs et événements qui animent notre institue.";
                     ?>
                     <p><?php echo htmlspecialchars($about_paragraph1); ?></p>
@@ -173,7 +173,7 @@ $team_members = [
                 muted
                 playsinline
                 preload="auto"
-                title="Vidéo de localisation de ClubNest">
+                title="Vidéo de localisation de ISG Clubs">
                 <source src="..\isgSousse.mp4" type="video/mp4">
                 Votre navigateur ne supporte pas la balise vidéo.
             </video>
