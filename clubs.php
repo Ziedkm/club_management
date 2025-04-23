@@ -82,8 +82,8 @@ if (!empty($selectedCategory)) {
 
             <!-- Page Header -->
             <div class="mb-10 text-center md:text-left">
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">University Clubs</h1>
-                <p class="text-lg text-gray-600">
+                <h1 class="text-3xl md:text-4xl font-bold mb-2">University Clubs</h1>
+                <p class="text-lg">
                     Discover and join clubs that match your interests.
                 </p>
             </div>
@@ -109,19 +109,21 @@ if (!empty($selectedCategory)) {
                                         name="search"
                                         value="<?php echo htmlspecialchars($searchQuery); ?>"
                                         placeholder="Search by name, description, category..."
-                                        class="form-input block w-full pl-10 pr-3 py-2 sm:text-sm"
+                                        class="form-input block w-full pl-10 pr-3 py-2 sm:text-sm appearance-none border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                     >
                                 </div>
                             </div>
 
                             <!-- Category Filter -->
                             <div>
-                                <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Filter by Category</label>
+                                <label for="category" class="block text-sm font-medium text-gray-700 mb-1" style="color: black ;">Filter by Category</label>
                                 <select
                                     id="category"
                                     name="category"
-                                    class="form-input block w-full py-2 px-3 sm:text-sm appearance-none"
-                                >
+                                    class="form-input block w-full py-2 px-3 sm:text-sm appearance-none border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                    onchange="this.form.submit()"
+                                    style="background-color: white; color: black;"
+                                    >
                                     <option value="">All Categories</option>
                                     <?php foreach ($all_categories as $category): ?>
                                     <option

@@ -61,7 +61,8 @@ try {
     $convQuery = "
         SELECT 
             u.id, 
-            u.username, 
+            u.username,
+            u.profile_picture_path, 
             MAX(m.sent_at) AS last_message_time,
             (
                 SELECT message_content 
@@ -82,7 +83,7 @@ try {
         WHERE 
             (m.sender_id = :cuid1 OR m.receiver_id = :cuid1) AND 
             u.id != :cuid1
-        GROUP BY u.id, u.username
+        GROUP BY u.id, u.username, u.profile_picture_path
         ORDER BY last_message_time DESC
     ";
     $stmtConv = $pdo->prepare($convQuery);
@@ -93,7 +94,7 @@ try {
     // --- Handle Search ---
     if (!empty($searchQuery)) {
         $searchSql = "
-            SELECT id, username 
+            SELECT id, username,profile_picture_path 
             FROM users 
             WHERE username LIKE :sq AND id != :cuid2 
             LIMIT 10
@@ -113,7 +114,7 @@ try {
             $selectedUserId = null; // Prevent selecting self
         } else {
             // Fetch selected user details
-            $userQuery = "SELECT id, username FROM users WHERE id = :suid1";
+            $userQuery = "SELECT id, username, profile_picture_path FROM users WHERE id = :suid1";
             $stmtUser = $pdo->prepare($userQuery);
             $stmtUser->bindParam(':suid1', $selectedUserId, PDO::PARAM_INT);
             $stmtUser->execute();
@@ -133,7 +134,7 @@ try {
 
                 // Fetch messages for the conversation
                 $msgQuery = "
-                    SELECT m.*, u.username AS sender_username 
+                    SELECT m.*, u.username AS sender_username,u.profile_picture_path as sender_pfp_path 
                     FROM messages m
                     JOIN users u ON m.sender_id = u.id
                     WHERE 
@@ -229,8 +230,20 @@ include_once 'header.php'; // Contains the HTML structure (e.g., <head>, <body>,
                     <h3 class="list-heading">Search Results</h3>
                     <?php if (count($searchResults) > 0): ?>
                         <?php foreach ($searchResults as $user): ?>
+                            <?php
+                                // Prepare paths for search result avatar
+                                $searchUserPicPath = $user['profile_picture_path'] ?? null;
+                                $searchUserPicServerPath = $searchUserPicPath ? rtrim($_SERVER['DOCUMENT_ROOT'], '/') . $searchUserPicPath : null;
+                                $showSearchUserPic = $searchUserPicPath && $searchUserPicServerPath && file_exists($searchUserPicServerPath);
+                            ?>
                             <a href="messages.php?with=<?php echo $user['id']; ?>" class="conversation-item <?php echo ($selectedUserId === $user['id']) ? 'active' : ''; ?>">
-                                <div class="avatar-placeholder"><?php echo strtoupper(substr(htmlspecialchars($user['username']), 0, 1)); ?></div>
+                                <div class="avatar-placeholder">
+                                <?php if ($showSearchUserPic): ?>
+                                        <img src="<?php echo htmlspecialchars($searchUserPicPath); ?>" alt="" class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold text-lg">
+                                    <?php else: ?>    
+                                <?php echo strtoupper(substr(htmlspecialchars($user['username']), 0, 1)); ?>
+                                    <?php endif; ?>
+                                    </div>
                                 <div class="conversation-info">
                                     <span class="username"><?php echo htmlspecialchars($user['username']); ?></span>
                                     <span class="last-message-preview">Start a conversation</span>
@@ -246,9 +259,19 @@ include_once 'header.php'; // Contains the HTML structure (e.g., <head>, <body>,
 
                 <?php if (count($conversations) > 0): ?>
                     <?php foreach ($conversations as $convo): ?>
+                        <?php
+                            // Prepare paths for conversation avatar
+                            $convoUserPicPath = $convo['profile_picture_path'] ?? null;
+                            $convoUserPicServerPath = $convoUserPicPath ? rtrim($_SERVER['DOCUMENT_ROOT'], '/') . $convoUserPicPath : null;
+                            $showConvoUserPic = $convoUserPicPath && $convoUserPicServerPath && file_exists($convoUserPicServerPath);
+                        ?>
                         <a href="messages.php?with=<?php echo $convo['id']; ?>" class="conversation-item <?php echo ($selectedUserId === $convo['id']) ? 'active' : ''; ?>">
                             <div class="avatar-placeholder">
+                            <?php if ($showConvoUserPic): ?>
+                                    <img src="<?php echo htmlspecialchars($convoUserPicPath); ?>" alt="" class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold text-lg">
+                                <?php else: ?>
                                 <?php echo strtoupper(substr(htmlspecialchars($convo['username']), 0, 1)); ?>
+                                <?php endif; ?>
                                 <?php if (($convo['unread_count'] ?? 0) > 0): ?>
                                     <span class="unread-badge" aria-label="<?php echo $convo['unread_count']; ?> unread"><?php echo $convo['unread_count']; ?></span>
                                 <?php endif; ?>
@@ -287,6 +310,7 @@ include_once 'header.php'; // Contains the HTML structure (e.g., <head>, <body>,
                 <div class="message-list" id="message-list">
                     <?php if (count($messages) > 0): ?>
                         <?php foreach ($messages as $msg): ?>
+                            
                             <div class="message-item <?php echo ($msg['sender_id'] == $currentUserId) ? 'sent' : 'received'; ?>">
                                 <div class="message-bubble">
                                     <p class="message-content"><?php echo nl2br(htmlspecialchars($msg['message_content'])); ?></p>

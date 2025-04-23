@@ -50,14 +50,14 @@ foreach ($all_clubs as $club) {
                 <h1 class="text-4xl md:text-5xl font-bold leading-tight">
                     Discover and join university clubs in one place
                 </h1>
-                <p class="text-lg text-gray-600">
+                <p class="text-lg">
                     ISG Clubs connects you with clubs that match your interests, helps you stay updated with events, and simplifies club management for leaders.
                 </p>
                 <div class="flex flex-wrap gap-4">
-                    <a href="/cm/clubs.php" class="btn-primary py-3 px-6">
+                    <a href="/cm/clubs.php" class="btn-primary py-3 px-6" style="border-radius: 10px;">
                         Explore Clubs
                     </a>
-                    <a href="/cm/login.php" class="btn-secondary py-3 px-6">
+                    <a href="/cm/login.php" class="btn-secondary py-3 px-6" style="border-radius: 10px;">
                         Sign Up Now
                     </a>
                 </div>
@@ -71,41 +71,41 @@ foreach ($all_clubs as $club) {
         <div class="mb-16">
             <div class="text-center mb-12 fade-up">
                 <h2 class="text-3xl font-bold mb-4">Why use ISG Clubs?</h2>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                <p class="text-lg  max-w-2xl mx-auto">
                     Our platform makes club management and participation easier than ever
                 </p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Feature 1 -->
-                <div class="bg-white p-6 rounded-lg shadow-md border fade-up" style="animation-delay: 100ms;">
+                <div class="p-6 rounded-lg shadow-md border fade-up" style="animation-delay: 100ms;">
                     <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
                         <i class="fas fa-search text-blue-600 text-xl"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-2">Discover Clubs</h3>
-                    <p class="text-gray-600">
+                    <p class="">
                         Browse and search through all available university clubs based on your interests.
                     </p>
                 </div>
                 
                 <!-- Feature 2 -->
-                <div class="bg-white p-6 rounded-lg shadow-md border fade-up" style="animation-delay: 200ms;">
+                <div class="p-6 rounded-lg shadow-md border fade-up" style="animation-delay: 200ms;">
                     <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
                         <i class="fas fa-bell text-blue-600 text-xl"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-2">Stay Updated</h3>
-                    <p class="text-gray-600">
+                    <p class="">
                         Receive notifications about club activities, events, and important announcements.
                     </p>
                 </div>
                 
                 <!-- Feature 3 -->
-                <div class="bg-white p-6 rounded-lg shadow-md border fade-up" style="animation-delay: 300ms;">
+                <div class="p-6 rounded-lg shadow-md border fade-up" style="animation-delay: 300ms;">
                     <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
                         <i class="fas fa-users-cog text-blue-600 text-xl"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-2">Easy Management</h3>
-                    <p class="text-gray-600">
+                    <p class="">
                         Club leaders can manage members, send notifications, and organize events with ease.
                     </p>
                 </div>
@@ -116,7 +116,7 @@ foreach ($all_clubs as $club) {
         <div>
             <div class="text-center mb-12 fade-up">
                 <h2 class="text-3xl font-bold mb-4">Featured Clubs</h2>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                <p class="text-lg max-w-2xl mx-auto">
                     Check out some of our most popular university clubs
                 </p>
             </div>
@@ -140,13 +140,13 @@ foreach ($all_clubs as $club) {
                     
                     $delay = 100 * $count;
                 ?>
-                <div class="bg-white rounded-lg shadow-md border overflow-hidden fade-up" style="animation-delay: <?php echo $delay; ?>ms;">
+                <div class="rounded-lg shadow-md border overflow-hidden fade-up" style="animation-delay: <?php echo $delay; ?>ms;">
                     <div class="h-40 bg-blue-100 flex items-center justify-center">
                         <i class="fas fa-users text-blue-300 text-5xl"></i>
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-semibold mb-2"><?php echo $club['name']; ?></h3>
-                        <p class="text-gray-600 mb-4"><?php echo substr($club['description'], 0, 100) . (strlen($club['description']) > 100 ? '...' : ''); ?></p>
+                        <p class="mb-4"><?php echo substr($club['description'], 0, 100) . (strlen($club['description']) > 100 ? '...' : ''); ?></p>
                         <div class="flex flex-wrap gap-2 mb-4">
                             <span class="club-tag club-tag-primary">
                                 <i class="fas fa-users mr-1"></i> <?php echo $memberCount; ?> members
@@ -155,7 +155,7 @@ foreach ($all_clubs as $club) {
                                 <?php echo $club['category']; ?>
                             </span>
                         </div>
-                        <a href="index.php?page=club-detail&id=<?php echo $club['id']; ?>" class="btn btn-primary w-full text-center">
+                        <a href="/cm/club-detail.php?page=club-detail&&id=<?php echo $club['id']; ?>" class="btn btn-primary w-full text-center">
                             View Club
                         </a>
                     </div>

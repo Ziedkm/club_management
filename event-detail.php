@@ -127,7 +127,7 @@ try {
         // Don't proceed to fetch comments/interactions if event not found
     } else {
         // Fetch Comments (only if event found)
-        $sqlComments = "SELECT ec.*, u.username as commenter_username FROM event_comments ec JOIN users u ON ec.user_id = u.id WHERE ec.event_id = :event_id ORDER BY ec.created_at DESC";
+        $sqlComments = "SELECT ec.*, u.username as commenter_username,u.profile_picture_path FROM event_comments ec JOIN users u ON ec.user_id = u.id WHERE ec.event_id = :event_id ORDER BY ec.created_at DESC";
         $stmtComments = $pdo->prepare($sqlComments); $stmtComments->bindParam(':event_id', $eventId, PDO::PARAM_INT); $stmtComments->execute(); $comments = $stmtComments->fetchAll(PDO::FETCH_ASSOC);
 
         // Fetch Current User's Interactions (only if event found and user logged in)
@@ -231,14 +231,25 @@ include_once 'header.php'; // Already included at the top
             <section id="comments" class="comments-section card">
                 <h2>Comments (<?php echo $event['comment_count'] ?? 0; ?>)</h2>
 
-                <?php if ($currentUserId): ?>
+                <?php if ($currentUserId):
+                    
+                    // Get path from session - use null coalescing for safety
+                    $userProfilePic = $_SESSION['user']['profile_picture_path'] ?? null;
+                    // Construct full server path to check if file exists
+                    $profilePicServerPath = $userProfilePic ? rtrim($_SERVER['DOCUMENT_ROOT'], '/') . $userProfilePic : null;
+                    $showProfilePic = $userProfilePic && file_exists($profilePicServerPath);
+                ?>
                     <!-- Comment Form -->
                     <form method="POST" action="<?php echo $eventActionUrl; ?>#comments" class="comment-form">
                          <input type="hidden" name="event_id" value="<?php echo $event['id']; ?>">
                          <input type="hidden" name="action" value="add_comment">
                         <div class="comment-input-group">
                             <div class="avatar-placeholder comment-avatar">
+                                <?php if ($showProfilePic): ?>
+                                    <img src="<?php echo htmlspecialchars($userProfilePic); ?>" alt="Your Profile Picture" class="h-8 w-8 rounded-full bg-blue-200 flex items-center justify-center">
+                                <?php else: ?>
                                 <?php echo strtoupper(substr($_SESSION['user']['username'] ?? '?', 0, 1)); ?>
+                                <?php endif; ?>
                             </div>
                             <textarea name="comment_text" class="comment-input" rows="2" placeholder="Add your comment..." required aria-label="Add your comment"></textarea>
                         </div>
@@ -255,10 +266,20 @@ include_once 'header.php'; // Already included at the top
                 <div class="comment-list">
                     <?php if (count($comments) > 0): ?>
                         <?php foreach ($comments as $comment): ?>
+                            <?php
+                                // Prepare paths for comment avatar
+                                $commenterPicPath = $comment['profile_picture_path'] ?? null;
+                                $commenterPicServerPath = $commenterPicPath ? rtrim($_SERVER['DOCUMENT_ROOT'], '/') . $commenterPicPath : null;
+                                $showCommenterPic = $commenterPicPath && $commenterPicServerPath && file_exists($commenterPicServerPath);
+                            ?>
                             <div class="comment-item">
                                 <div class="avatar-placeholder comment-avatar">
+                                <?php if ($showCommenterPic): ?>
+                                        <img src="<?php echo htmlspecialchars($commenterPicPath); ?>" alt="<?php echo htmlspecialchars($comment['commenter_username'] ?? 'User'); ?>'s picture" class="flex-shrink-0 h-9 w-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold text-lg">
+                                    <?php else: ?>
                                      <?php echo strtoupper(substr(htmlspecialchars($comment['commenter_username'] ?? '?'), 0, 1)); ?>
-                                </div>
+                                    <?php endif; ?>
+                                    </div>
                                 <div class="comment-content">
                                     <div class="comment-header">
                                         <span class="commenter-name"><?php echo htmlspecialchars($comment['commenter_username'] ?? 'User'); ?></span>

@@ -277,7 +277,6 @@ body.dark #theme-toggle{
         gap: 1rem;
     }
 }
-/* Add these rules to your styles.css or adapt them */
 
 /* Utilities */
 .mb-16 { margin-bottom: 4rem; }
@@ -288,7 +287,7 @@ body.dark #theme-toggle{
 /* Consider adding a .text-muted class if needed */
 .text-muted { color: #6c757d; } /* Example muted color */
 body.dark .text-muted { color: #adb5bd; } /* Example dark mode muted color */
-
+.text-primary { color: var(--primary-color); } /* Example primary color */
 
 /* Hero Section */
 .hero-section .hero-content-wrapper {
@@ -821,6 +820,7 @@ body.dark .profilebox {
          .event-actions { padding: 0.25rem 0;}
          .action-button { font-size: 0.8rem; gap: 0.25rem; padding: 0.5rem 0.2rem; }
          .action-button i { font-size: 0.9rem; }
+        
          .event-card-header, .event-card-body, .event-metadata, .event-stats { padding-left: 1rem; padding-right: 1rem; }
          .event-stats { padding-top: 0.75rem; padding-bottom: 0.75rem;} }
 
@@ -829,3 +829,4 @@ body.dark .profilebox {
             color: #374151;
             border: 1px solid transparent;
         }
+       

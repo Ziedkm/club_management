@@ -195,6 +195,7 @@ include_once 'header.php'; // Provides navbar/layout
                                 </div>
                             </div>
                             <!-- dropdown menu for edit if user is leader or admin -->
+                            <?php if (isset($_SESSION['user'])): ?>
                             <?php if (($currentUserId && $event['created_by'] == $currentUserId)|| $_SESSION['user']['role'] == 'admin'): ?>
                                 <div class="event-actions-dropdown">
                                     
@@ -208,7 +209,7 @@ include_once 'header.php'; // Provides navbar/layout
                                     </div>
                                 </div>
                             <?php endif; ?>
-
+                            <?php endif; ?>
                              
                         </div>
 
@@ -216,16 +217,16 @@ include_once 'header.php'; // Provides navbar/layout
                         <div class="event-card-body">
                             <h2 class="event-title"><a href="<?php echo $eventDetailUrl; ?>" class="event-title-link"><?php echo htmlspecialchars($event['name']); ?></a></h2>
                             <!-- ** Truncated Description ** -->
-                            <p class="event-description truncated">
-                                <?php
-                                    $fullDesc = $event['description'] ?? '';
-                                    $maxLength = 150; // Adjust character limit
-                                    echo nl2br(htmlspecialchars(substr($fullDesc, 0, $maxLength)));
-                                    if (strlen($fullDesc) > $maxLength) {
-                                        echo '... <a href="' . $eventDetailUrl . '" class="read-more-link">Read More</a>';
-                                    }
-                                ?>
-                            </p>
+                            <p class="mt-2 text-gray-600">
+                            <?php
+                                $fullDesc = $event['description'] ?? '';
+                                $maxLength = 150; // Adjust character limit
+                                echo nl2br(htmlspecialchars(substr($fullDesc, 0, $maxLength)));
+                                if (strlen($fullDesc) > $maxLength) {
+                                    echo '... <a href="' . $eventDetailUrl . '" class="read-more-link">Read More</a>';
+                                }
+                            ?>
+                        </p>
                             <?php if (!empty($event['poster_image_path']) && file_exists(rtrim($_SERVER['DOCUMENT_ROOT'], '/') . $event['poster_image_path'])): ?>
                                 <!-- ** Aspect Ratio Container for Image ** -->
                                 <a href="<?php echo $eventDetailUrl; ?>" class="event-poster aspect-ratio-1-1">
@@ -264,36 +265,39 @@ include_once 'header.php'; // Provides navbar/layout
                         <div class="event-actions equal-width-actions">
                              <!-- Like Button -->
                             <?php if ($currentUserId): ?>
-                            <form method="POST" action="events.php<?php echo !empty($searchQuery) ? '?search='.urlencode($searchQuery) : ''; ?>" class="action-form"> <input type="hidden" name="event_id" value="<?php echo $event['id']; ?>"> <input type="hidden" name="action" value="<?php echo $liked ? 'unlike' : 'like'; ?>"> <button type="submit" class="action-button <?php echo $liked ? 'active' : ''; ?>"> <i class="fas fa-thumbs-up fa-fw"></i> Like<?php // echo $liked ? 'd' : ''; ?> </button> </form>
+                            <form method="POST" action="events.php<?php echo !empty($searchQuery) ? '?search='.urlencode($searchQuery) : ''; ?>" class="action-form"> <input type="hidden" name="event_id" value="<?php echo $event['id']; ?>"> <input type="hidden" name="action" value="<?php echo $liked ? 'unlike' : 'like'; ?>"> <button type="submit" class="action-button <?php echo $liked ? 'active' : ''; ?>"> <i class="fas fa-thumbs-up fa-fw"></i> <span class="text-action"> <?php echo $liked ? 'Liked' : 'Like'; ?></span></button> </form>
                             <?php else: ?>
-                             <a href="<?php echo $loginUrl; ?>" class="action-button"><i class="fas fa-thumbs-up fa-fw"></i> Like</a>
+                             <a href="<?php echo $loginUrl; ?>" class="action-button"><i class="fas fa-thumbs-up fa-fw"></i><span class="text-action"> Like</span></a>
                             <?php endif; ?>
 
                              <!-- Comment Button -->
-                            <a href="<?php echo $eventDetailUrl; ?>#comments" class="action-button"> <i class="fas fa-comment fa-fw"></i> Comment </a>
+                            <a href="<?php echo $eventDetailUrl; ?>#comments" class="action-button"> <i class="fas fa-comment fa-fw"></i><span class="text-action"> Comment </span></a>
 
                              <!-- Interested Button -->
                             <?php if ($currentUserId): ?>
-                             <form method="POST" action="events.php<?php echo !empty($searchQuery) ? '?search='.urlencode($searchQuery) : ''; ?>" class="action-form"> <input type="hidden" name="event_id" value="<?php echo $event['id']; ?>"> <input type="hidden" name="action" value="<?php echo $interested ? 'uninterested' : 'interested'; ?>"> <button type="submit" class="action-button <?php echo $interested ? 'active' : ''; ?>"> <i class="fas fa-star fa-fw"></i> Interested<?php // echo $interested ? '?' : ''; ?> </button> </form>
+                             <form method="POST" action="events.php<?php echo !empty($searchQuery) ? '?search='.urlencode($searchQuery) : ''; ?>" class="action-form"> <input type="hidden" name="event_id" value="<?php echo $event['id']; ?>"> <input type="hidden" name="action" value="<?php echo $interested ? 'uninterested' : 'interested'; ?>"> <button type="submit" class="action-button <?php echo $interested ? 'active' : ''; ?>"> <i class="fas fa-star fa-fw"></i><span class="text-action"> <?php echo $interested ? 'Uninterested' : 'Interested'; ?> </span></button> </form>
                             <?php else: ?>
-                             <a href="<?php echo $loginUrl; ?>" class="action-button"><i class="fas fa-star fa-fw"></i> Interested</a>
+                             <a href="<?php echo $loginUrl; ?>" class="action-button"><i class="fas fa-star fa-fw"></i><span class="text-action"> Interested</span></a>
                              <?php endif; ?>
 
                             <!-- Participate Button -->
                             <?php if ($currentUserId): ?>
-                            <form method="POST" action="events.php<?php echo !empty($searchQuery) ? '?search='.urlencode($searchQuery) : ''; ?>" class="action-form"> <input type="hidden" name="event_id" value="<?php echo $event['id']; ?>"> <input type="hidden" name="action" value="<?php echo $attending ? 'unattend' : 'attend'; ?>"> <button type="submit" class="action-button <?php echo $attending ? 'active primary' : ''; ?>"> <i class="fas fa-check-circle fa-fw"></i> <?php echo $attending ? 'Attending' : 'Attend'; ?> </button> </form>
+                            <form method="POST" action="events.php<?php echo !empty($searchQuery) ? '?search='.urlencode($searchQuery) : ''; ?>" class="action-form"> <input type="hidden" name="event_id" value="<?php echo $event['id']; ?>"> <input type="hidden" name="action" value="<?php echo $attending ? 'unattend' : 'attend'; ?>"> <button type="submit" class="action-button <?php echo $attending ? 'active primary' : ''; ?>"> <i class="fas fa-check-circle fa-fw"></i><span class="text-action">  <?php echo $attending ? 'Attending' : 'Attend'; ?></span> </button> </form>
                             <?php else: ?>
-                             <a href="<?php echo $loginUrl; ?>" class="action-button"><i class="fas fa-check-circle fa-fw"></i> Attend</a>
+                             <a href="<?php echo $loginUrl; ?>" class="action-button"><i class="fas fa-check-circle fa-fw"></i><span class="text-action"> Attend</span></a>
                             <?php endif; ?>
 
                             <!-- Share Button (Placeholder) -->
-                            <button type="button" class="action-button" onclick="/* Add share logic or modal here */ alert('Share functionality coming soon!');" <?php echo !$currentUserId ? 'disabled title="Log in to share"' : ''; ?>> <i class="fas fa-share fa-fw"></i> Share </button>
+                            <button type="button" class="action-button" onclick="/* Add share logic or modal here */ alert('Share functionality coming soon!');" <?php echo !$currentUserId ? 'disabled title="Log in to share"' : ''; ?>> <i class="fas fa-share fa-fw"></i><span class="text-action"> Share </span></button>
                         </div>
 
                     </article> <!-- End event-card -->
                 <?php endforeach; ?>
             <?php else: ?>
-                <div class="no-events-message card"> <!-- ... No events message ... --> </div>
+                <div class="no-events-message card"> <!-- ... No events message ... --> 
+                    <h2>No Events Found</h2>
+                    <p>Try adjusting your search or check back later.</p>
+                </div>
             <?php endif; ?>
         </div> <!-- End event-feed -->
 
@@ -305,4 +309,21 @@ include_once 'header.php'; // Provides navbar/layout
 
 
 </body>
+<style>
+    /* Add your custom styles here */
+    @media (max-width: 640px) { 
+        .action-button .text-action{
+            display: none;
+        }
+        .action-button{
+            
+            border-left: 1px solid #ccc;
+            border-right: 1px solid #ccc;
+            
+        }
+        .action-button i{
+            font-size: 20px;
+        }
+    }
+    </style>
 </html>

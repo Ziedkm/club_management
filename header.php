@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ISGS Clubs</title>
+    
 
     <!-- Core Stylesheets -->
     <link rel="stylesheet" href="styles.css">
@@ -121,13 +122,23 @@
                         <path d="M12 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0M8.5 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 11a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m5-5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m-11 0a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m9.743-4.036a.5.5 0 1 1-.707-.707.5.5 0 0 1 .707.707m-7.779 7.779a.5.5 0 1 1-.707-.707.5.5 0 0 1 .707.707m7.072 0a.5.5 0 1 1 .707-.707.5.5 0 0 1-.707.707M3.757 4.464a.5.5 0 1 1 .707-.707.5.5 0 0 1-.707.707"/>
                       </svg></button>
                 </div>
-                <?php if (isset($_SESSION['user'])): ?>
+                <?php if (isset($_SESSION['user'])):
+                    // Get path from session - use null coalescing for safety
+                    $userProfilePic = $_SESSION['user']['profile_picture_path'] ?? null;
+                    // Construct full server path to check if file exists
+                    $profilePicServerPath = $userProfilePic ? rtrim($_SERVER['DOCUMENT_ROOT'], '/') . $userProfilePic : null;
+                    $showProfilePic = $userProfilePic && file_exists($profilePicServerPath);
+                ?>
                         <div class="profilebox">
                             <a href="profile.php" class="flex items-center space-x-2">
+                            <?php if ($showProfilePic): ?>
+                                <img src="<?php echo htmlspecialchars($userProfilePic); ?>" alt="Profile Picture" class="h-8 w-8 rounded-full bg-blue-200 flex items-center justify-center">
+                            <?php else: ?>
                                 <div class="h-8 w-8 rounded-full bg-blue-200 flex items-center justify-center">
                                     <?php echo substr($_SESSION['user']['username'], 0, 1); ?>
                                 </div>
-                                <span><?php echo $_SESSION['user']['username']; ?></span>
+                            <?php endif; ?>
+                                <span><?php echo $_SESSION['user']['username'];?></span>
                             </a>
                             <a href="actions/logout.php" class="bg-red-100 hover:bg-red-200 text-red-800 px-3 py-1 rounded-md">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
@@ -136,6 +147,7 @@
                                 </svg>
                             </a>
                         </div>
+                        
                     <?php else: ?>
                         
                         <a href="/cm/login.php" class="btn btn-outline">Login</a>
@@ -251,12 +263,23 @@
                       </svg></button>
             </div>
             <div class="mobile-menu-auth">
-            <?php if (isset($_SESSION['user'])): ?>
+            <?php if (isset($_SESSION['user'])):
+                    // Get path from session - use null coalescing for safety
+                    $userProfilePic = $_SESSION['user']['profile_picture_path'] ?? null;
+                    // Construct full server path to check if file exists
+                    $profilePicServerPath = $userProfilePic ? rtrim($_SERVER['DOCUMENT_ROOT'], '/') . $userProfilePic : null;
+                    $showProfilePic = $userProfilePic && file_exists($profilePicServerPath);
+                ?>
                         <div class="profilebox">
                             <a href="/cm/profile.php" class="flex items-center space-x-2">
-                                <div class="h-8 w-8 rounded-full bg-blue-200 flex items-center justify-center ">
+                            <?php if ($showProfilePic): ?>
+                                <img src="<?php echo htmlspecialchars($userProfilePic); ?>" alt="Profile Picture" class="h-8 w-8 rounded-full bg-blue-200 flex items-center justify-center">
+                            <?php else: ?>
+                                <div class="h-8 w-8 rounded-full bg-blue-200 flex items-center justify-center">
                                     <?php echo substr($_SESSION['user']['username'], 0, 1); ?>
                                 </div>
+                            <?php endif; ?>
+                                
                                 <span><?php echo $_SESSION['user']['username']; ?></span>
                             </a>
                             <a href="actions/logout.php" class="bg-red-100 hover:bg-red-200 text-red-800 px-3 py-1 rounded-md ">

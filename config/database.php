@@ -60,20 +60,25 @@ function loginUser($email, $password)
 {
     global $pdo;
 
-    $query = "SELECT * FROM users WHERE email = :email";
+    $query = "SELECT * FROM users WHERE email = :email"; // This selects all columns, including profile_picture_path
     $stmt = $pdo->prepare($query);
     $stmt->bindParam(':email', $email);
     $stmt->execute();
 
     $user = $stmt->fetch();
 
-    if ($user && $password === $user['password'] && /*check if the user is banned or not*/ $user['is_banned']==0) { // In production, use password_verify()
+    // CRITICAL: HASH CHECK MISSING! Replace this line in production
+    if ($user && $password === $user['password'] && $user['is_banned']==0) {
+
         // Store user in session
         $_SESSION['user'] = [
             'id' => $user['id'],
             'username' => $user['username'],
             'email' => $user['email'],
-            'role' => $user['role']
+            'role' => $user['role'],
+            // **** MISSING PROFILE PICTURE PATH ASSIGNMENT ****
+            // You need to add this line:
+            'profile_picture_path' => $user['profile_picture_path'] // <--- ADD THIS
         ];
         return true;
     }

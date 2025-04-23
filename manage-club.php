@@ -30,6 +30,19 @@ function format_time_ago($datetime, $full = false) { /* ... function code ... */
 // --- Define available categories & statuses ---
 $availableCategories = ['Academic', 'Arts & Culture', 'Community Service', 'Recreation', 'Sports', 'Technology', 'Social', 'Other'];
 $availableStatuses = ['pending', 'active', 'rejected']; // Needed if admin edits status
+$assignableDepartments = [
+    'Vice President',
+    'HR Responsible',
+    'General Secretary',
+    'Media Responsible',
+    'Sponsoring Responsible',
+    'Logistique Responsible',
+    'Media Member',
+    'Sponsoring Member',
+    'Logistique Member',
+    'General Member' // Or leave blank/NULL for generic members
+];
+sort($assignableDepartments);
 
 // --- Session Flash Messages ---
 $actionMsg = $_SESSION['manage_club_message'] ?? null; unset($_SESSION['manage_club_message']);
@@ -57,31 +70,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $canManage && $clubToManage) {
 
             case 'remove_member':
                 // --- Remove Member ---
-                $memberIdToRemove = filter_input(INPUT_POST, 'member_id', FILTER_VALIDATE_INT);
-                if($memberIdToRemove){ if($memberIdToRemove===$currentUserId){$formError="Cannot remove self.";} else { $stmtRole=$pdo->prepare("SELECT role FROM club_members WHERE user_id=:uid AND club_id=:cid"); $stmtRole->execute([':uid'=>$memberIdToRemove,':cid'=>$clubId]); $memRole=$stmtRole->fetchColumn(); if($memRole==='leader'){$formError="Cannot remove leader via this action.";} else { $stmtDel=$pdo->prepare("DELETE FROM club_members WHERE user_id=:uid AND club_id=:cid"); $stmtDel->execute([':uid'=>$memberIdToRemove,':cid'=>$clubId]); if($stmtDel->rowCount()>0) $formSuccess="Member removed."; else $formError="Remove failed.";}}} else {$formError="Invalid member ID.";}
+                $memberIdToRemove=filter_input(INPUT_POST,'member_id',FILTER_VALIDATE_INT);if($memberIdToRemove){if($memberIdToRemove===$currentUserId && $isClubLeader){$formError="Leaders cannot remove self.";}else{$stmtRole=$pdo->prepare("SELECT role FROM club_members WHERE user_id=:uid AND club_id=:cid");$stmtRole->execute([':uid'=>$memberIdToRemove,':cid'=>$clubId]);$memRole=$stmtRole->fetchColumn();if($memRole==='leader'){$formError="Cannot remove leader.";}else{$stmtDel=$pdo->prepare("DELETE FROM club_members WHERE user_id=:uid AND club_id=:cid");$stmtDel->execute([':uid'=>$memberIdToRemove,':cid'=>$clubId]);if($stmtDel->rowCount()>0)$formSuccess="Member removed.";else $formError="Remove failed.";}}}else{$formError="Invalid member ID.";}
                 break;
 
             case 'approve_request':
                  // --- Approve Join Request ---
                  $requesterId = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
                  if ($requesterId) {
-                     $stmtApprove = $pdo->prepare("UPDATE club_members SET role = 'member' WHERE user_id = :user_id AND club_id = :club_id AND role = 'pending'");
+                     // Approve sets role to 'member', department NULL initially
+                     $stmtApprove = $pdo->prepare("UPDATE club_members SET role = 'member', department = NULL WHERE user_id = :user_id AND club_id = :club_id AND role = 'pending'");
                      $stmtApprove->bindParam(':user_id', $requesterId, PDO::PARAM_INT); $stmtApprove->bindParam(':club_id', $clubId, PDO::PARAM_INT); $stmtApprove->execute();
-                     if ($stmtApprove->rowCount() > 0) $formSuccess = "Join request approved."; else $formError = "Approval failed (request not found or already processed).";
-                      /* TODO: Send notification to user */
-                 } else $formError = "Invalid user ID for approval.";
+                     if ($stmtApprove->rowCount() > 0) $formSuccess = "Join request approved (Role: Member)."; else $formError = "Approval failed.";
+                 } else $formError = "Invalid user ID.";
                  break;
 
             case 'reject_request':
                  // --- Reject Join Request ---
-                 $requesterId = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
-                 if ($requesterId) {
-                     $stmtReject = $pdo->prepare("DELETE FROM club_members WHERE user_id = :user_id AND club_id = :club_id AND role = 'pending'");
-                     $stmtReject->bindParam(':user_id', $requesterId, PDO::PARAM_INT); $stmtReject->bindParam(':club_id', $clubId, PDO::PARAM_INT); $stmtReject->execute();
-                     if ($stmtReject->rowCount() > 0) $formSuccess = "Join request rejected."; else $formError = "Rejection failed (request not found or already processed).";
-                      /* TODO: Send notification to user */
-                 } else $formError = "Invalid user ID for rejection.";
+                 $requesterId=filter_input(INPUT_POST,'user_id',FILTER_VALIDATE_INT);if($requesterId){$stmtR=$pdo->prepare("DELETE FROM club_members WHERE user_id=:uid AND club_id=:cid AND role='pending'");$stmtR->bindParam(':uid',$requesterId,PDO::PARAM_INT);$stmtR->bindParam(':cid',$clubId,PDO::PARAM_INT);$stmtR->execute();if($stmtR->rowCount()>0)$formSuccess="Request rejected.";else $formError="Rejection failed.";}else $formError="Invalid user ID.";
                  break;
+            case 'update_department':
+                $memberIdToUpdate = filter_input(INPUT_POST, 'member_id', FILTER_VALIDATE_INT);
+                $newDepartment = trim($_POST['new_department'] ?? ''); // Can be empty string to clear
+                
+                if (!$memberIdToUpdate) { $formError = "Invalid member ID for department update."; }
+                // Allow empty string (clearing department) or check if it's in the defined list
+                elseif (!empty($newDepartment) && !in_array($newDepartment, $assignableDepartments)) {
+                     $formError = "Invalid department selected ('".htmlspecialchars($newDepartment)."').";
+                }
+                // Prevent changing leader's department this way (though leaders usually don't have one)
+                elseif ($memberIdToUpdate === $currentUserId && $isClubLeader) { $formError = "Leaders manage departments, their own isn't set here."; }
+                else {
+                    // Check if member exists and is not pending/leader
+                    $stmtCheckMem = $pdo->prepare("SELECT role FROM club_members WHERE user_id = :uid AND club_id = :cid");
+                    $stmtCheckMem->execute([':uid' => $memberIdToUpdate, ':cid' => $clubId]);
+                    $currentMemberRole = $stmtCheckMem->fetchColumn();
+
+                    if ($currentMemberRole === 'leader') {
+                        $formError = "Cannot assign a department to the club Leader.";
+                    } elseif ($currentMemberRole === false) {
+                         $formError = "Member not found in this club.";
+                    } elseif ($currentMemberRole === 'pending') {
+                         $formError = "Approve join request first before assigning department.";
+                    } else {
+                        // Proceed with update - Use NULL if empty string was selected
+                        $deptValue = !empty($newDepartment) ? $newDepartment : null;
+                        $stmtUpdateDept = $pdo->prepare("UPDATE club_members SET department = :new_dept WHERE user_id = :uid AND club_id = :cid");
+                        $stmtUpdateDept->bindParam(':new_dept', $deptValue, PDO::PARAM_STR|PDO::PARAM_NULL); // Allow NULL
+                        $stmtUpdateDept->bindParam(':uid', $memberIdToUpdate, PDO::PARAM_INT);
+                        $stmtUpdateDept->bindParam(':cid', $clubId, PDO::PARAM_INT);
+                        $stmtUpdateDept->execute();
+
+                        // rowCount might be 0 if value didn't change, so check errorInfo instead for failure
+                        if ($stmtUpdateDept->errorInfo()[0] === '00000') {
+                            $formSuccess = "Member department updated successfully.";
+                        } else {
+                            $formError = "Failed to update department.";
+                             error_log("Dept update failed: ".implode(", ", $stmtUpdateDept->errorInfo()));
+                        }
+                    }
+                }
+                break;
 
             case 'send_notification':
                  // --- Send Notification ---
@@ -115,18 +163,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $canManage && $clubToManage) {
 $clubMembers = []; $clubEvents = []; $pendingRequests = [];
 if ($clubToManage) {
     try {
-        // Fetch Members (Leaders first, then Members)
-        $stmtMembers = $pdo->prepare("SELECT u.id, u.username, cm.role FROM users u JOIN club_members cm ON u.id = cm.user_id WHERE cm.club_id = :club_id AND cm.role IN ('leader', 'member') ORDER BY FIELD(cm.role, 'leader', 'member'), u.username ASC");
+        // Fetch Members - include department now, order by role then department?
+        $stmtMembers = $pdo->prepare("SELECT u.id, u.username, cm.role, cm.department
+                                     FROM users u JOIN club_members cm ON u.id = cm.user_id
+                                     WHERE cm.club_id = :club_id AND cm.role IN ('leader', 'member')
+                                     ORDER BY FIELD(cm.role, 'leader', 'member'), cm.department ASC, u.username ASC");
         $stmtMembers->bindParam(':club_id', $clubId, PDO::PARAM_INT); $stmtMembers->execute(); $clubMembers = $stmtMembers->fetchAll(PDO::FETCH_ASSOC);
 
-        // Fetch Pending Join Requests
+        // Fetch Pending Join Requests (same)
         $stmtPending = $pdo->prepare("SELECT u.id, u.username, cm.joined_at FROM users u JOIN club_members cm ON u.id = cm.user_id WHERE cm.club_id = :club_id AND cm.role = 'pending' ORDER BY cm.joined_at ASC");
         $stmtPending->bindParam(':club_id', $clubId, PDO::PARAM_INT); $stmtPending->execute(); $pendingRequests = $stmtPending->fetchAll(PDO::FETCH_ASSOC);
 
-        // Fetch Active Events
+        // Fetch Active Events (same)
         $stmtEvents = $pdo->prepare("SELECT id, name, event_date FROM events WHERE club_id = :club_id AND status = 'active' ORDER BY event_date DESC LIMIT 10");
         $stmtEvents->bindParam(':club_id', $clubId, PDO::PARAM_INT); $stmtEvents->execute(); $clubEvents = $stmtEvents->fetchAll(PDO::FETCH_ASSOC);
-
     } catch (Exception $e) { error_log("Manage Club Fetch List Error: ".$e->getMessage()); $pageError = $pageError ?? "Could not load members/events."; }
 }
 
@@ -181,8 +231,51 @@ include_once 'header.php';
                         <?php endif; ?>
                     </section> <!-- **** END Pending Join Requests **** -->
 
-                    <section class="card"> <h2 class="section-heading">Current Members (<?php echo count($clubMembers); ?>)</h2> <?php if(count($clubMembers)>0): ?><div class="list-container compact-list"><?php foreach($clubMembers as $member):?><div class="list-item member-list-item"><div class="item-main"><span class="member-name"><?php echo htmlspecialchars($member['username']);?></span><?php if($member['role']==='leader'):?><span class="role-badge leader-badge">Leader</span><?php endif;?></div><div class="item-action"><?php if($member['id']!=$currentUserId && $member['role']!=='leader'):?><form method="POST" action="manage-club.php?id=<?php echo $clubId;?>" class="action-form" onsubmit="return confirm('Remove member?');"><input type="hidden" name="action" value="remove_member"><input type="hidden" name="member_id" value="<?php echo $member['id'];?>"><button type="submit" class="btn-delete-sm" title="Remove"><i class="fas fa-user-minus"></i></button></form><?php endif;?></div></div><?php endforeach;?></div><?php else:?><p class="empty-list-message small">No members yet.</p><?php endif;?> <!-- Removed Add Member Button --> </section>
-                    <section class="card"> <h2 class="section-heading">Recent Club Events</h2> <?php if(count($clubEvents)>0): ?><div class="list-container compact-list"><?php foreach($clubEvents as $event):?><div class="list-item event-list-item"><div class="item-main"><a href="event-detail.php?id=<?php echo $event['id'];?>" class="item-title event-link"><?php echo htmlspecialchars($event['name']);?></a></div><div class="item-action"><a href="edit_event.php?id=<?php echo $event['id'];?>" class="btn-action edit" title="Edit"><i class="fas fa-edit"></i></a></div></div><?php endforeach;?></div><?php else:?><p class="empty-list-message small">No active events.</p><?php endif;?><div class="form-actions" style="margin-top:1rem;"><a href="create_event.php?club_id=<?php echo $clubId;?>" class="btn btn-secondary btn-sm" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;"><i class="fas fa-plus"></i> New Event</a></div> </section>
+                    <!-- **** MODIFIED Members Section **** -->
+                    <section class="card">
+                        <h2 class="section-heading">Current Members (<?php echo count($clubMembers); ?>)</h2>
+                        <?php if(count($clubMembers)>0): ?>
+                            <div class="list-container compact-list members-list">
+                                <?php foreach($clubMembers as $member):?>
+                                    <div class="list-item member-list-item">
+                                        <div class="item-main member-info">
+                                            <span class="member-name"><?php echo htmlspecialchars($member['username']);?><!-- Display Department -->
+                                            <span class="member-department">
+                                                <?php echo htmlspecialchars($member['department'] ?? 'No Department'); // Show department ?>
+                                            </span></span>
+                                            
+                                            
+                                        </div>
+                                        <div class="item-action member-actions">
+                                            <?php // --- Department Update Form (Not for leader/self) --- ?>
+                                            <?php if ($canManage && $member['role'] !== 'leader' && $member['id'] !== $currentUserId): ?>
+                                                <form method="POST" action="manage-club.php?id=<?php echo $clubId; ?>" class="action-form department-update-form">
+                                                    <input type="hidden" name="action" value="update_department">
+                                                    <input type="hidden" name="member_id" value="<?php echo $member['id']; ?>">
+                                                    <select name="new_department" class="form-select-sm" aria-label="Change department for <?php echo htmlspecialchars($member['username']); ?>">
+                                                        <option value="">-- Assign Dept --</option> <!-- Option to clear -->
+                                                        <?php foreach($assignableDepartments as $dept): ?>
+                                                            <option value="<?php echo htmlspecialchars($dept); ?>" <?php echo ($member['department'] === $dept) ? 'selected' : ''; ?>>
+                                                                <?php echo htmlspecialchars($dept); ?>
+                                                            </option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                    <button type="submit" class="btn-action update" title="Update Department"><i class="fas fa-check"></i></button>
+                                                </form>
+                                            <?php endif; ?>
+
+                                            <?php // --- Remove Member Form (Not for leader/self) --- ?>
+                                            <?php if($canManage && $member['role'] !== 'leader' && $member['id'] !== $currentUserId):?>
+                                                <form method="POST" action="manage-club.php?id=<?php echo $clubId;?>" class="action-form" onsubmit="return confirm('Remove <?php echo htmlspecialchars(addslashes($member['username'])); ?>?');"> <input type="hidden" name="action" value="remove_member"> <input type="hidden" name="member_id" value="<?php echo $member['id'];?>"> <button type="submit" class="btn-delete-sm" title="Remove Member"><i class="fas fa-user-minus"></i></button> </form>
+                                            <?php endif;?>
+                                        </div>
+                                    </div>
+                                <?php endforeach;?>
+                            </div>
+                        <?php else:?> <p class="empty-list-message small">No members yet (excluding pending).</p> <?php endif;?>
+                    </section>
+                    <!-- **** END Members Section **** -->
+     <section class="card"> <h2 class="section-heading">Recent Club Events</h2> <?php if(count($clubEvents)>0): ?><div class="list-container compact-list"><?php foreach($clubEvents as $event):?><div class="list-item event-list-item"><div class="item-main"><a href="event-detail.php?id=<?php echo $event['id'];?>" class="item-title event-link"><?php echo htmlspecialchars($event['name']);?></a></div><div class="item-action"><a href="edit_event.php?id=<?php echo $event['id'];?>" class="btn-action edit" title="Edit"><i class="fas fa-edit"></i></a></div></div><?php endforeach;?></div><?php else:?><p class="empty-list-message small">No active events.</p><?php endif;?><div class="form-actions" style="margin-top:1rem;"><a href="create_event.php?club_id=<?php echo $clubId;?>" class="btn btn-secondary btn-sm" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;"><i class="fas fa-plus"></i> New Event</a></div> </section>
                  </div> <!-- End Sidebar Column -->
             </div> <!-- End Grid -->
         <?php endif; // End check for valid $clubToManage ?>
@@ -192,6 +285,51 @@ include_once 'header.php';
 
 <!-- Styles -->
 <style>
+    /* --- Paste all previous styles --- */
+    /* --- Add/Modify Styles for Member List --- */
+.members-list .list-item { flex-wrap: wrap; /* Allow wrap */ }
+    .member-info { display: flex; flex-direction: column; flex-grow: 1; padding-right: 1rem; min-width: 150px; /* Prevent excessive squish */ }
+    .member-name { font-weight: 600;margin-bottom: 6px; }
+    .member-name .member-department { font-size: 0.7rem; color: #fff; margin-top: 2px; border-radius: 20px;  background-color:var(--primary-color); padding: 2px 10px; } body.dark .member-department { color: #ccc; }
+    .member-actions { display: flex; align-items: center; flex-shrink: 0; flex-wrap: wrap; gap: 0.5rem; margin-left: auto; /* Push actions right */}
+    .department-update-form { display: inline-flex; align-items: center; gap: 0.3rem; }
+    .form-select-sm { /* Keep previous style */
+        width: auto; /* Allow auto width for select */
+        border: 2px solid var(--border-color); /* Keep border style */
+        border-radius: 0.5rem; /* Keep border radius */
+        padding: 0.3rem 0.5rem; /* Adjust padding for smaller size */
+        font-size: 0.9rem; /* Smaller font size for compactness */
+    }
+    .department-update-form .btn-action.update { /* Keep previous style */
+        background-color: #007bff; /* Blue background for update button */
+        color: #fff; /* White text */
+        border: none; /* No border */
+        padding: 0.3rem 0.5rem; /* Padding for button */
+        border-radius: 0.3rem; /* Rounded corners */
+        cursor: pointer; /* Pointer cursor on hover */
+    }
+    .department-update-form .btn-action.update:hover { /* Hover effect for update button */
+        background-color: #0056b3; /* Darker blue on hover */
+        color: #fff; /* White text on hover */
+    }
+    .member-actions .btn-delete-sm { /* Keep previous style */
+        color: #dc3545; /* Red color for delete button */
+        font-size: 1.2rem; /* Larger icon size */
+        padding: 0.3rem 0.5rem; /* Padding for button */
+        border-radius: 0.3rem; /* Rounded corners */
+    }
+    .member-actions .btn-delete-sm:hover { /* Hover effect for delete button */
+        color: #c82333; /* Darker red on hover */
+    }
+
+    /* Adjust mobile view if needed */
+     @media (max-width: 768px) { /* Wider breakpoint for action wrapping */
+        .member-list-item { flex-direction: column; align-items: flex-start; }
+        .member-actions { margin-left: 0; margin-top: 0.75rem; width: 100%; justify-content: flex-start; }
+         .department-update-form { width: 100%; } /* Make form take full width */
+         .department-update-form select { flex-grow: 1; max-width: none; }
+         
+     }
     /* Reuse styles from profile.php/admin.php: card, message, form-group, form-input, form-textarea, form-select, form-actions, btn, btn-primary, btn-secondary, section-heading, list-container, list-item, item-main, item-action, empty-list-message, etc. */
     .manage-club-container .manage-club-wrapper { max-width: 1100px; margin: 1rem auto; }
     .manage-club-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 2rem; }
