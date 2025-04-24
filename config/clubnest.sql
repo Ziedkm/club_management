@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 23, 2025 at 12:42 AM
+-- Generation Time: Apr 24, 2025 at 12:33 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -59,18 +59,19 @@ CREATE TABLE `club_members` (
   `user_id` int(11) NOT NULL,
   `club_id` int(11) NOT NULL,
   `role` enum('member','leader','pending') NOT NULL DEFAULT 'pending',
-  `joined_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `joined_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `department` enum('President','Vice President','HR Responsible','General Secretary','Media Responsible','Sponsoring Responsible','Logistique Responsible','Media Member','Sponsoring Member','Logistique Member') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `club_members`
 --
 
-INSERT INTO `club_members` (`id`, `user_id`, `club_id`, `role`, `joined_at`) VALUES
-(1, 2, 1, 'leader', '2025-03-25 10:17:43'),
-(2, 2, 2, 'leader', '2025-03-25 10:17:43'),
-(3, 3, 3, 'member', '2025-03-25 10:17:43'),
-(29, 4, 2, 'pending', '2025-04-13 20:06:34');
+INSERT INTO `club_members` (`id`, `user_id`, `club_id`, `role`, `joined_at`, `department`) VALUES
+(1, 2, 1, 'leader', '2025-03-25 10:17:43', NULL),
+(2, 2, 2, 'leader', '2025-03-25 10:17:43', 'President'),
+(3, 3, 3, 'member', '2025-03-25 10:17:43', NULL),
+(29, 4, 2, 'member', '2025-04-13 20:06:34', 'Media Responsible');
 
 -- --------------------------------------------------------
 
@@ -312,22 +313,23 @@ CREATE TABLE `users` (
   `is_banned` tinyint(1) NOT NULL DEFAULT 0,
   `ban_reason` text DEFAULT NULL,
   `banned_until` datetime DEFAULT NULL COMMENT 'Null for permanent ban',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `profile_picture_path` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `is_banned`, `ban_reason`, `banned_until`, `created_at`) VALUES
-(1, 'admin', 'admin@university.edu', 'admin123', 'admin', 0, NULL, NULL, '2025-03-25 10:17:43'),
-(2, 'clubleader', 'leader@university.edu', 'leader123', 'club_leader', 0, NULL, NULL, '2025-03-25 10:17:43'),
-(3, 'student', 'student@university.edu', 'student123', 'student', 0, NULL, NULL, '2025-03-25 10:17:43'),
-(4, 'zied kmantar', 'ziedkmantar@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-04-05 19:53:01'),
-(5, 'azer', 'azerfarhat@gmail.com', 'azer123', 'student', 0, NULL, NULL, '2025-04-07 13:00:54'),
-(6, 'Ella', 'ellahamdi@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-04-08 07:53:22'),
-(7, 'yassine', 'yassinekmantar@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-04-09 14:25:23'),
-(8, 'anoirTN', 'anoirajej02@gmail.com', 'anoir0987', 'student', 0, NULL, NULL, '2025-04-11 21:37:11');
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `is_banned`, `ban_reason`, `banned_until`, `created_at`, `profile_picture_path`) VALUES
+(1, 'admin', 'admin@university.edu', 'admin123', 'admin', 0, NULL, NULL, '2025-03-25 10:17:43', NULL),
+(2, 'MejdEddine', 'leader@university.edu', 'leader123', 'club_leader', 0, NULL, NULL, '2025-03-25 10:17:43', '/cm/uploads/profile_pics/2_1745490708.png'),
+(3, 'student', 'student@university.edu', 'student123', 'student', 0, NULL, NULL, '2025-03-25 10:17:43', NULL),
+(4, 'zied kmantar', 'ziedkmantar@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-04-05 19:53:01', NULL),
+(5, 'azer', 'azerfarhat@gmail.com', 'azer123', 'student', 0, NULL, NULL, '2025-04-07 13:00:54', NULL),
+(6, 'Ella', 'ellahamdi@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-04-08 07:53:22', NULL),
+(7, 'yassine', 'yassinekmantar@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-04-09 14:25:23', NULL),
+(8, 'anoirTN', 'anoirajej02@gmail.com', 'anoir0987', 'student', 0, NULL, NULL, '2025-04-11 21:37:11', NULL);
 
 --
 -- Indexes for dumped tables
