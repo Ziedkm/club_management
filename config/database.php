@@ -76,9 +76,7 @@ function loginUser($email, $password)
             'username' => $user['username'],
             'email' => $user['email'],
             'role' => $user['role'],
-            // **** MISSING PROFILE PICTURE PATH ASSIGNMENT ****
-            // You need to add this line:
-            'profile_picture_path' => $user['profile_picture_path'] // <--- ADD THIS
+            'profile_picture_path' => $user['profile_picture_path']
         ];
         return true;
     }

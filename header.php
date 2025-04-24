@@ -58,6 +58,11 @@
                             <path d="M10.5 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM8 2a2.5 2.5 0 1 0 .001-4.001A2.5 2.5 0 0 0 8 2zm4.5-.5a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5h9zM8 .75A7.25 7.25 0 1 1 .75 8 .75.75 0 0 1 .75.75h7z"/>
                         </svg> Admin Panel
                     </a>
+                    <!-- show the admin notification page -->
+                     <a href="/cm/admin_notifications.php" class="nav-link">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
+  <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"/>
+</svg> Send Notifications
                 <?php endif; ?>
                 <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] == 'club_leader'): ?>
                 <a href="/cm/dashboard.php" class="nav-link">
@@ -236,6 +241,12 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-badge-fill" viewBox="0 0 16 16">
                             <path d="M10.5 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zM8 2a2.5 2.5 0 1 0 .001-4.001A2.5 2.5 0 0 0 8 2zm4.5-.5a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5h9zM8 .75A7.25 7.25 0 1 1 .75 8 .75.75 0 0 1 .75.75h7z"/>
                         </svg> Admin Panel
+                    </a>
+                    <!-- show the admin notification page mobile -->
+                        <a href="/cm/admin_notifications.php" class="nav-list-phone" style="background-color: var(--background-color); color: var(--text-color); border-radius: 5px; padding: 10px; align-items: center; display: flex; gap: 10px; border: 1px solid var(--primary-color); margin: 10px 0;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
+    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7a5.978 5.978 0 0 0-.005-.401z"/>
+</svg> Send Notifications
                     </a>
                 <?php endif; ?>
                 <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] == 'club_leader'): ?>

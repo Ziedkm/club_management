@@ -13,6 +13,7 @@ $memberCount = 0;
 $isMember = false;
 $isLeader = false;
 $userId = $_SESSION['user']['id'] ?? null; // Get user ID if logged in
+$userRole = $_SESSION['user']['role'] ?? null; // Get user role if logged in
 // 1. Validate Club ID
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     // Optional: Set a flash message for the user
@@ -236,6 +237,11 @@ include_once 'header.php';
                     <a href="manage-club.php?id=<?php echo $clubId; ?>" class="inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
                         <i class="fas fa-cog mr-2"></i> Manage Club
                     </a>
+                <?php elseif($$userRole='admin'): // User is an Admin ?>
+                    <a href="edit_club.php?id=<?php echo $clubId; ?>" class="inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                        <i class="fas fa-cog mr-2"></i> Edit Club
+                    </a>
+
                 <?php elseif ($isMember): // User is a Member (not leader) ?>
                     <form method="POST" action="club-detail.php?page=club-detail&id=<?php echo $clubId; ?>">
                         <button type="submit" name="leave_club" class="w-full sm:w-auto inline-flex justify-center items-center px-4 py-2 border border-red-300 rounded-md shadow-sm text-sm font-medium text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
@@ -409,7 +415,14 @@ include_once 'header.php';
             </div>
 
             <!-- Join Information Box (Conditional) -->
-            <?php if ($userId && !$isMember && !$isLeader): ?>
+             <?php if($userRole='admin'): ?>
+                <div class="bg-yellow-50 p-6 rounded-lg border border-yellow-100 shadow-sm">
+                    <h3 class="text-lg font-semibold text-yellow-800 mb-2">Admin Access</h3>
+                    <p class="text-sm text-yellow-700 mb-4">
+                        You have admin access to this club. You can manage members and events.
+                    </p>
+                </div>
+            <?php elseif ($userId && !$isMember && !$isLeader): ?>
                 <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 shadow-sm">
                     <h3 class="text-lg font-semibold text-blue-800 mb-2">Interested in joining?</h3>
                     <p class="text-sm text-blue-700 mb-4">
