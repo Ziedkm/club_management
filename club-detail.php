@@ -14,6 +14,9 @@ $isMember = false;
 $isLeader = false;
 $userId = $_SESSION['user']['id'] ?? null; // Get user ID if logged in
 $userRole = $_SESSION['user']['role'] ?? null; // Get user role if logged in
+//console log userRole
+echo "<script>console.log('User Role: " . $userRole . "');</script>";
+
 // 1. Validate Club ID
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     // Optional: Set a flash message for the user
@@ -237,7 +240,7 @@ include_once 'header.php';
                     <a href="manage-club.php?id=<?php echo $clubId; ?>" class="inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
                         <i class="fas fa-cog mr-2"></i> Manage Club
                     </a>
-                <?php elseif($$userRole='admin'): // User is an Admin ?>
+                <?php elseif($userRole=='admin'): // User is an Admin ?>
                     <a href="edit_club.php?id=<?php echo $clubId; ?>" class="inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
                         <i class="fas fa-cog mr-2"></i> Edit Club
                     </a>
@@ -415,7 +418,7 @@ include_once 'header.php';
             </div>
 
             <!-- Join Information Box (Conditional) -->
-             <?php if($userRole='admin'): ?>
+             <?php if($userRole=='admin'): ?>
                 <div class="bg-yellow-50 p-6 rounded-lg border border-yellow-100 shadow-sm">
                     <h3 class="text-lg font-semibold text-yellow-800 mb-2">Admin Access</h3>
                     <p class="text-sm text-yellow-700 mb-4">

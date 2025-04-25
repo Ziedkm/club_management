@@ -1,5 +1,5 @@
 <?php
-// session_start(); // Uncomment if session is needed elsewhere
+session_start(); // Uncomment if session is needed elsewhere
 require_once 'config/database.php';
 // Assuming getAllClubs() and getClubMembers() are defined
 include_once 'header.php'; // Assumes header.php includes necessary basic HTML structure, potentially <head>
