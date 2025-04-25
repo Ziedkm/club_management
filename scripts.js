@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // *** NEW: Mobile Menu Selectors using UNIQUE IDs ***
     const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
     const mobileLanguageSelect = document.getElementById('mobile-language-select'); // Need this if uncommenting language logic
-
+    
     // Scroll effect for sidebar
     window.addEventListener('scroll', () => {
         // Check if sidebar exists before adding/removing class

@@ -106,9 +106,9 @@ include_once 'header.php';
         <!-- Left Decorative Panel -->
         <div class="left-panel">
             <div class="left-content">
-                <span class="brand-tag">ClubMantra</span> <!-- Keep Brand Name -->
+                <span class="brand-tag">ISGS Clubs</span> <!-- Keep Brand Name -->
                 <!-- English Text based on form state -->
-                <h2><?php echo $showLoginForm ? 'Welcome Back' : 'Join ClubMantra'; ?></h2>
+                <h2><?php echo $showLoginForm ? 'Welcome Back' : 'Join ISGS Clubs'; ?></h2>
                 <p><?php echo $showLoginForm
                     ? 'Log in to continue your experience with university clubs.' // English
                     : 'Create an account to discover and join clubs, and stay connected.'; ?> <!-- English -->

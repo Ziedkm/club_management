@@ -72,7 +72,7 @@ $team_members = [
             </p>
             <div class="about-card">
                 <div class="about-banner">
-                    <img src="../bannerr.jpg" alt="Étudiants regardant un paysage - Mission ClubMantra">
+                    <img src="../bannerr.jpg" alt="Étudiants regardant un paysage - Mission ISGS clubs">
                     <h3 class="mission-overlay-text">Notre Mission</h3>
                 </div>
                 <div class="about-content">

@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="styles2.css">
     <link rel="stylesheet" href="footer.css">
 
+    <!-- app icon -->
+    <link rel="icon" href="assets/images/logo.png" type="image/png">
+
     <!-- Third Party CSS -->
     <!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -26,6 +29,12 @@
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script src="scripts.js"></script>
     <script src="script.js"></script>
+    <style>
+       body.dark .nav-link.active {
+    background-color: rgb(59 130 246 / .5);
+    color: rgb(255, 255, 255);
+}
+</style>
 </head>
 <body>
     <!-- Desktop Sidebar -->
