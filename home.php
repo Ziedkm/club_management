@@ -700,11 +700,11 @@ body.dark input:focus, body.dark textarea:focus {
                     <p class="hero-subtitle"> 
                         Discover diverse clubs, join vibrant communities, and stay updated on campus events. ISG Clubs is your central hub for university life.
                     </p>
-                    <div class="hero-actions">
-                        <a href="/cm/clubs.php" class="btn btn-primary shadow-lg transform hover:scale-105">
+                    <div class="hero-actions" style="align-items: center; justify-content: center; ">
+                        <a href="/cm/clubs.php" class="btn btn-primary shadow-lg transform hover:scale-105" style="width: 300px;">
                             Explore Clubs Now <i class="fas fa-arrow-right ml-2"></i>
                         </a>
-                        <a href="/cm/login.php" class="btn btn-outline transform hover:scale-105">
+                        <a href="/cm/login.php" class="btn btn-outline transform hover:scale-105" style="width: 300px;">
                             Join the Community
                         </a>
                     </div>
