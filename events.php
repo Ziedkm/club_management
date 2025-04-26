@@ -30,13 +30,15 @@ try {
                 e.id, e.name, e.description, e.event_date, e.event_end_date, e.location, e.poster_image_path, e.created_at,
                 e.created_by,
                 c.id as club_id, c.name as club_name,
-                u.username as creator_username, -- If you want to show who created it
+                c.logo_path as club_logo_path, -- Fetch club logo path
+                u.username as creator_username,
                 (SELECT COUNT(*) FROM event_attendees WHERE event_id = e.id) as participant_count,
                 (SELECT COUNT(*) FROM event_likes WHERE event_id = e.id) as like_count,
-                (SELECT COUNT(*) FROM event_comments WHERE event_id = e.id) as comment_count
+                (SELECT COUNT(*) FROM event_comments WHERE event_id = e.id) as comment_count,
+                (SELECT COUNT(*) FROM event_interest WHERE event_id = e.id) as interest_count
             FROM events e
             JOIN clubs c ON e.club_id = c.id
-            LEFT JOIN users u ON e.created_by = u.id -- Left join in case creator is deleted
+            LEFT JOIN users u ON e.created_by = u.id
             WHERE e.status = 'active'";
 
     // Add Search condition
@@ -180,9 +182,24 @@ include_once 'header.php'; // Provides navbar/layout
                         <div class="event-card-header">
                             <div class="event-club-info">
                                 <a href="club-detail.php?id=<?php echo $event['club_id']; ?>" class="club-avatar-link">
-                                    <div class="avatar-placeholder small-avatar">
-                                        <?php echo strtoupper(substr($event['club_name'] ?? '?', 0, 1)); ?>
-                                    </div>
+                                <?php
+                                    // Check if logo path exists and the file is accessible
+                                    $clubLogoWebPath = $event['club_logo_path'] ?? null;
+                                    // IMPORTANT: Adjust the document root check based on how $clubLogoWebPath is stored (relative vs absolute web path)
+                                    // If $clubLogoWebPath is like '/cm/uploads/club_logos/xyz.jpg'
+                                    $clubLogoServerPath = $clubLogoWebPath ? rtrim($_SERVER['DOCUMENT_ROOT'], '/') . $clubLogoWebPath : null;
+                                    // If $clubLogoWebPath is just 'xyz.jpg', you need to prepend the directory path:
+                                    // $clubLogoServerPath = $clubLogoWebPath ? rtrim($_SERVER['DOCUMENT_ROOT'], '/') . '/cm/uploads/club_logos/' . $clubLogoWebPath : null;
+
+                                    $showClubLogo = $clubLogoWebPath && file_exists($clubLogoServerPath);
+                                    ?>
+                                    <?php if ($showClubLogo): ?>
+                                        <img src="<?php echo htmlspecialchars($clubLogoWebPath); ?>" alt="<?php echo htmlspecialchars($event['club_name'] ?? ''); ?> Logo" class="avatar-image small-avatar">
+                                    <?php else: ?>
+                                        <div class="avatar-placeholder small-avatar">
+                                            <?php echo strtoupper(substr($event['club_name'] ?? '?', 0, 1)); ?>
+                                        </div>
+                                    <?php endif; ?>
                                 </a>
                                 <div>
                                     <a href="club-detail.php?id=<?php echo $event['club_id']; ?>" class="club-name-link">
@@ -310,6 +327,26 @@ include_once 'header.php'; // Provides navbar/layout
 
 </body>
 <style>
+     /* Add/Modify styles for Club Logo */
+     .avatar-image.small-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover; /* Ensure image covers the circle */
+        border: 1px solid var(--border-color); /* Optional border */
+         background-color: #eee; /* Fallback bg if image fails */
+    }
+    body.dark .avatar-image.small-avatar {
+        border-color: #444;
+        background-color: #444;
+    }
+
+    /* Ensure placeholder and image have same dimensions */
+     .avatar-placeholder.small-avatar, .avatar-image.small-avatar {
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0; /* Prevent shrinking */
+     }
     /* Add your custom styles here */
     @media (max-width: 640px) { 
         .action-button .text-action{

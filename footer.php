@@ -49,7 +49,7 @@
                 <p>
                     Restez connecté aux dernières
                     nouvelles et informations de
-                    <span class="highlight">club</span><span class="highlight-white">nest</span>.
+                    <span class="highlight">ISGS</span><span class="highlight-white">Clubs</span>.
                 </p>
             </div>
         </div>

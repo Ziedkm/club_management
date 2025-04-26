@@ -92,7 +92,7 @@ try {
 
     // Fetch Event Details
     // ** MODIFIED SQL WHERE Clause **
-    $sqlEvent = "SELECT e.*, c.name as club_name, u.username as creator_username,
+    $sqlEvent = "SELECT e.*, c.name as club_name, u.username as creator_username, c.logo_path as logo_path,
                  (SELECT COUNT(*) FROM event_attendees WHERE event_id = e.id) as participant_count,
                  (SELECT COUNT(*) FROM event_likes WHERE event_id = e.id) as like_count,
                  (SELECT COUNT(*) FROM event_comments WHERE event_id = e.id) as comment_count,
@@ -109,11 +109,11 @@ try {
               $sqlEvent .= " AND e.status = 'active'";
          }
          // If preview=true but user is NOT admin, they still only see active events (optional security)
-         // else { $sqlEvent .= " AND e.status = 'active'"; }
+         else { $sqlEvent .= " AND e.status = 'active'"; }
     }
     // else: If preview=true AND user IS admin, show event regardless of status (except maybe 'rejected'?)
     // Optional: Exclude rejected events even for admin preview?
-    // if ($isPreview && $userRole === 'admin') { $sqlEvent .= " AND e.status != 'rejected'"; }
+    if ($isPreview && $userRole === 'admin') { $sqlEvent .= " AND e.status != 'rejected'"; }
 
 
     $stmtEvent = $pdo->prepare($sqlEvent);
@@ -131,10 +131,35 @@ try {
         $stmtComments = $pdo->prepare($sqlComments); $stmtComments->bindParam(':event_id', $eventId, PDO::PARAM_INT); $stmtComments->execute(); $comments = $stmtComments->fetchAll(PDO::FETCH_ASSOC);
 
         // Fetch Current User's Interactions (only if event found and user logged in)
-        if ($currentUserId) { /* ... fetch likes, interest, attending ... */ }
+        if ($currentUserId) { /* ... fetch likes, interest, attending ... */
+            $stmtInteractions = $pdo->prepare("SELECT * FROM event_likes WHERE user_id = :user_id AND event_id = :event_id");
+            $stmtInteractions->bindParam(':user_id', $currentUserId, PDO::PARAM_INT);
+            $stmtInteractions->bindParam(':event_id', $eventId, PDO::PARAM_INT);
+            $stmtInteractions->execute();
+            $userInteractions['liked'] = (bool)$stmtInteractions->fetchColumn();
+
+            // Repeat for interest and attendance
+            $stmtInterest = $pdo->prepare("SELECT * FROM event_interest WHERE user_id = :user_id AND event_id = :event_id");
+            $stmtInterest->bindParam(':user_id', $currentUserId, PDO::PARAM_INT);
+            $stmtInterest->bindParam(':event_id', $eventId, PDO::PARAM_INT);
+            $stmtInterest->execute();
+            $userInteractions['interested'] = (bool)$stmtInterest->fetchColumn();
+
+            // Fetch attendance status
+            $stmtAttendance = $pdo->prepare("SELECT * FROM event_attendees WHERE user_id = :user_id AND event_id = :event_id");
+            $stmtAttendance->bindParam(':user_id', $currentUserId, PDO::PARAM_INT);
+            $stmtAttendance->bindParam(':event_id', $eventId, PDO::PARAM_INT);
+            $stmtAttendance->execute();
+            $userInteractions['attending'] = (bool)$stmtAttendance->fetchColumn();
+        }
+        
+        
     }
 
-} catch (Exception $e) { /* ... error handling ... */ }
+} catch (Exception $e) { /* ... error handling ... */
+    $pageError = "Error loading event details."; // Simplified error message
+    error_log("Event detail fetch error: " . $e->getMessage());
+}
 
 // --- NOW START HTML OUTPUT ---
 include_once 'header.php'; // Already included at the top
@@ -177,7 +202,28 @@ include_once 'header.php'; // Already included at the top
             <article class="event-detail-card card">
                 <!-- Event Header -->
                 <div class="event-card-header">
-                    <div class="event-club-info"> <a href="club-detail.php?id=<?php echo $event['club_id']; ?>" class="club-avatar-link"> <div class="avatar-placeholder small-avatar"><?php echo strtoupper(substr($event['club_name'] ?? '?', 0, 1)); ?></div></a> <div> <a href="club-detail.php?id=<?php echo $event['club_id']; ?>" class="club-name-link"><?php echo htmlspecialchars($event['club_name'] ?? '?'); ?></a> <span class="event-post-time">Posted <?php echo format_time_ago($event['created_at']); ?><?php echo $event['creator_username'] ? ' by '.htmlspecialchars($event['creator_username']) : ''; ?></span> </div> </div>
+                    <div class="event-club-info">
+                        
+                         <a href="club-detail.php?id=<?php echo $event['club_id']; ?>" class="club-avatar-link"> 
+                         <?php
+                                    // Check if logo path exists and the file is accessible
+                                    $clubLogoWebPath = $event['logo_path'] ?? null;
+                                    //console log
+                                    echo "<script>console.log('Club Logo Web Path: " . htmlspecialchars($clubLogoWebPath) . "');</script>";
+                                    // IMPORTANT: Adjust the document root check based on how $clubLogoWebPath is stored (relative vs absolute web path)
+                                    // If $clubLogoWebPath is like '/cm/uploads/club_logos/xyz.jpg'
+                                    $clubLogoServerPath = $clubLogoWebPath ? rtrim($_SERVER['DOCUMENT_ROOT'], '/') . $clubLogoWebPath : null;
+                                    // If $clubLogoWebPath is just 'xyz.jpg', you need to prepend the directory path:
+                                    // $clubLogoServerPath = $clubLogoWebPath ? rtrim($_SERVER['DOCUMENT_ROOT'], '/') . '/cm/uploads/club_logos/' . $clubLogoWebPath : null;
+
+                                    $showClubLogo = $clubLogoWebPath && file_exists($clubLogoServerPath);
+                                    ?>
+                                    <?php if ($showClubLogo): ?>
+                                        <img src="<?php echo htmlspecialchars($clubLogoWebPath); ?>" alt="<?php echo htmlspecialchars($event['club_name'] ?? ''); ?> Logo" class="avatar-placeholder small-avatar">
+                                    <?php else: ?>
+                        <div class="avatar-placeholder small-avatar"><?php echo strtoupper(substr($event['club_name'] ?? '?', 0, 1)); ?></div>
+                                    <?php endif; ?>
+                    </a> <div> <a href="club-detail.php?id=<?php echo $event['club_id']; ?>" class="club-name-link"><?php echo htmlspecialchars($event['club_name'] ?? '?'); ?></a> <span class="event-post-time">Posted <?php echo format_time_ago($event['created_at']); ?><?php echo $event['creator_username'] ? ' by '.htmlspecialchars($event['creator_username']) : ''; ?></span> </div> </div>
                 </div>
 
                 <!-- Event Body -->

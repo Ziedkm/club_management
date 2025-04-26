@@ -29,11 +29,59 @@
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script src="scripts.js"></script>
     <script src="script.js"></script>
+    <?php
+// Add this near the top of test2.php, AFTER session_start() and require_once 'config/database.php'
+// Make sure $pdo is available here
+$hasUnreadMessages = false;
+if (isset($_SESSION['user']) && isset($_SESSION['user']['id']) && isset($pdo)) {
+    try {
+        $currentUserId = $_SESSION['user']['id'];
+        $sqlUnread = "SELECT 1 FROM messages WHERE receiver_id = :userId AND is_read = FALSE LIMIT 1";
+        $stmtUnread = $pdo->prepare($sqlUnread);
+        $stmtUnread->bindParam(':userId', $currentUserId, PDO::PARAM_INT);
+        $stmtUnread->execute();
+        if ($stmtUnread->fetch()) {
+            $hasUnreadMessages = true;
+        }
+    } catch (Exception $e) {
+        // Log error but don't break the page load
+        error_log("Error checking unread messages: " . $e->getMessage());
+    }
+}
+?>
     <style>
        body.dark .nav-link.active {
     background-color: rgb(59 130 246 / .5);
     color: rgb(255, 255, 255);
 }
+/* Notification Dot Style */
+.nav-link.has-notification {
+           position: relative; /* Needed for absolute positioning of the dot */
+       }
+
+       .notification-dot {
+           position: absolute;
+           top: 0.6rem; /* Adjust position as needed */
+           left: 2.2rem; /* Adjust position as needed */
+           width: 8px;   /* Dot size */
+           height: 8px;  /* Dot size */
+           background-color: red;
+           border-radius: 50%;
+           border: 1px solid var(--background-color); /* Make it stand out slightly */
+           box-shadow: 0 0 3px rgba(255, 0, 0, 0.7);
+       }
+       body.dark .notification-dot {
+            border-color: #1a1a4a; /* Match dark card background */
+       }
+
+       /* Mobile Dot Style (if needed - adjust positioning) */
+        .bottom-nav .nav-item.has-notification {
+             position: relative;
+        }
+         .bottom-nav .notification-dot {
+              top: 4px; /* Adjust for mobile icon positioning */
+              right: calc(50% - 16px); /* Center roughly above text */
+         }
 </style>
 </head>
 <body>
@@ -83,11 +131,14 @@
                 <?php endif; ?>
                 <!--messages-->
                 <?php if (isset($_SESSION['user'])): ?>
-                <a href="/cm/messages.php" class="nav-link">
-                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
-  <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
-</svg> Messages
-                </a>
+                    <a href="/cm/messages.php" class="nav-link <?php echo $hasUnreadMessages ? 'has-notification' : ''; // Add class if unread ?>">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+                          <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
+                        </svg> Messages
+                        <?php if ($hasUnreadMessages): ?>
+                            <span class="notification-dot" aria-label="Unread messages"></span>
+                        <?php endif; ?>
+                    </a>
                 <?php endif; ?>
                 <!-- ==== START Create Buttons ==== -->
             <?php if (isset($_SESSION['user'])): ?>
@@ -192,12 +243,16 @@
             <span>Events</span>
         </a>
         <?php if (isset($_SESSION['user'])): ?>
-                <a href="/cm/messages.php" class="nav-item">
+            <a href="/cm/messages.php" class="nav-item <?php echo $hasUnreadMessages ? 'has-notification' : ''; // Add class if unread ?>">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
-  <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
-</svg> <span>Messages</span>
-                </a>
+                  <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
+                </svg>
+                <span>Messages</span>
+                 <?php if ($hasUnreadMessages): ?>
+                    <span class="notification-dot" aria-label="Unread messages"></span>
                 <?php endif; ?>
+            </a>
+        <?php endif; ?>
         
         <button id="menu-toggle" class="nav-item">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">

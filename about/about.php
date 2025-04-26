@@ -132,7 +132,7 @@ $team_members = [
         <div class="container"> <!-- Contenu centré -->
             <h2 class="section-title">Meet The Team</h2>
             <p class="section-description">
-                La plateforme <span style=" color: #00408e; font-weight: bold;">CLUB</span><span class="highlight-dark">NEST</span> est réalisée comme un Projet
+                La plateforme <span style=" color: #00408e; font-weight: bold;">ISGS</span><span class="highlight-dark">Clubs</span> est réalisée comme un Projet
                 universitaire en 2025 par des étudiants Business Intelligence.
             </p>
             <div class="team-members-grid">

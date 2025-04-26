@@ -15,6 +15,11 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['user']['id'])) {
 $userId = $_SESSION['user']['id'];
 $userRole = $_SESSION['user']['role'];
 
+// --- Constants (Additions for Club Logo) ---
+define('CLUB_LOGO_UPLOAD_DIR', rtrim($_SERVER['DOCUMENT_ROOT'], '/') . '/cm/uploads/club_logos/'); // Absolute path
+define('CLUB_LOGO_URL_PATH', '/cm/uploads/club_logos/'); // Relative web path
+define('LOGO_MAX_FILE_SIZE', 2 * 1024 * 1024); // Max logo size 2MB (adjust as needed)
+define('LOGO_ALLOWED_MIME_TYPES', ['image/jpeg', 'image/png', 'image/gif', 'image/webp']); // Same as events or different?
 // --- Set Default Timezone ---
 // Replace 'Your/Timezone' with the appropriate value, e.g., 'America/New_York'
 date_default_timezone_set('UTC'); // Example
@@ -63,6 +68,7 @@ $clubName = ''; $clubDescription = ''; $clubCategory = ''; $clubSchedule = '';
 $assignedLeaderId = ''; // Only used by admin form
 $formError = null; $formSuccess = null;
 $pageError = $pageError ?? null; // Ensure pageError exists
+$logoPathForDb = null; // For logo upload, if needed
 
 // --- Get Session Flash Messages ---
 if (isset($_SESSION['error_message']) && !$pageError) { $pageError = $_SESSION['error_message']; unset($_SESSION['error_message']); } // Prioritize page errors set above
@@ -79,9 +85,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$pageError) { // Allow submission 
     $clubSchedule = trim($_POST['club_schedule'] ?? '');
     // Get assigned leader ID only if admin submitted
     $assignedLeaderId = ($userRole === 'admin') ? filter_input(INPUT_POST, 'assigned_leader_id', FILTER_VALIDATE_INT) : null;
+    $logoFile = $_FILES['club_logo'] ?? null; // NEW: Get logo file data
 
     // --- Validation ---
     $formError = ''; // Reset
+    $logoTargetPath = null; // Full path for moving file
+    $logoUniqueFilename = null; // Filename for DB
     if (empty($clubName) || empty($clubCategory) || empty($clubDescription)) {
         $formError = "Club Name, Category, and Description are required.";
     } elseif (!in_array($clubCategory, $availableCategories)) {
@@ -108,9 +117,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$pageError) { // Allow submission 
         $existingClub = $stmtCheckName->fetch(PDO::FETCH_ASSOC);
         if ($existingClub) { $formError = "A club with this name already exists".($existingClub['status']==='pending'?" (pending).":"."); }
     }
+    // *** NEW: Validate Logo Upload (Optional) ***
+    if (!$formError && $logoFile && $logoFile['error'] !== UPLOAD_ERR_NO_FILE) {
+        if ($logoFile['error'] !== UPLOAD_ERR_OK) { $formError = "Logo upload error (Code: {$logoFile['error']})."; }
+        elseif ($logoFile['size'] > LOGO_MAX_FILE_SIZE) { $formError = "Logo file too large (Max: ".(LOGO_MAX_FILE_SIZE / 1024 / 1024)." MB)."; }
+        elseif (!in_array(mime_content_type($logoFile['tmp_name']), LOGO_ALLOWED_MIME_TYPES)) { $formError = "Invalid logo file type."; }
+        else {
+            // Generate unique filename & path
+            $fileExtension = strtolower(pathinfo($logoFile['name'], PATHINFO_EXTENSION));
+            if (!in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) { $formError = "Invalid logo file extension."; }
+            else {
+                $logoUniqueFilename = uniqid('clublogo_', true) . '.' . $fileExtension;
+                $logoTargetPath = CLUB_LOGO_UPLOAD_DIR . $logoUniqueFilename; // Full server path
+                // Check/Create Directory
+                if (!file_exists(CLUB_LOGO_UPLOAD_DIR)) { if (!mkdir(CLUB_LOGO_UPLOAD_DIR, 0775, true)) { $formError = "Cannot create logo directory."; $logoTargetPath = null; } }
+                elseif (!is_writable(CLUB_LOGO_UPLOAD_DIR)) { $formError = "Logo directory not writable."; $logoTargetPath = null; }
+                 // Set path for DB (relative web path)
+                if($logoTargetPath) $logoPathForDb = CLUB_LOGO_URL_PATH . $logoUniqueFilename;
+            }
+        }
+    } // End Logo Validation
+
 
     // --- Process if No Errors ---
+    
     if (empty($formError)) {
+            $uploadSuccess = false;
+            // Attempt to move file only if one was provided and validated correctly
+            if ($logoTargetPath !== null && $logoFile && $logoFile['error'] === UPLOAD_ERR_OK) {
+                 if (move_uploaded_file($logoFile['tmp_name'], $logoTargetPath)) {
+                    $uploadSuccess = true;
+                } else {
+                     $formError = "Failed to save uploaded club logo."; error_log("Logo upload move failed: {$logoFile['tmp_name']} to {$logoTargetPath}"); $logoPathForDb = null;
+                }
+            } elseif ($logoFile && $logoFile['error'] === UPLOAD_ERR_OK && $logoTargetPath === null) {
+                 $formError = $formError ?: "Logo directory issue prevented saving image."; $logoPathForDb = null;
+            }
         try {
             $clubStatus = ($userRole === 'admin') ? 'active' : 'pending';
             $proposerId = ($userRole === 'admin') ? $userId : $userId; // Admin is proposer if they create it directly
@@ -118,15 +160,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$pageError) { // Allow submission 
             $pdo->beginTransaction();
 
             // Insert club
-            $sqlInsertClub = "INSERT INTO clubs (name, description, category, meeting_schedule, status, proposed_by_user_id) VALUES (:name, :description, :category, :schedule, :status, :proposer_id)";
-            $stmtInsertClub = $pdo->prepare($sqlInsertClub);
-            // Bind parameters...
-            $stmtInsertClub->bindParam(':name', $clubName);
-            $stmtInsertClub->bindParam(':description', $clubDescription);
-            $stmtInsertClub->bindParam(':category', $clubCategory);
-            $stmtInsertClub->bindParam(':schedule', $clubSchedule);
-            $stmtInsertClub->bindParam(':status', $clubStatus);
-            $stmtInsertClub->bindParam(':proposer_id', $proposerId, PDO::PARAM_INT);
+            
+             $sqlInsertClub = "INSERT INTO clubs (name, description, category, meeting_schedule, status, proposed_by_user_id, logo_path) VALUES (:name, :description, :category, :schedule, :status, :proposer_id, :logo_path)";
+             $stmtInsertClub = $pdo->prepare($sqlInsertClub);
+             // Bind parameters...
+             $stmtInsertClub->bindParam(':name', $clubName);
+             $stmtInsertClub->bindParam(':description', $clubDescription);
+             $stmtInsertClub->bindParam(':category', $clubCategory);
+             $stmtInsertClub->bindParam(':schedule', $clubSchedule);
+             $stmtInsertClub->bindParam(':status', $clubStatus);
+             $stmtInsertClub->bindParam(':proposer_id', $proposerId, PDO::PARAM_INT);
+             $stmtInsertClub->bindParam(':logo_path', $logoPathForDb); // Bind the logo path/filename
 
             if ($stmtInsertClub->execute()) {
                 $newClubId = $pdo->lastInsertId();
@@ -196,6 +240,13 @@ include_once 'header.php'; // Use header.php directly
                 <div class="form-group"><label for="club_description">Description <span class="required">*</span></label><textarea id="club_description" name="club_description" class="form-textarea" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;" rows="5" placeholder="Purpose & activities..." required><?php echo htmlspecialchars($clubDescription); ?></textarea></div>
                 <!-- Meeting Schedule -->
                 <div class="form-group"><label for="club_schedule">Meeting Schedule (Optional)</label><input type="text" id="club_schedule" name="club_schedule" class="form-input" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;" value="<?php echo htmlspecialchars($clubSchedule); ?>" maxlength="100" placeholder="e.g., Tuesdays at 5 PM"></div>
+                <!-- **** NEW: Club Logo Upload **** -->
+                <div class="form-group">
+                    <label for="club_logo">Club Logo (Optional)</label>
+                    <input type="file" id="club_logo" name="club_logo" class="form-input file-input" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;"
+                           accept=".jpg, .jpeg, .png, .gif, .webp">
+                     <small class="input-hint">Max: <?php echo LOGO_MAX_FILE_SIZE / 1024 / 1024; ?> MB. Types: JPG, PNG, GIF, WEBP.</small>
+                </div>
 
                 <!-- **** Assign President (Admin Only) **** -->
                 <?php if ($userRole === 'admin'): ?>

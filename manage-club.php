@@ -5,6 +5,13 @@ session_start();
 require_once 'config/database.php'; // Provides $pdo
 // include_once 'functions.php'; // Include function files if separate
 
+// --- Constants (Additions for Club Logo) ---
+// Adjust '/cm/' if your project structure is different relative to the web root
+define('CLUB_LOGO_UPLOAD_DIR', rtrim($_SERVER['DOCUMENT_ROOT'], '/') . '/cm/uploads/club_logos/'); // Absolute server path
+define('CLUB_LOGO_URL_PATH', '/cm/uploads/club_logos/'); // Relative web path for src attribute
+define('LOGO_MAX_FILE_SIZE', 2 * 1024 * 1024); // 2MB
+define('LOGO_ALLOWED_MIME_TYPES', ['image/jpeg', 'image/png', 'image/gif', 'image/webp']);
+
 // **** CRITICAL: Authorization Check ****
 if (!isset($_SESSION['user']) || !isset($_SESSION['user']['id'])) { $_SESSION['error_message']="Login required."; header('Location: login.php'); exit; }
 $currentUserId = $_SESSION['user']['id'];
@@ -12,18 +19,20 @@ $currentUserRole = $_SESSION['user']['role'];
 
 // --- Get Target Club ID ---
 $clubId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-if (!$clubId) { $_SESSION['error_message']="Invalid Club ID."; header('Location: dashboard.php'); exit; }
+if (!$clubId) { $_SESSION['error_message']="Invalid Club ID."; header('Location: dashboard.php'); exit; } // Send non-admins back to their dashboard
 
 // --- Check Permission & Fetch Club Data ---
 $canManage = false; $isClubLeader = false; $clubToManage = null; $pageError = null;
 try {
     if (!isset($pdo)) { throw new Exception("DB connection error."); }
-    $stmtClub = $pdo->prepare("SELECT * FROM clubs WHERE id = :id"); $stmtClub->bindParam(':id', $clubId, PDO::PARAM_INT); $stmtClub->execute(); $clubToManage = $stmtClub->fetch(PDO::FETCH_ASSOC);
+    // Fetch club data including logo_path
+    $stmtClub = $pdo->prepare("SELECT * FROM clubs WHERE id = :id");
+    $stmtClub->bindParam(':id', $clubId, PDO::PARAM_INT); $stmtClub->execute(); $clubToManage = $stmtClub->fetch(PDO::FETCH_ASSOC);
     if (!$clubToManage) { throw new Exception("Club not found."); }
+    // Check management permission
     if ($currentUserRole === 'admin') { $canManage = true; } else { $stmtLeaderCheck = $pdo->prepare("SELECT 1 FROM club_members WHERE user_id = :user_id AND club_id = :club_id AND role = 'leader'"); $stmtLeaderCheck->bindParam(':user_id', $currentUserId, PDO::PARAM_INT); $stmtLeaderCheck->bindParam(':club_id', $clubId, PDO::PARAM_INT); $stmtLeaderCheck->execute(); if ($stmtLeaderCheck->fetch()) { $canManage = true; $isClubLeader = true; } }
-    if (!$canManage) { $_SESSION['error_message']="Permission denied."; header('Location: dashboard.php'); exit; }
+    if (!$canManage) { $_SESSION['error_message']="Permission denied."; header('Location: dashboard.php'); exit; } // Deny if not admin or specific leader
 } catch (Exception $e) { error_log("Manage Club Permission/Fetch Error: ".$e->getMessage()); $pageError="Could not load club data."; $clubToManage=false; }
-
 // --- Helper Functions ---
 function format_time_ago($datetime, $full = false) { /* ... function code ... */ try{ $now=new DateTime; $ts=strtotime($datetime); if($ts===false)throw new Exception(); $ago=new DateTime('@'.$ts); $diff=$now->diff($ago); $s=['y'=>'year','m'=>'month','d'=>'day','h'=>'hour','i'=>'minute','s'=>'second']; foreach($s as $k=>&$v){if(property_exists($diff,$k)){if($diff->$k)$v=$diff->$k.' '.$v.($diff->$k>1?'s':'');else unset($s[$k]);}else unset($s[$k]);} if(!$full)$s=array_slice($s,0,1); return $s?implode(', ',$s).' ago':'just now'; } catch(Exception $e){ error_log("Time format err: ".$e->getMessage()); $ts=strtotime($datetime); return $ts?date('M j, Y g:i a',$ts):'Invalid date';} }
 
@@ -55,18 +64,150 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $canManage && $clubToManage) {
     $action = $_POST['action'] ?? null;
     $formSuccess = null;
     $redirect = true;
+    $logoPathForDb = $clubToManage['logo_path']; // Start with existing path for update details
+    $logoTargetPath = null; // Full server path for new upload
+    $logoToRemove = null;   // Old logo server path to delete
+    $fileErrorOccurred = false; // Flag for file system errors
+    $uploadAttempted = false; // Flag if user submitted a file
+    $uploadValidationError = null; // Specific upload error
+    
+    function handleLogoUpload($logoFile, $removeLogo, $clubToManage) {
+        $logoPathForDb = $clubToManage['logo_path'];
+        $logoToRemove = null;
+        $logoTargetPath = null;
+    
+        if ($removeLogo) {
+            $logoToRemove = $clubToManage['logo_path'];
+            $logoPathForDb = null;
+        } elseif ($logoFile && $logoFile['error'] === UPLOAD_ERR_OK) {
+            if ($logoFile['size'] > LOGO_MAX_FILE_SIZE) {
+                throw new Exception("Logo too large.");
+            }
+    
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mimeType = finfo_file($finfo, $logoFile['tmp_name']);
+            finfo_close($finfo);
+    
+            if (!in_array($mimeType, LOGO_ALLOWED_MIME_TYPES)) {
+                throw new Exception("Invalid logo type.");
+            }
+    
+            $fileExtension = strtolower(pathinfo($logoFile['name'], PATHINFO_EXTENSION));
+            $logoUniqueFilename = uniqid('clublogo_', true) . '.' . $fileExtension;
+            $logoTargetPath = CLUB_LOGO_UPLOAD_DIR . $logoUniqueFilename;
+    
+            if (!file_exists(CLUB_LOGO_UPLOAD_DIR) && !mkdir(CLUB_LOGO_UPLOAD_DIR, 0775, true)) {
+                throw new Exception("Cannot create logo directory.");
+            }
+    
+            if (!is_writable(CLUB_LOGO_UPLOAD_DIR)) {
+                throw new Exception("Logo directory is not writable.");
+            }
+    
+            $logoPathForDb = CLUB_LOGO_URL_PATH . $logoUniqueFilename;
+            $logoToRemove = $clubToManage['logo_path'];
+        } elseif ($logoFile && $logoFile['error'] !== UPLOAD_ERR_NO_FILE) {
+            throw new Exception("Logo upload error (Code: {$logoFile['error']}).");
+        }
+    
+                                // Check if the upload directory exists
+                                $uploadDirExists = file_exists(CLUB_LOGO_UPLOAD_DIR);
+
+                                // If the directory does not exist, attempt to create it
+                                if (!$uploadDirExists) {
+                                    // mkdir creates the directory with 0775 permissions, allowing the owner and group to write
+                                    // This is necessary to store uploaded club logos securely
+                                    if (!mkdir(CLUB_LOGO_UPLOAD_DIR, 0775, true)) {
+                                        // Log an error if directory creation fails
+                                        $formError = "Cannot create logo directory.";
+                                        error_log("Failed to create directory: " . CLUB_LOGO_UPLOAD_DIR . ". Check permissions.");
+                                        $logoTargetPath = null;
+                                    } elseif (!file_exists(CLUB_LOGO_UPLOAD_DIR)) {
+                                        // Double-check if the directory was created successfully
+                                        $formError = "Directory creation failed unexpectedly.";
+                                        error_log("Directory creation failed even after mkdir: " . CLUB_LOGO_UPLOAD_DIR);
+                                        $logoTargetPath = null;
+                                    } else {
+                                        // Directory creation succeeded
+                                        $uploadDirExists = true;
+                                    }
+                                }
+    }
 
     try {
         $pdo->beginTransaction();
 
         switch ($action) {
             case 'update_details':
-                // --- Update Club Details ---
+                // Retrieve inputs
                 $newName=trim($_POST['club_name']??''); $newDesc=trim($_POST['club_description']??''); $newCat=trim($_POST['club_category']??''); $newSched=trim($_POST['club_schedule']??'');
-                if(empty($newName)||empty($newDesc)||empty($newCat)){ $formError="Name, Desc, Category required."; } elseif(!in_array($newCat,$availableCategories)){ $formError="Invalid category."; } // Add length checks...
-                if(!$formError && $newName !== $clubToManage['name']){ $stmtCheck=$pdo->prepare("SELECT id FROM clubs WHERE name=:n AND id!=:id"); $stmtCheck->execute([':n'=>$newName,':id'=>$clubId]); if($stmtCheck->fetch()){ $formError='Club name exists.'; }}
-                if(!$formError){ $sql="UPDATE clubs SET name=:n, description=:d, category=:c, meeting_schedule=:s WHERE id=:id"; $stmt=$pdo->prepare($sql); $stmt->execute([':n'=>$newName,':d'=>$newDesc,':c'=>$newCat,':s'=>$newSched,':id'=>$clubId]); if($stmt->rowCount()>0){ $formSuccess="Details updated."; $clubToManage['name']=$newName; $clubToManage['description']=$newDesc; $clubToManage['category']=$newCat; $clubToManage['meeting_schedule']=$newSched; } else { $formError="Update failed or no changes made.";}}
-                break;
+                $logoFile = $_FILES['club_logo'] ?? null;
+
+                
+                
+                $removeLogo = isset($_POST['remove_logo']) && $_POST['remove_logo'] == '1';
+
+                // Basic Validation
+                if(empty($newName)||empty($newDesc)||empty($newCat)){ $formError="Name, Desc, Category required."; }
+                elseif(!in_array($newCat,$availableCategories)){ $formError="Invalid category."; }
+                // Length checks...
+
+                // Name uniqueness check (if changed)
+                if(!$formError && $newName !== $clubToManage['name']){ /* ... name check ... */ 
+                    $stmtNameCheck=$pdo->prepare("SELECT COUNT(*) FROM clubs WHERE name=:name AND id!=:id"); $stmtNameCheck->bindParam(':name',$newName); $stmtNameCheck->bindParam(':id',$clubId,PDO::PARAM_INT); $stmtNameCheck->execute(); if($stmtNameCheck->fetchColumn()>0){$formError="Club name already exists."; }
+                }
+
+                // Logo Handling Validation (only if basic validation passed)
+                if (!$formError) {
+                    try {
+                        [$logoPathForDb, $logoToRemove, $logoTargetPath] = handleLogoUpload($logoFile, $removeLogo, $clubToManage);
+                        $uploadAttempted = true; // Logo upload attempted
+                        
+                    } catch (Exception $e) {
+                        $formError = $e->getMessage();
+                    }
+                }
+
+                // Perform DB Update if still no errors
+                if(!$formError){
+                    $sql="UPDATE clubs SET name=:n, description=:d, category=:c, meeting_schedule=:s, logo_path=:logo WHERE id=:id"; // Added logo_path
+                    $stmt=$pdo->prepare($sql);
+                    // Bind params including logo
+                    $stmt->bindParam(':n',$newName); $stmt->bindParam(':d',$newDesc); $stmt->bindParam(':c',$newCat); $stmt->bindParam(':s',$newSched);
+                    $stmt->bindParam(':logo',$logoPathForDb); // Bind new/old/null path
+                    $stmt->bindParam(':id',$clubId,PDO::PARAM_INT);
+
+                    if ($stmt->execute()) {
+                        // Handle File System Changes AFTER successful DB update
+                        $updateSuccessMessage = 'Details updated.';
+                        $oldLogoServerPath = $logoToRemove ? rtrim($_SERVER['DOCUMENT_ROOT'], '/') . $logoToRemove : null;
+                        $newLogoServerPath = $logoTargetPath;
+
+                        // a) Move new file if needed
+                        if ($newLogoServerPath !== null && $logoFile && $logoFile['error'] === UPLOAD_ERR_OK) {
+                            if (!move_uploaded_file($logoFile['tmp_name'], $newLogoServerPath)) {
+                                error_log("!!! CRITICAL: DB updated but failed to move new club logo: {$logoFile['tmp_name']} to {$newLogoServerPath}");
+                                $updateSuccessMessage .= " (WARNING: Failed saving new logo!)";
+                                $fileErrorOccurred = true;
+                            }
+                        }
+                        // b) Delete old file if needed
+                        if (!$fileErrorOccurred && $oldLogoServerPath && file_exists($oldLogoServerPath) && $oldLogoServerPath !== $newLogoServerPath ) {
+                            if (!unlink($oldLogoServerPath)) {
+                                 error_log("Warning: Failed to delete old club logo: {$oldLogoServerPath}");
+                                 $updateSuccessMessage .= " (Note: Couldn't remove old logo.)";
+                            }
+                        }
+                        // Update was successful (even if file ops had warnings)
+                        $formSuccess = $updateSuccessMessage;
+                        // Refresh local variable for display if needed (only if not redirecting immediately)
+                        $clubToManage['name']=$newName;
+                        $clubToManage['logo_path']=$logoPathForDb;
+
+                    } else { $formError="Update failed."; } // DB update itself failed
+                }
+                break; // End case 'update_details'
+
 
             case 'remove_member':
                 // --- Remove Member ---
@@ -202,7 +343,27 @@ include_once 'header.php';
 
                 <!-- Left Column: Edit Details & Send Notification -->
                 <div class="manage-column-main space-y-8">
-                    <section class="card"> <h2 class="section-heading">Edit Club Details</h2> <form method="POST" action="manage-club.php?id=<?php echo $clubId; ?>" class="edit-form space-y-4"> <input type="hidden" name="action" value="update_details"> <div class="form-group"><label for="club_name">Name<span class="required">*</span></label><input type="text" id="club_name" name="club_name" class="form-input" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;" value="<?php echo htmlspecialchars($clubToManage['name']);?>" required></div> <div class="form-group"><label for="club_category">Category<span class="required">*</span></label><select id="club_category" name="club_category" class="form-input" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;" required><option value="" disabled>-- Select --</option><?php foreach($availableCategories as $cat):?><option value="<?php echo htmlspecialchars($cat);?>" <?php echo($clubToManage['category']===$cat)?'selected':'';?>><?php echo htmlspecialchars($cat);?></option><?php endforeach;?></select></div> <div class="form-group"><label for="club_schedule">Schedule</label><input type="text" id="club_schedule" name="club_schedule" class="form-input" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;" value="<?php echo htmlspecialchars($clubToManage['meeting_schedule']??'');?>"></div> <div class="form-group"><label for="club_description">Description<span class="required">*</span></label><textarea id="club_description" name="club_description" class="form-textarea" rows="5" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;" required><?php echo htmlspecialchars($clubToManage['description']??'');?></textarea></div> <div class="form-actions"><button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Details</button></div> </form> </section>
+                    <section class="card"> <h2 class="section-heading">Edit Club Details</h2> <form method="POST" action="manage-club.php?id=<?php echo $clubId; ?>" class="edit-form space-y-4"> <input type="hidden" name="action" value="update_details"> <div class="form-group"><label for="club_name">Name<span class="required">*</span></label><input type="text" id="club_name" name="club_name" class="form-input" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;" value="<?php echo htmlspecialchars($clubToManage['name']);?>" required></div> <div class="form-group"><label for="club_category">Category<span class="required">*</span></label><select id="club_category" name="club_category" class="form-input" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;" required><option value="" disabled>-- Select --</option><?php foreach($availableCategories as $cat):?><option value="<?php echo htmlspecialchars($cat);?>" <?php echo($clubToManage['category']===$cat)?'selected':'';?>><?php echo htmlspecialchars($cat);?></option><?php endforeach;?></select></div> <div class="form-group"><label for="club_schedule">Schedule</label><input type="text" id="club_schedule" name="club_schedule" class="form-input" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;" value="<?php echo htmlspecialchars($clubToManage['meeting_schedule']??'');?>"></div> <div class="form-group"><label for="club_description">Description<span class="required">*</span></label><textarea id="club_description" name="club_description" class="form-textarea" rows="5" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;" required><?php echo htmlspecialchars($clubToManage['description']??'');?></textarea></div> <!-- **** NEW: Club Logo Management **** -->
+                            <hr class="form-divider">
+                             <div class="form-group">
+                                <label>Current Club Logo</label>
+                                <div class="current-logo-preview">
+                                    <?php $currentLogoWebPath=$clubToManage['logo_path']??null; $currentLogoServerPath=$currentLogoWebPath?rtrim($_SERVER['DOCUMENT_ROOT'],'/').$currentLogoWebPath:null; $hasCurrentLogo=$currentLogoWebPath&&file_exists($currentLogoServerPath);?>
+                                    <?php if($hasCurrentLogo):?>
+                                        <img src="<?php echo htmlspecialchars($currentLogoWebPath);?>?<?php echo time();?>" alt="Logo" class="logo-preview-img">
+                                        <label class="checkbox-label small-label"><input type="checkbox" name="remove_logo" value="1" class="form-checkbox-sm"><span>Remove</span></label>
+                                    <?php else:?>
+                                        <p class="form-static-text italic">No logo.</p>
+                                    <?php endif;?>
+                                </div>
+                            </div>
+                             <div class="form-group">
+                                <label for="club_logo">Upload New Logo</label>
+                                <input type="file" id="club_logo" name="club_logo" class="form-input file-input" accept=".jpg,.jpeg,.png,.gif,.webp">
+                                <small class="input-hint">Max: <?php echo LOGO_MAX_FILE_SIZE/1024/1024;?> MB. Overwrites current.</small>
+                            </div>
+                             <!-- **** END Club Logo Management **** -->
+                              <div class="form-actions"><button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Details</button></div> </form> </section>
                     <section class="card"> <h2 class="section-heading">Send Notification</h2> <form method="POST" action="manage-club.php?id=<?php echo $clubId; ?>" class="space-y-4 dashboard-form"><input type="hidden" name="action" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;" value="send_notification"><div class="form-group"><label for="notification_title" class="form-label">Title<span class="required">*</span></label><input type="text" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;" id="notification_title" name="notification_title" class="form-input" placeholder="e.g., Meeting Reminder" required></div><div class="form-group"><label for="notification_message" class="form-label">Message<span class="required">*</span></label><textarea id="notification_message" name="notification_message" class="form-textarea" style="width: 100%; border: 2px solid var(--border-color);border-radius: 0.5rem;padding:10px;" rows="4" placeholder="Enter details..." required></textarea></div><div class="form-actions"><button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Send</button></div></form> </section>
                 </div>
 
@@ -384,7 +545,13 @@ include_once 'header.php';
     .btn-action.reject { color: #721c24; } .btn-action.reject:hover { background-color: #f8d7da; } body.dark .btn-action.reject { color: #f5c6cb; } body.dark .btn-action.reject:hover { background-color: rgba(245, 198, 203, 0.2); }
     .btn-delete-sm { background: none; border: none; color: #aaa; cursor: pointer; padding: 0.1rem 0.3rem; font-size: 0.9rem; line-height: 1;} .btn-delete-sm:hover { color: #dc3545; } body.dark .btn-delete-sm { color: #888; } body.dark .btn-delete-sm:hover { color: #f5c6cb; }
     .empty-list-message.small { font-size: 0.9rem; padding: 1rem; text-align: center; }
-
+/* --- Add styles for logo preview --- */
+.current-logo-preview { display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem; }
+    .logo-preview-img { max-width: 60px; max-height: 60px; border-radius: 4px; border: 1px solid var(--border-color); object-fit: contain; background-color: #f8f9fa;} body.dark .logo-preview-img { border-color: #444; background-color: #333; }
+    .checkbox-label.small-label { font-size: 0.9rem; color: #555; } body.dark .checkbox-label.small-label { color: #ccc; }
+    .form-checkbox-sm { width: 0.9rem; height: 0.9rem; margin-right: 0.4rem; accent-color: var(--primary-color); }
+     .file-input { padding: 0.5rem; } /* Adjust file input padding if needed */
+     .form-static-text.italic { font-style: italic; color: #888;} body.dark .form-static-text.italic { color: #aaa;}
 </style>
 
 
