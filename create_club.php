@@ -22,7 +22,7 @@ define('LOGO_MAX_FILE_SIZE', 2 * 1024 * 1024); // Max logo size 2MB (adjust as n
 define('LOGO_ALLOWED_MIME_TYPES', ['image/jpeg', 'image/png', 'image/gif', 'image/webp']); // Same as events or different?
 // --- Set Default Timezone ---
 // Replace 'Your/Timezone' with the appropriate value, e.g., 'America/New_York'
-date_default_timezone_set('UTC'); // Example
+date_default_timezone_set('Africa/Tunis'); // Example
 
 // --- Role Specific Logic & Data Fetching ---
 $availableCategories = ['Academic', 'Arts & Culture', 'Community Service', 'Recreation', 'Sports', 'Technology', 'Social', 'Other'];

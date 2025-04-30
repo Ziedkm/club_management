@@ -159,16 +159,22 @@ if (!empty($selectedCategory)) {
                                 $memberCount = count($members);
                             }
                         ?>
+                        
                         <div class="bg-white rounded-lg shadow border border-gray-200 overflow-hidden flex flex-col">
                             <!-- Placeholder for Club Image/Logo -->
+                           
                             <div class="h-40 bg-blue-100 flex items-center justify-center">
                                 <!-- You can replace this with an actual image if available -->
+                                <?php if (empty($club['logo_path'])): ?>
                                 <i class="fas fa-users text-blue-300 text-5xl"></i>
-                                <?php /* in future update we add logo path to the database and use it here:
-                                    $logoPath = $club['logo_path'] ?? 'path/to/default/logo.png';
+                                <?php else: ?>
+                                    <?php /* in future update we add logo path to the database and use it here:*/
+                                    $logoPath = $club['logo_path'];
                                     echo '<img src="'.htmlspecialchars($logoPath).'" alt="'.htmlspecialchars($club['name']).' Logo" class="h-full w-full object-cover">';
-                                 */ ?>
+                                  ?>
+                                <?php endif; ?>
                             </div>
+                            
                             <!-- Club Content -->
                             <div class="p-5 flex flex-col flex-grow">
                                 <h3 class="text-lg font-semibold text-gray-900 mb-2"><?php echo htmlspecialchars($club['name'] ?? 'Unnamed Club'); ?></h3>

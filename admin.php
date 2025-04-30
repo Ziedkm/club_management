@@ -144,7 +144,11 @@ include_once 'header.php';
     <div class="admin-content-wrapper">
 
         <!-- Page Header -->
-        <div class="admin-header"><h1>Admin Panel</h1><p>Manage requests, users, clubs, and events.</p></div>
+        <div class="admin-header"><a href="admin_stats.php" class="stats_btn">View Statistics</a><h1>Admin Panel</h1><p>Manage requests, users, clubs, and events.</p>
+    <!-- buttun to get admin to the statistics page on the side-->
+    
+        </div>
+        
 
         <!-- Action Feedback Messages -->
         <?php if ($adminActionMsg): ?><div class="message <?php echo $adminActionMsg['type'] === 'success' ? 'success-message' : 'error-message'; ?>" role="alert"><?php echo htmlspecialchars($adminActionMsg['text']); ?></div><?php endif; ?>
@@ -177,6 +181,8 @@ include_once 'header.php';
                 <div id="admin-events" class="admin-tab-panel" role="tabpanel">
                     <section class="admin-section card"><h2>Events (<?php echo count($allEvents); ?>)</h2><div class="admin-table-wrapper"><table class="admin-table"><thead><tr><th>Name</th><th>Club</th><th>Date</th><th>Attendees</th><th>Status</th><th>Actions</th></tr></thead><tbody> <?php foreach($allEvents as $event): ?><tr> <td data-label="Name"><?php echo htmlspecialchars($event['name']);?></td> <td data-label="Club"><?php echo htmlspecialchars($event['club_name']);?></td> <td data-label="Date"><?php echo date('M j, Y @ g:i A', strtotime($event['event_date']));?></td> <td data-label="Attendees"><?php echo $event['attendee_count']??0;?></td> <td data-label="Status"><span class="status-badge <?php echo $event['status'];?>"><?php echo ucfirst($event['status']);?></span></td> <td class="actions"><a href="edit_event.php?id=<?php echo $event['id'];?>" class="btn-action edit" title="Edit"><i class="fas fa-edit"></i></a> <form method="POST" action="admin.php" class="action-form" onsubmit="return confirm('DELETE event permanently?');"><input type="hidden" name="action" value="delete_event"><input type="hidden" name="target_id" value="<?php echo $event['id'];?>"><button type="submit" class="btn-action delete" title="Delete"><i class="fas fa-trash-alt"></i></button></form></td> </tr><?php endforeach; ?></tbody></table></div></section>
                 </div>
+                
+                
             </div> <!-- End Admin Tab Content -->
         </div> <!-- End Admin Tabs Section -->
 
@@ -210,7 +216,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
          // Optional: Activate tab based on URL hash on load
-         /*
+         
          if (window.location.hash) {
              const initialTarget = window.location.hash;
              const initialButton = document.querySelector(`.admin-tab-button[data-tab-target="${initialTarget}"]`);
@@ -218,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
                  initialButton.click(); // Simulate click to activate
              }
          }
-         */
+         
     }
 });
 </script>
@@ -226,6 +232,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Specific CSS for Admin Panel -->
 <style>
     /* Reuse general styles like .card, .message etc. */
+    
 
     .admin-panel-container .admin-content-wrapper { max-width: 1200px; margin: 1rem auto; padding: 0 1rem; }
     .admin-header { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); } body.dark .admin-header { border-bottom-color: #333366; }
@@ -273,6 +280,28 @@ document.addEventListener('DOMContentLoaded', function() {
     .status-badge.rejected { background-color: #f8d7da; color: #721c24; } body.dark .status-badge.rejected { background-color: #721c24; color: #f8d7da;}
     .status-badge.banned { background-color: #f8d7da; color: #721c24; } body.dark .status-badge.banned { background-color: #721c24; color: #f8d7da;}
     tr.banned-row td { opacity: 0.6; font-style: italic; }
+    .stats_btn{
+        background-color: #007bff; /* Bootstrap primary color */
+        color: white;
+        
+        float: right;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        border-radius: 5px;
+        margin-top: 20px;
+        margin-left: 20px;
+        transition-duration: 200ms;
+    }
+    .stats_btn:hover {
+        background-color:rgb(65, 157, 255); /* Darker shade on hover */
+        color: white;
+        border-radius: 25px;
+        transform: translate(0, -6px);
+    }
+    
+
 
 
      /* Responsive Table */
@@ -290,6 +319,9 @@ document.addEventListener('DOMContentLoaded', function() {
          .admin-table td.actions { text-align: left; padding-left: 0.75rem; } /* Actions align left on mobile */
          .admin-table td.actions::before { display: none; } /* No label for actions cell */
           .actions .reason-input { max-width: none; width: calc(100% - 50px); /* Adjust width */ }
+          .stats_btn
+{ margin-top: 20px; /* Add margin for spacing */ } /* Responsive button */
+
 
           /* Add data-label attributes to your td elements in PHP if using this mobile table approach */
           /* Example: <td data-label="Club Name"></td> */
