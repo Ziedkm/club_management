@@ -5,7 +5,7 @@
 [![Last Commit](https://img.shields.io/github/last-commit/Ziedkm/club_management?style=flat-square&logo=github&label=last%20commit)](https://github.com/Ziedkm/club_management/commits/main)
 [![Language Count](https://img.shields.io/github/languages/count/Ziedkm/club_management?style=flat-square)](https://github.com/Ziedkm/club_management)
 [![Top Language](https://img.shields.io/github/languages/top/Ziedkm/club_management?style=flat-square&color=blueviolet)](https://github.com/Ziedkm/club_management)
-[![License](https://img.shields.io/github/license/Ziedkm/club_management?style=flat-square&color=lightgrey)](LICENSE) // Add a LICENSE file
+[![License](https://img.shields.io/github/license/Ziedkm/club_management?style=flat-square&color=lightgrey)](LICENSE) 
 
 ---
 
