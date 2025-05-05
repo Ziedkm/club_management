@@ -182,7 +182,7 @@ This project is licensed under the **MIT License** - see the `LICENSE` file (you
 
 ## Contact
 
-*   **Project Lead:** [Your Name/Lead Name] - [your.email@example.com](mailto:ziedkmantar@gmail.com)
-*   **Project Link:** [https://github.com/your_github_username/club_management](https://github.com/Ziedkm/club_management)
+*   **Project Lead:** [Your Name/Lead Name] - [ziedkmantar@gmail.com](mailto:ziedkmantar@gmail.com)
+*   **Project Link:** [https://github.com/Ziedkm/club_management](https://github.com/Ziedkm/club_management)
 
 ---
