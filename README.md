@@ -11,8 +11,8 @@
 
 **Now available on Mobile!**
 
-<p align="center">
-  <img src="https://i.ibb.co/jv0dHbqw/app-ios-android.jpg" alt="Mobile App Preview" width="100%" style="border-radius: 25px;"/>
+<p align="center" style="border-radius: 25px;">
+  <img src="https://i.ibb.co/jv0dHbqw/app-ios-android.jpg" alt="Mobile App Preview" width="100%" />
 </p>
 
 **Built with the core technologies:**
