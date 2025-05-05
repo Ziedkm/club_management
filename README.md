@@ -86,7 +86,7 @@ Set up the project locally:
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your_github_username/club_management.git
+    git clone https://github.com/Ziedkm/club_management.git
     ```
     *(Replace with your actual repository URL)*
 
