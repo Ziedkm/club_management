@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Apr 24, 2025 at 12:33 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: 127.0.0.1:3306
+-- Generation Time: May 05, 2025 at 11:05 AM
+-- Server version: 9.1.0
+-- PHP Version: 8.3.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -27,26 +27,31 @@ SET time_zone = "+00:00";
 -- Table structure for table `clubs`
 --
 
-CREATE TABLE `clubs` (
-  `id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `description` text DEFAULT NULL,
-  `category` varchar(50) NOT NULL,
-  `meeting_schedule` varchar(100) DEFAULT NULL,
-  `status` enum('pending','active','rejected') NOT NULL DEFAULT 'pending',
-  `proposed_by_user_id` int(11) DEFAULT NULL COMMENT 'User ID who submitted the request',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `clubs`;
+CREATE TABLE IF NOT EXISTS `clubs` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `description` text COLLATE utf8mb4_general_ci,
+  `category` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `meeting_schedule` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `status` enum('pending','active','rejected') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'pending',
+  `proposed_by_user_id` int DEFAULT NULL COMMENT 'User ID who submitted the request',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `logo_path` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `proposed_by_user_id` (`proposed_by_user_id`),
+  KEY `idx_club_status` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `clubs`
 --
 
-INSERT INTO `clubs` (`id`, `name`, `description`, `category`, `meeting_schedule`, `status`, `proposed_by_user_id`, `created_at`) VALUES
-(1, 'Computer Science Club', 'A club for computer science enthusiasts', 'Technology', 'Tuesdays at 5 PM', 'active', NULL, '2025-03-25 10:17:43'),
-(2, 'Chess Club', 'Learn and play chess with other students', 'Recreation', 'Fridays at 3 PM', 'active', NULL, '2025-03-25 10:17:43'),
-(3, 'Environmental Club', 'Working together for a sustainable campus', 'Social', 'Wednesdays at 6 PM', 'active', NULL, '2025-03-25 10:17:43'),
-(4, 'microsoft club', 'yes yes very good club join now', 'computer sc', 'Tuesday 5pm', 'pending', 1, '2025-04-06 20:19:34');
+INSERT INTO `clubs` (`id`, `name`, `description`, `category`, `meeting_schedule`, `status`, `proposed_by_user_id`, `created_at`, `logo_path`) VALUES
+(1, 'ISGS Experts Club', 'Isg Experts Club 🌟\nNonprofit organization\nNotre club offre des ateliers dans le domaine des affaires ainsi que des évents socioculturels pour apprendre et se connecter dans un cadre dynamique.', 'Technology', 'Tuesdays at 5 PM', 'active', NULL, '2025-03-25 10:17:43', NULL),
+(2, 'Microsoft ISGS Club', 'ISGS Microsoft Club\r\n✨Invest In Your Future\r\n📍Higher Institute of management of Sousse\r\n• FB: ISGS Microsoft\r\n• Linkedin : ISGs Microsoft Club\r\n• TikTok: isgsmicrosoftclub', 'Technology', 'Fridays at 3 PM', 'active', NULL, '2025-03-25 10:17:43', '/cm/uploads/club_logos/micro.jpg'),
+(3, 'Nexusart ISGS Club', 'Nexus art🌟🌠\r\n´´✨ le lieu où l’art prend vie .rejoignez-nous pour exprimer votre créativité !🎭🎼 ‘´\r\n📍institut supérieur de gestion sousse', 'Arts & Culture', 'Wednesdays at 6 PM', 'active', NULL, '2025-03-25 10:17:43', '/cm/uploads/club_logos/art.jpg'),
+(4, 'Rotaract ISGS Club', 'Rotaract ISG.S\r\n📍Sousse, Tunisia district 9010\r\n📧 Rotaract.isgs@gmail.com', 'Academic', 'Tuesday 5pm', 'active', 1, '2025-04-06 20:19:34', '/cm/uploads/club_logos/rotaract.png');
 
 -- --------------------------------------------------------
 
@@ -54,24 +59,39 @@ INSERT INTO `clubs` (`id`, `name`, `description`, `category`, `meeting_schedule`
 -- Table structure for table `club_members`
 --
 
-CREATE TABLE `club_members` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `club_id` int(11) NOT NULL,
-  `role` enum('member','leader','pending') NOT NULL DEFAULT 'pending',
-  `joined_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `department` enum('President','Vice President','HR Responsible','General Secretary','Media Responsible','Sponsoring Responsible','Logistique Responsible','Media Member','Sponsoring Member','Logistique Member') DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `club_members`;
+CREATE TABLE IF NOT EXISTS `club_members` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `club_id` int NOT NULL,
+  `role` enum('member','leader','pending') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'pending',
+  `joined_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `department` enum('President','Vice President','HR Responsible','General Secretary','Media Responsible','Sponsoring Responsible','Logistique Responsible','Media Member','Sponsoring Member','Logistique Member','General Member') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'General Member',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_membership` (`user_id`,`club_id`),
+  KEY `idx_club_pending` (`club_id`,`role`)
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `club_members`
 --
 
 INSERT INTO `club_members` (`id`, `user_id`, `club_id`, `role`, `joined_at`, `department`) VALUES
-(1, 2, 1, 'leader', '2025-03-25 10:17:43', NULL),
+(1, 8, 1, 'leader', '2025-03-25 10:17:43', 'President'),
 (2, 2, 2, 'leader', '2025-03-25 10:17:43', 'President'),
-(3, 3, 3, 'member', '2025-03-25 10:17:43', NULL),
-(29, 4, 2, 'member', '2025-04-13 20:06:34', 'Media Responsible');
+(3, 3, 3, 'member', '2025-03-25 10:17:43', 'General Member'),
+(29, 4, 2, 'member', '2025-04-13 20:06:34', 'Media Responsible'),
+(30, 6, 4, 'leader', '2025-05-05 06:38:07', 'President'),
+(31, 7, 3, 'leader', '2025-05-05 06:39:22', 'President'),
+(32, 9, 2, 'member', '2025-05-05 06:40:21', 'Media Member'),
+(33, 9, 3, 'member', '2025-05-05 06:40:27', 'Media Responsible'),
+(34, 10, 2, 'member', '2025-05-05 10:14:33', 'HR Responsible'),
+(35, 11, 1, 'member', '2025-05-05 10:15:07', 'General Secretary'),
+(36, 12, 2, 'member', '2025-05-05 10:15:31', 'Sponsoring Responsible'),
+(37, 13, 4, 'member', '2025-05-05 10:16:49', 'Media Member'),
+(38, 14, 2, 'member', '2025-05-05 10:17:21', 'Logistique Member'),
+(39, 15, 1, 'member', '2025-05-05 10:18:18', 'Sponsoring Member'),
+(40, 5, 2, 'member', '2025-05-05 10:20:27', 'Vice President');
 
 -- --------------------------------------------------------
 
@@ -79,30 +99,36 @@ INSERT INTO `club_members` (`id`, `user_id`, `club_id`, `role`, `joined_at`, `de
 -- Table structure for table `events`
 --
 
-CREATE TABLE `events` (
-  `id` int(11) NOT NULL,
-  `club_id` int(11) NOT NULL,
-  `name` varchar(150) NOT NULL,
-  `description` text DEFAULT NULL,
+DROP TABLE IF EXISTS `events`;
+CREATE TABLE IF NOT EXISTS `events` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `club_id` int NOT NULL,
+  `name` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `description` text COLLATE utf8mb4_general_ci,
   `event_date` datetime NOT NULL,
   `event_end_date` datetime DEFAULT NULL COMMENT 'Optional: Date and time the event ends',
-  `location` varchar(255) DEFAULT NULL,
-  `status` enum('pending','active','rejected') NOT NULL DEFAULT 'pending',
-  `poster_image_path` varchar(255) DEFAULT NULL COMMENT 'Path to event poster image',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `created_by` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `location` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `status` enum('pending','active','rejected') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'pending',
+  `poster_image_path` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'Path to event poster image',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_by` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `club_id` (`club_id`),
+  KEY `created_by` (`created_by`),
+  KEY `idx_event_date` (`event_date`),
+  KEY `idx_event_status` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `events`
 --
 
 INSERT INTO `events` (`id`, `club_id`, `name`, `description`, `event_date`, `event_end_date`, `location`, `status`, `poster_image_path`, `created_at`, `created_by`) VALUES
-(2, 2, 'qsfsqf', 'qdsqsdqsdqsdqsd', '2025-04-07 04:28:00', '2025-04-07 15:26:00', 'saleqsfqsfqs', 'active', '/cm/uploads/event_posters/event_67f31be802fd27.42977506.png', '2025-04-07 00:27:20', 1),
-(3, 1, 'test', 'qsfqsfqsfqsfojsifjqslkfjq\r\nqsfqlskfjqlqsfqsfqsfqsfojsifjqslkfjq\r\nqsfqlskfjqlqsfqsfqsfqsfojsifjqslkfjq\r\nqsfqlskfjqlqsfqsfqsfqsfojsifjqslkfjq\r\nqsfqlskfjqlqsfqsfqsfqsfojsifjqslkfjq\r\nqsfqlskfjql', '2025-04-13 13:41:00', '2025-04-14 17:44:00', 'sale 17', 'active', '/cm/uploads/event_posters/event_67f31f58aa2fb5.24921088.png', '2025-04-07 00:42:00', 1),
-(4, 2, 'CMC', 'QSDQSFSQFQSFQSFQSFQSFQSFQSF', '2025-04-08 03:18:00', '2025-04-09 03:18:00', 'EPI', 'active', '/cm/uploads/event_posters/event_67f33630b74af2.02937043.jpg', '2025-04-07 02:19:28', 2),
+(4, 2, 'CMC', '🚀 Blast off alert! 🌕\nRegistrations for the Coding Moon Challenge are officially LIVE! 🚨\n👉 bit.ly/codingmoon25\nDon’t just watch from the sidelines—be part of the mission! 🌌\n#CodingMoonChallenge #Hackathon #ToTheMoonAndBeyond #RegisterNow\nThe countdown has begun. Will you be on board? 🚀👩‍💻👨‍💻', '2025-04-08 03:18:00', '2025-04-09 03:18:00', 'EPI', 'active', '/cm/uploads/event_posters/event_67f33630b74af2.02937043.jpg', '2025-04-07 02:19:28', 2),
 (5, 2, 'CMC', 'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffqsfqfqsfqsf', '2025-04-10 03:28:00', '2025-04-11 03:28:00', 'sale 17', 'rejected', '/cm/uploads/event_posters/event_67f338433138f0.13613334.jpg', '2025-04-07 02:28:19', 2),
-(6, 2, 'hachathon', 'BLABLABLABLABLABLABALBALABALB   AKABKABKABKABBAKBAKAB', '2025-04-16 12:57:00', '2025-04-17 12:57:00', 'ihecc', 'rejected', '/cm/uploads/event_posters/event_67f3bdd8a86dd7.41879141.jpg', '2025-04-07 11:58:16', 2);
+(6, 2, 'hachathon', 'BLABLABLABLABLABLABALBALABALB   AKABKABKABKABBAKBAKAB', '2025-04-16 12:57:00', '2025-04-17 12:57:00', 'ihecc', 'rejected', '/cm/uploads/event_posters/event_67f3bdd8a86dd7.41879141.jpg', '2025-04-07 11:58:16', 2),
+(7, 2, 'Formation Flutter', 'Unlocking the power of mobile development with Flutter! 🚀 Dive into the world of beautiful apps, fast development, and seamless cross-platform experiences\r\nBy the Microsofter : @zied_kmanter\r\nIf you’re interested don’t forget to fill the form 👋:\r\n\r\nhttps://docs.google.com/forms/d/e/1FAIpQLSdlCZ6uBoSb4NL51bbj3L9MKDxtpu0k0luctLlS3bYjZ2gNfg/viewform?ts=67a2856f&fbclid', '2025-05-15 07:45:00', '2025-05-24 07:45:00', 'ISGS NVS2', 'active', '/cm/uploads/event_posters/event_68185eda24cf87.25475336.jpg', '2025-05-05 06:46:50', 1),
+(8, 1, 'Match tn ISGS', 'Maybe you will meet your match ,\r\nyou never know 😏', '2025-05-07 07:50:00', '2025-05-16 07:51:00', 'A23', 'active', '/cm/uploads/event_posters/event_68185fffc909e3.73187879.jpg', '2025-05-05 06:51:43', 1);
 
 -- --------------------------------------------------------
 
@@ -110,19 +136,16 @@ INSERT INTO `events` (`id`, `club_id`, `name`, `description`, `event_date`, `eve
 -- Table structure for table `event_attendees`
 --
 
-CREATE TABLE `event_attendees` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `event_id` int(11) NOT NULL,
-  `registered_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `event_attendees`
---
-
-INSERT INTO `event_attendees` (`id`, `user_id`, `event_id`, `registered_at`) VALUES
-(3, 1, 3, '2025-04-07 01:17:49');
+DROP TABLE IF EXISTS `event_attendees`;
+CREATE TABLE IF NOT EXISTS `event_attendees` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `event_id` int NOT NULL,
+  `registered_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_attendance` (`user_id`,`event_id`),
+  KEY `event_id` (`event_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -130,20 +153,23 @@ INSERT INTO `event_attendees` (`id`, `user_id`, `event_id`, `registered_at`) VAL
 -- Table structure for table `event_comments`
 --
 
-CREATE TABLE `event_comments` (
-  `id` int(11) NOT NULL,
-  `event_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `comment_text` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `event_comments`;
+CREATE TABLE IF NOT EXISTS `event_comments` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `event_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `comment_text` text COLLATE utf8mb4_general_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `idx_event_comments_time` (`event_id`,`created_at`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `event_comments`
 --
 
 INSERT INTO `event_comments` (`id`, `event_id`, `user_id`, `comment_text`, `created_at`) VALUES
-(1, 3, 1, 'very good event 😊', '2025-04-07 01:25:40'),
 (2, 4, 8, 'Yooo', '2025-04-11 21:38:40');
 
 -- --------------------------------------------------------
@@ -152,10 +178,13 @@ INSERT INTO `event_comments` (`id`, `event_id`, `user_id`, `comment_text`, `crea
 -- Table structure for table `event_interest`
 --
 
-CREATE TABLE `event_interest` (
-  `user_id` int(11) NOT NULL,
-  `event_id` int(11) NOT NULL,
-  `marked_at` timestamp NOT NULL DEFAULT current_timestamp()
+DROP TABLE IF EXISTS `event_interest`;
+CREATE TABLE IF NOT EXISTS `event_interest` (
+  `user_id` int NOT NULL,
+  `event_id` int NOT NULL,
+  `marked_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user_id`,`event_id`),
+  KEY `event_id` (`event_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -163,7 +192,6 @@ CREATE TABLE `event_interest` (
 --
 
 INSERT INTO `event_interest` (`user_id`, `event_id`, `marked_at`) VALUES
-(1, 3, '2025-04-07 01:17:29'),
 (8, 4, '2025-04-11 21:38:17');
 
 -- --------------------------------------------------------
@@ -172,10 +200,13 @@ INSERT INTO `event_interest` (`user_id`, `event_id`, `marked_at`) VALUES
 -- Table structure for table `event_likes`
 --
 
-CREATE TABLE `event_likes` (
-  `user_id` int(11) NOT NULL,
-  `event_id` int(11) NOT NULL,
-  `liked_at` timestamp NOT NULL DEFAULT current_timestamp()
+DROP TABLE IF EXISTS `event_likes`;
+CREATE TABLE IF NOT EXISTS `event_likes` (
+  `user_id` int NOT NULL,
+  `event_id` int NOT NULL,
+  `liked_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user_id`,`event_id`),
+  KEY `event_id` (`event_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -183,9 +214,7 @@ CREATE TABLE `event_likes` (
 --
 
 INSERT INTO `event_likes` (`user_id`, `event_id`, `liked_at`) VALUES
-(1, 3, '2025-04-07 01:17:25'),
-(1, 4, '2025-04-08 13:29:07'),
-(2, 3, '2025-04-07 12:05:04'),
+(1, 4, '2025-05-01 11:19:51'),
 (4, 4, '2025-04-07 18:15:50'),
 (5, 4, '2025-04-07 13:03:46'),
 (8, 4, '2025-04-11 21:38:20');
@@ -196,14 +225,18 @@ INSERT INTO `event_likes` (`user_id`, `event_id`, `liked_at`) VALUES
 -- Table structure for table `messages`
 --
 
-CREATE TABLE `messages` (
-  `id` int(11) NOT NULL,
-  `sender_id` int(11) NOT NULL,
-  `receiver_id` int(11) NOT NULL,
-  `message_content` text NOT NULL,
-  `sent_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `is_read` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `messages`;
+CREATE TABLE IF NOT EXISTS `messages` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `sender_id` int NOT NULL,
+  `receiver_id` int NOT NULL,
+  `message_content` text COLLATE utf8mb4_general_ci NOT NULL,
+  `sent_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `is_read` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `idx_conversation` (`sender_id`,`receiver_id`,`sent_at`),
+  KEY `idx_receiver_read` (`receiver_id`,`is_read`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `messages`
@@ -236,14 +269,17 @@ INSERT INTO `messages` (`id`, `sender_id`, `receiver_id`, `message_content`, `se
 -- Table structure for table `notifications`
 --
 
-CREATE TABLE `notifications` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `title` varchar(100) NOT NULL,
-  `message` text NOT NULL,
-  `is_read` tinyint(1) DEFAULT 0,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `notifications`;
+CREATE TABLE IF NOT EXISTS `notifications` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `title` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `message` text COLLATE utf8mb4_general_ci NOT NULL,
+  `is_read` tinyint(1) DEFAULT '0',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `notifications`
@@ -296,7 +332,16 @@ INSERT INTO `notifications` (`id`, `user_id`, `title`, `message`, `is_read`, `cr
 (47, 4, 'Club Left', 'You have left Chess Club', 0, '2025-04-13 20:04:30'),
 (48, 4, 'Club Joined', 'You have successfully joined Chess Club', 0, '2025-04-13 20:06:25'),
 (49, 4, 'Club Left', 'You have left Chess Club', 0, '2025-04-13 20:06:26'),
-(50, 4, 'Club Joined', 'You have successfully joined Chess Club', 0, '2025-04-13 20:06:34');
+(50, 4, 'Club Joined', 'You have successfully joined Chess Club', 0, '2025-04-13 20:06:34'),
+(51, 9, 'Club Joined', 'You have successfully joined Microsoft ISGS Club', 0, '2025-05-05 06:40:21'),
+(52, 9, 'Club Joined', 'You have successfully joined Nexusart ISGS Club', 0, '2025-05-05 06:40:27'),
+(53, 10, 'Club Joined', 'You have successfully joined Microsoft ISGS Club', 0, '2025-05-05 10:14:33'),
+(54, 11, 'Club Joined', 'You have successfully joined ISGS Experts Club', 0, '2025-05-05 10:15:07'),
+(55, 12, 'Club Joined', 'You have successfully joined Microsoft ISGS Club', 0, '2025-05-05 10:15:31'),
+(56, 13, 'Club Joined', 'You have successfully joined Rotaract ISGS Club', 0, '2025-05-05 10:16:49'),
+(57, 14, 'Club Joined', 'You have successfully joined Microsoft ISGS Club', 0, '2025-05-05 10:17:21'),
+(58, 15, 'Club Joined', 'You have successfully joined ISGS Experts Club', 0, '2025-05-05 10:18:18'),
+(59, 5, 'Club Joined', 'You have successfully joined Microsoft ISGS Club', 0, '2025-05-05 10:20:27');
 
 -- --------------------------------------------------------
 
@@ -304,18 +349,23 @@ INSERT INTO `notifications` (`id`, `user_id`, `title`, `message`, `is_read`, `cr
 -- Table structure for table `users`
 --
 
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `role` enum('student','club_leader','admin') NOT NULL DEFAULT 'student',
-  `is_banned` tinyint(1) NOT NULL DEFAULT 0,
-  `ban_reason` text DEFAULT NULL,
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `role` enum('student','club_leader','admin') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'student',
+  `is_banned` tinyint(1) NOT NULL DEFAULT '0',
+  `ban_reason` text COLLATE utf8mb4_general_ci,
   `banned_until` datetime DEFAULT NULL COMMENT 'Null for permanent ban',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `profile_picture_path` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `profile_picture_path` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `email` (`email`),
+  KEY `idx_user_status` (`is_banned`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
@@ -324,148 +374,19 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `is_banned`, `ban_reason`, `banned_until`, `created_at`, `profile_picture_path`) VALUES
 (1, 'admin', 'admin@university.edu', 'admin123', 'admin', 0, NULL, NULL, '2025-03-25 10:17:43', NULL),
 (2, 'MejdEddine', 'leader@university.edu', 'leader123', 'club_leader', 0, NULL, NULL, '2025-03-25 10:17:43', '/cm/uploads/profile_pics/2_1745490708.png'),
-(3, 'student', 'student@university.edu', 'student123', 'student', 0, NULL, NULL, '2025-03-25 10:17:43', NULL),
-(4, 'zied kmantar', 'ziedkmantar@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-04-05 19:53:01', NULL),
-(5, 'azer', 'azerfarhat@gmail.com', 'azer123', 'student', 0, NULL, NULL, '2025-04-07 13:00:54', NULL),
-(6, 'Ella', 'ellahamdi@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-04-08 07:53:22', NULL),
-(7, 'yassine', 'yassinekmantar@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-04-09 14:25:23', NULL),
-(8, 'anoirTN', 'anoirajej02@gmail.com', 'anoir0987', 'student', 0, NULL, NULL, '2025-04-11 21:37:11', NULL);
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `clubs`
---
-ALTER TABLE `clubs`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `proposed_by_user_id` (`proposed_by_user_id`),
-  ADD KEY `idx_club_status` (`status`);
-
---
--- Indexes for table `club_members`
---
-ALTER TABLE `club_members`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `unique_membership` (`user_id`,`club_id`),
-  ADD KEY `idx_club_pending` (`club_id`,`role`);
-
---
--- Indexes for table `events`
---
-ALTER TABLE `events`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `club_id` (`club_id`),
-  ADD KEY `created_by` (`created_by`),
-  ADD KEY `idx_event_date` (`event_date`),
-  ADD KEY `idx_event_status` (`status`);
-
---
--- Indexes for table `event_attendees`
---
-ALTER TABLE `event_attendees`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `unique_attendance` (`user_id`,`event_id`),
-  ADD KEY `event_id` (`event_id`);
-
---
--- Indexes for table `event_comments`
---
-ALTER TABLE `event_comments`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `idx_event_comments_time` (`event_id`,`created_at`);
-
---
--- Indexes for table `event_interest`
---
-ALTER TABLE `event_interest`
-  ADD PRIMARY KEY (`user_id`,`event_id`),
-  ADD KEY `event_id` (`event_id`);
-
---
--- Indexes for table `event_likes`
---
-ALTER TABLE `event_likes`
-  ADD PRIMARY KEY (`user_id`,`event_id`),
-  ADD KEY `event_id` (`event_id`);
-
---
--- Indexes for table `messages`
---
-ALTER TABLE `messages`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `idx_conversation` (`sender_id`,`receiver_id`,`sent_at`),
-  ADD KEY `idx_receiver_read` (`receiver_id`,`is_read`);
-
---
--- Indexes for table `notifications`
---
-ALTER TABLE `notifications`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD KEY `idx_user_status` (`is_banned`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `clubs`
---
-ALTER TABLE `clubs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT for table `club_members`
---
-ALTER TABLE `club_members`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
-
---
--- AUTO_INCREMENT for table `events`
---
-ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT for table `event_attendees`
---
-ALTER TABLE `event_attendees`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `event_comments`
---
-ALTER TABLE `event_comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `messages`
---
-ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
-
---
--- AUTO_INCREMENT for table `notifications`
---
-ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+(3, 'Salah', 'student@university.edu', 'student123', 'student', 0, NULL, NULL, '2025-03-25 10:17:43', NULL),
+(4, 'zied kmantar', 'ziedkmantar@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-04-05 19:53:01', '/cm/uploads/profile_pics/4_1746439366.png'),
+(5, 'azer', 'azerfarhat@gmail.com', 'azer123', 'student', 0, NULL, NULL, '2025-04-07 13:00:54', '/cm/uploads/profile_pics/5_1746440459.jpg'),
+(6, 'Ella', 'ellahamdi@gmail.com', '123456', 'club_leader', 0, NULL, NULL, '2025-04-08 07:53:22', NULL),
+(7, 'yassine', 'yassinekmantar@gmail.com', '123456', 'club_leader', 0, NULL, NULL, '2025-04-09 14:25:23', NULL),
+(8, 'anoirTN', 'anoirajej02@gmail.com', 'anoir0987', 'student', 0, NULL, NULL, '2025-04-11 21:37:11', NULL),
+(9, 'Mohammed baccari', 'Mohammedbaccari@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-05-05 06:40:15', '/cm/uploads/profile_pics/9_1746427263.jpg'),
+(10, 'saoussen', 'saoussen@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-05-05 10:14:28', NULL),
+(11, 'Salma Chaieb', 'SalmaChaieb@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-05-05 10:14:47', NULL),
+(12, 'Chaima', 'Chaima@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-05-05 10:15:25', '/cm/uploads/profile_pics/12_1746440147.jpg'),
+(13, 'Yasmine Farhat', 'YasmineFarhat@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-05-05 10:16:18', '/cm/uploads/profile_pics/13_1746440200.jpg'),
+(14, 'Ilyees', 'Ilyees@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-05-05 10:17:03', '/cm/uploads/profile_pics/14_1746440235.jpeg'),
+(15, 'Melliti Arwed', 'MellitiArwed@gmail.com', '123456', 'student', 0, NULL, NULL, '2025-05-05 10:17:44', NULL);
 
 --
 -- Constraints for dumped tables

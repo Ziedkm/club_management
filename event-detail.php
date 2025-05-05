@@ -209,7 +209,7 @@ include_once 'header.php'; // Already included at the top
                                     // Check if logo path exists and the file is accessible
                                     $clubLogoWebPath = $event['logo_path'] ?? null;
                                     //console log
-                                    echo "<script>console.log('Club Logo Web Path: " . htmlspecialchars($clubLogoWebPath) . "');</script>";
+                                    
                                     // IMPORTANT: Adjust the document root check based on how $clubLogoWebPath is stored (relative vs absolute web path)
                                     // If $clubLogoWebPath is like '/cm/uploads/club_logos/xyz.jpg'
                                     $clubLogoServerPath = $clubLogoWebPath ? rtrim($_SERVER['DOCUMENT_ROOT'], '/') . $clubLogoWebPath : null;
