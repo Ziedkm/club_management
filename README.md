@@ -12,7 +12,7 @@
 **Now available on Mobile!**
 
 <p align="center">
-  <img src="[https://ibb.co/jWf0M5D](https://i.ibb.co/jv0dHbqw/app-ios-android.jpg)" alt="Mobile App Preview" width="600"/>
+  <img src="https://i.ibb.co/jv0dHbqw/app-ios-android.jpg" alt="Mobile App Preview" width="600"/>
 </p>
 
 **Built with the core technologies:**
