@@ -12,7 +12,7 @@
 **Now available on Mobile!**
 
 <p align="center">
-  <img src="https://i.ibb.co/jv0dHbqw/app-ios-android.jpg" alt="Mobile App Preview" width="600"/>
+  <img src="https://i.ibb.co/jv0dHbqw/app-ios-android.jpg" alt="Mobile App Preview" width="100%"/>
 </p>
 
 **Built with the core technologies:**
@@ -182,7 +182,7 @@ This project is licensed under the **MIT License** - see the `LICENSE` file (you
 
 ## Contact
 
-*   **Project Lead:** [Your Name/Lead Name] - [ziedkmantar@gmail.com](mailto:ziedkmantar@gmail.com)
+*   **Project Lead:** - [ziedkmantar@gmail.com](mailto:ziedkmantar@gmail.com)
 *   **Project Link:** [https://github.com/Ziedkm/club_management](https://github.com/Ziedkm/club_management)
 
 ---
