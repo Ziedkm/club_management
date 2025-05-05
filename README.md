@@ -12,7 +12,7 @@
 **Now available on Mobile!**
 
 <p align="center">
-  <img src="https://ibb.co/jWf0M5D" alt="Mobile App Preview" width="600"/>
+  <img src="[https://ibb.co/jWf0M5D](https://i.ibb.co/jv0dHbqw/app-ios-android.jpg)" alt="Mobile App Preview" width="600"/>
 </p>
 
 **Built with the core technologies:**
@@ -182,7 +182,7 @@ This project is licensed under the **MIT License** - see the `LICENSE` file (you
 
 ## Contact
 
-*   **Project Lead:** [Your Name/Lead Name] - [your.email@example.com](mailto:your.email@example.com)
-*   **Project Link:** [https://github.com/your_github_username/club_management](https://github.com/your_github_username/club_management)
+*   **Project Lead:** [Your Name/Lead Name] - [your.email@example.com](mailto:ziedkmantar@gmail.com)
+*   **Project Link:** [https://github.com/your_github_username/club_management](https://github.com/Ziedkm/club_management)
 
 ---
