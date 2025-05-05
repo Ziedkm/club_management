@@ -1,4 +1,4 @@
-# 🚀 CLUB_MANAGEMENT <img src="https://ibb.co/RkgZPBK" alt="Club Management Logo" width="40"/>
+# 🚀 CLUB_MANAGEMENT <img src="https://i.ibb.co/Kp5R7LgF/logo.png" alt="Club Management Logo" width="40"/>
 
 *Empowering Clubs, Connecting Communities, Inspiring Engagement*
 
